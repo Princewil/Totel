@@ -1,49 +1,79 @@
 {
   "project_info": {
-    "project_number": "407855852221",
-    "project_id": "totel-d7322",
-    "storage_bucket": "totel-d7322.appspot.com"
+    "project_number": "795851651432",
+    "project_id": "irish-53c69",
+    "storage_bucket": "irish-53c69.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:407855852221:android:9930db9b3571bad8f9e5d4",
+        "mobilesdk_app_id": "1:795851651432:android:7a4f38844a4dc3ce7efedd",
         "android_client_info": {
-          "package_name": "com.totel.totel"
+          "package_name": "com.irish.irish"
         }
       },
       "oauth_client": [
         {
-          "client_id": "407855852221-b3kg2e5lsgtu6rqinoitge7814nqq4d4.apps.googleusercontent.com",
+          "client_id": "795851651432-kpmhq9n971n9jvggnemh4p8b8a8cnj3t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.totel.totel",
-            "certificate_hash": "6df5aaae196d52f98486255efc6c01521284c78d"
+            "package_name": "com.irish.irish",
+            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
           }
         },
         {
-          "client_id": "407855852221-9milom47ganrf9s4t614bho2mj4h4ui5.apps.googleusercontent.com",
+          "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7AXhkTJTg5j5xWgBJjS8dRV8oZXfTEMQ"
+          "current_key": "AIzaSyDlbtjR6CjXcbJwozGwmpSKOotsrHbzp4o"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "407855852221-9milom47ganrf9s4t614bho2mj4h4ui5.apps.googleusercontent.com",
+              "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
               "client_type": 3
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795851651432:android:c6a16fef4757f2ae7efedd",
+        "android_client_info": {
+          "package_name": "com.ktotel.ktotel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795851651432-7dt7hke9f8r4i0cu0pb152mvvqfdc01k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
+          }
+        },
+        {
+          "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlbtjR6CjXcbJwozGwmpSKOotsrHbzp4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
             {
-              "client_id": "407855852221-coiol78e6tjp3ogcjcuttuc6dr7j8drr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.totel"
-              }
+              "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         }

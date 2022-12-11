@@ -1,7 +1,6 @@
 import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
-import 'package:cheffy/modules/main/map/map_view.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -29,6 +28,7 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
               formGroup: viewModel.form,
               child: Column(
                 children: [
+                  SizedBox(height: kToolbarHeight * 0.6),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -46,12 +46,18 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
                           const SizedBox(height: 52),
                           Text(
                             'Login to Continue',
-                            style: AppStyle.of(context).b1B.wCChineseBlack,
+                            style: AppStyle.of(context)
+                                .b1B
+                                .wCChineseBlack!
+                                .merge(normaltextFont),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. ',
-                            style: AppStyle.of(context).b4.wCRhythm,
+                            style: AppStyle.of(context)
+                                .b4
+                                .wCRhythm!
+                                .merge(headerTextFont),
                           ),
                           const SizedBox(height: 64),
                           AppFormField(
@@ -59,6 +65,7 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
                             field: ReactiveTextField(
                               formControlName: viewModel.controls.username,
                               textInputAction: TextInputAction.next,
+                              style: normaltextFont,
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: AppColors.soap,
@@ -77,6 +84,7 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
                             field: ReactiveTextField(
                               formControlName: viewModel.controls.password,
                               textInputAction: TextInputAction.done,
+                              style: normaltextFont,
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: AppColors.soap,
@@ -101,19 +109,26 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: viewModel.onResetPassword,
+                              style: TextButton.styleFrom(
+                                  textStyle: headerTextFont),
                               child: const Text('Reset password'),
                             ),
                           ),
                           const SizedBox(height: 24),
                           ElevatedButton(
                             onPressed: viewModel.onSubmit,
+                            style: ElevatedButton.styleFrom(
+                                textStyle: headerTextFont),
                             child: const Text('Login'),
                           ),
                           const SizedBox(height: 24),
                           Text(
                             'Or continue with',
                             textAlign: TextAlign.center,
-                            style: AppStyle.of(context).b4.wCRhythm,
+                            style: AppStyle.of(context)
+                                .b4
+                                .wCRhythm!
+                                .merge(headerTextFont),
                           ),
                           // const SizedBox(height: 16),
                           // Row(
@@ -160,7 +175,10 @@ class LoginView extends ViewModelBuilderWidget<LoginViewModel> {
                         onPressed: viewModel.onRegister,
                         child: Text(
                           'Sign-up',
-                          style: AppStyle.of(context).b4M.wCPlumpPurplePrimary,
+                          style: AppStyle.of(context)
+                              .b4M
+                              .wCPlumpPurplePrimary!
+                              .merge(headerTextFont),
                         ),
                       ),
                     ],

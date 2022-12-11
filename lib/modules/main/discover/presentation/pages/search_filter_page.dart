@@ -1,6 +1,6 @@
 import 'package:cheffy/Utils/Utils.dart';
 import 'package:cheffy/Utils/theme/color.dart';
-import 'package:cheffy/core/enums/day_night_enum.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/discover/presentation/search_provider.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +39,7 @@ class SearchFilterPage extends StatelessWidget {
                     hintText: 'How many rooms',
                   ),
                   keyboardType: TextInputType.number,
+                  style: headerTextFont,
                   validationMessages: {
                     ValidationMessage.required: (val) => 'Enter rooms number',
                     ValidationMessage.number: (val) => 'Enter a valid number',
@@ -55,6 +56,7 @@ class SearchFilterPage extends StatelessWidget {
                     Expanded(
                       child: ReactiveDateTimePicker(
                         formControlName: ReactiveFormControls.searchCheckInDate,
+                        style: headerTextFont,
                         decoration: const InputDecoration(
                           labelText: 'Check in',
                           suffixIcon: Icon(Icons.calendar_today),
@@ -70,6 +72,7 @@ class SearchFilterPage extends StatelessWidget {
                         formControlName:
                             ReactiveFormControls.searchCheckOutDate,
                         timePickerEntryMode: TimePickerEntryMode.dial,
+                        style: headerTextFont,
                         decoration: const InputDecoration(
                           labelText: 'Check out',
                           suffixIcon: Icon(Icons.calendar_today),
@@ -90,6 +93,7 @@ class SearchFilterPage extends StatelessWidget {
                       child: Text(
                         'Hourly Basis',
                         textAlign: TextAlign.center,
+                        style: headerTextFont,
                       ),
                     ),
                     Switch.adaptive(
@@ -100,6 +104,7 @@ class SearchFilterPage extends StatelessWidget {
                       child: Text(
                         'All day',
                         textAlign: TextAlign.center,
+                        style: headerTextFont,
                       ),
                     ),
                   ],
@@ -115,6 +120,7 @@ class SearchFilterPage extends StatelessWidget {
                         child: ReactiveDateTimePicker(
                           formControlName: ReactiveFormControls.searchStartTime,
                           type: ReactiveDatePickerFieldType.time,
+                          style: headerTextFont,
                           decoration: const InputDecoration(
                             labelText: 'Start',
                             suffixIcon: Icon(Icons.calendar_today),
@@ -128,6 +134,7 @@ class SearchFilterPage extends StatelessWidget {
                         child: ReactiveDateTimePicker(
                           formControlName: ReactiveFormControls.searchEndTime,
                           type: ReactiveDatePickerFieldType.time,
+                          style: headerTextFont,
                           decoration: const InputDecoration(
                             labelText: 'End',
                             suffixIcon: Icon(Icons.calendar_today),
@@ -183,7 +190,10 @@ class SearchFilterPage extends StatelessWidget {
                                 .toInt(),
                       ),
                     ),
-                    Text('\$ ${searchProvider.maxPrice}'),
+                    Text(
+                      '\$ ${searchProvider.maxPrice}',
+                      style: headerTextFont,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -192,7 +202,10 @@ class SearchFilterPage extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: SharedWidgets.buildRoundedElevatedButton(
-                    btnChild: Text('Search'),
+                    btnChild: Text(
+                      'Search',
+                      style: headerTextFont,
+                    ),
                     onPress: searchProvider.onSearchFilterResultSubmit,
                   ),
                 ),

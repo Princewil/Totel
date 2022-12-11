@@ -1,4 +1,5 @@
 import 'package:cheffy/Utils/Utils.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ class SharedWidgets {
     PreferredSizeWidget? bottom,
   }) {
     return AppBar(
-      title: Text(title),
+      title: Text(title,
+          style: normaltextFont.copyWith(fontWeight: FontWeight.bold)),
       bottom: bottom,
       actions: [
         if (onNotificationPressed != null)
@@ -61,7 +63,7 @@ class SharedWidgets {
         title,
         style: TextStyle(
           color: Colors.grey,
-        ),
+        ).merge(headerTextFont),
       ),
     );
   }
@@ -74,7 +76,7 @@ class SharedWidgets {
     return SwitchListTile.adaptive(
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
       value: val,
-      title: Text(title),
+      title: Text(title, style: headerTextFont),
       onChanged: onChange,
     );
   }
@@ -91,6 +93,7 @@ class SharedWidgets {
         child: OutlinedButton(
           child: btnChild,
           style: OutlinedButton.styleFrom(
+            textStyle: headerTextFont,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                 isTooRounded
@@ -116,7 +119,7 @@ class SharedWidgets {
         child: TextButton(
           child: Text(btnText),
           style: ElevatedButton.styleFrom(
-            foregroundColor: btnColor,
+            primary: btnColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(isTooRounded
                   ? UniversalVariables.kButtonBorderRadius
@@ -139,7 +142,8 @@ class SharedWidgets {
       child: ElevatedButton(
         child: btnChild,
         style: ElevatedButton.styleFrom(
-          backgroundColor: btnColor ?? AppColors.plumpPurplePrimary,
+          primary: btnColor ?? AppColors.plumpPurplePrimary,
+          textStyle: headerTextFont,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(isTooRounded
                 ? UniversalVariables.kButtonBorderRadius
@@ -164,7 +168,8 @@ class SharedWidgets {
       child: ElevatedButton.icon(
         label: Text(btnText),
         style: ElevatedButton.styleFrom(
-          backgroundColor: btnColor,
+          primary: btnColor,
+          textStyle: headerTextFont,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(isTooRounded
                 ? UniversalVariables.kButtonBorderRadius
@@ -187,14 +192,14 @@ class SharedWidgets {
           style: const TextStyle(
             color: Colors.grey,
             fontSize: 18,
-          ),
+          ).merge(headerTextFont),
         ),
         Text(
           balance.toStringAsFixed(1),
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 22,
-          ),
+          ).merge(headerTextFont),
         ),
       ],
     );

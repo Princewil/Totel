@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:cheffy/modules/theme/color.dart';
@@ -69,7 +70,8 @@ class CarouselView extends ViewModelBuilderWidget<CarouselViewModel> {
                     onPressed: onPressedButton,
                     child: Text(
                       'Skip',
-                      style: AppStyle.of(context).b4.wCSoap,
+                      style:
+                          AppStyle.of(context).b4.wCSoap!.merge(normaltextFont),
                     ),
                   ),
               ],

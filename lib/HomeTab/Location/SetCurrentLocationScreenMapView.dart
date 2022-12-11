@@ -117,7 +117,7 @@ class _SetCurrentLocationScreenMapViewState
                         // style: AppStyle.of(context).b4M.wCPlumpPurplePrimary,
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsetsDirectional.all(15),
-                          backgroundColor: AppColors.plumpPurplePrimary,
+                          primary: AppColors.plumpPurplePrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

@@ -23,7 +23,7 @@ class AppTheme {
         outlinedButtonTheme: outlinedButtonThemeData,
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: AppColors.plumpPurplePrimary,
+            onSurface: AppColors.plumpPurplePrimary,
             textStyle: AppStyle.of(context).b4,
           ),
         ),

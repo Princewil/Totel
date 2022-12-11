@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:cheffy/core/enums/post_type.dart';
@@ -47,14 +48,14 @@ class PostTypeSelectionView extends StatelessWidget {
 
   Widget _typeBookedButton(BuildContext context) {
     return SizedBox(
-      height: 170,
+      height: 180,
       child: Stack(
         children: [
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            height: 120,
+            height: 140,
             child: Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
@@ -85,7 +86,7 @@ class PostTypeSelectionView extends StatelessWidget {
             left: 120,
             right: 0,
             bottom: 0,
-            height: 120,
+            height: 140,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
@@ -94,12 +95,18 @@ class PostTypeSelectionView extends StatelessWidget {
                 children: [
                   Text(
                     'Already Booked',
-                    style: AppStyle.of(context).b3B.wCChineseBlack,
+                    style: AppStyle.of(context)
+                        .b3B
+                        .wCChineseBlack!
+                        .merge(headerTextFont),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'My hotel is booked just looking for partner',
-                    style: AppStyle.of(context).b5.wCChineseBlack,
+                    style: AppStyle.of(context)
+                        .b5
+                        .wCChineseBlack!
+                        .merge(headerTextFont),
                   ),
                 ],
               ),
@@ -112,14 +119,14 @@ class PostTypeSelectionView extends StatelessWidget {
 
   Widget _typeFindingButton(BuildContext context) {
     return SizedBox(
-      height: 170,
+      height: 180,
       child: Stack(
         children: [
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
-            height: 120,
+            height: 140,
             child: Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
@@ -150,7 +157,7 @@ class PostTypeSelectionView extends StatelessWidget {
             left: 0,
             right: 120,
             bottom: 0,
-            height: 120,
+            height: 140,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
@@ -159,12 +166,18 @@ class PostTypeSelectionView extends StatelessWidget {
                 children: [
                   Text(
                     'Finding partner',
-                    style: AppStyle.of(context).b3B.wCChineseBlack,
+                    style: AppStyle.of(context)
+                        .b3B
+                        .wCChineseBlack!
+                        .merge(headerTextFont),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'I’m looking for travel partner',
-                    style: AppStyle.of(context).b5.wCChineseBlack,
+                    style: AppStyle.of(context)
+                        .b5
+                        .wCChineseBlack!
+                        .merge(headerTextFont),
                   ),
                 ],
               ),

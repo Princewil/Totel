@@ -1,11 +1,11 @@
 import 'package:cheffy/Utils/Utils.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/discover/presentation/search_provider.dart';
 import 'package:cheffy/modules/main/main_view_model.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/widgets/app_drawer.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -26,7 +26,7 @@ class SearchLocationPage extends StatelessWidget {
               style: TextStyle(
                 color: Colors.black54,
                 fontWeight: FontWeight.bold,
-              ),
+              ).merge(headerTextFont),
             ),
             SizedBox(
               height: 8,
@@ -37,7 +37,7 @@ class SearchLocationPage extends StatelessWidget {
                   body,
                   style: TextStyle(
                     color: Colors.grey,
-                  ),
+                  ).merge(headerTextFont),
                 ),
               ),
             ),
@@ -68,9 +68,9 @@ class SearchLocationPage extends StatelessWidget {
                 Text(
                   'Connect with other travelers',
                   style: TextStyle(
-                    fontSize: 44,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
-                  ),
+                  ).merge(headerTextFont),
                 ),
                 SizedBox(
                   height: 8,
@@ -79,13 +79,15 @@ class SearchLocationPage extends StatelessWidget {
                   'Explore the top destinations in:',
                   style: TextStyle(
                     color: Colors.grey,
-                  ),
+                  ).merge(headerTextFont),
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 ReactiveTextField(
                   formControlName: ReactiveFormControls.searchLocation,
+                  style: headerTextFont,
+                  autofocus: false,
                   decoration: InputDecoration(
                     labelText: 'Where you want to go?',
                     hintText: 'Search anywhere',
@@ -103,7 +105,7 @@ class SearchLocationPage extends StatelessWidget {
                   'Recent Search',
                   style: TextStyle(
                     color: Colors.grey,
-                  ),
+                  ).merge(headerTextFont),
                 ),
                 SizedBox(
                   height: 100,

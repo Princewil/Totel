@@ -49,12 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
+  //*Previous one
+  // static const FirebaseOptions android = FirebaseOptions(
+  //   apiKey: 'AIzaSyA7AXhkTJTg5j5xWgBJjS8dRV8oZXfTEMQ',
+  //   appId: '1:407855852221:android:9930db9b3571bad8f9e5d4',
+  //   messagingSenderId: '407855852221',
+  //   projectId: 'totel-d7322',
+  //   storageBucket: 'totel-d7322.appspot.com',
+  // );
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA7AXhkTJTg5j5xWgBJjS8dRV8oZXfTEMQ',
-    appId: '1:407855852221:android:9930db9b3571bad8f9e5d4',
-    messagingSenderId: '407855852221',
-    projectId: 'totel-d7322',
-    storageBucket: 'totel-d7322.appspot.com',
+    apiKey: 'AIzaSyDlbtjR6CjXcbJwozGwmpSKOotsrHbzp4o',
+    appId: '1:795851651432:android:c6a16fef4757f2ae7efedd',
+    messagingSenderId: '795851651432',
+    projectId: 'irish-53c69',
+    storageBucket: 'irish-53c69.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -63,8 +71,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '407855852221',
     projectId: 'totel-d7322',
     storageBucket: 'totel-d7322.appspot.com',
-    androidClientId: '407855852221-3cfgj728ubsn4e3q7edhem2kaep0edej.apps.googleusercontent.com',
-    iosClientId: '407855852221-dekodiuo3tdg6lnsmc2jscrdk40o2a5i.apps.googleusercontent.com',
+    androidClientId:
+        '407855852221-3cfgj728ubsn4e3q7edhem2kaep0edej.apps.googleusercontent.com',
+    iosClientId:
+        '407855852221-dekodiuo3tdg6lnsmc2jscrdk40o2a5i.apps.googleusercontent.com',
     iosBundleId: 'com.oluhagroup.totelpartner',
   );
 }

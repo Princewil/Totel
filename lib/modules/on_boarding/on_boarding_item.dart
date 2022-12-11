@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/r.g.dart';
 import 'package:flutter/material.dart';
 import 'package:cheffy/modules/theme/styles.dart';
@@ -82,16 +83,18 @@ class OnBoardingItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      title,
-                      style: AppStyle.of(context).b2B.wCMagnolia,
-                    ),
+                    Text(title,
+                        style: AppStyle.of(context)
+                            .b2B
+                            .wCMagnolia!
+                            .merge(headerTextFont)),
                     const SizedBox(height: 16),
-                    Text(
-                      description,
-                      textAlign: TextAlign.center,
-                      style: AppStyle.of(context).b4M.wCSoap,
-                    ),
+                    Text(description,
+                        textAlign: TextAlign.center,
+                        style: AppStyle.of(context)
+                            .b4M
+                            .wCSoap!
+                            .merge(headerTextFont)),
                   ],
                 ),
               )

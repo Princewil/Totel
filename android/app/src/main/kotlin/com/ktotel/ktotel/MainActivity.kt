@@ -1,4 +1,4 @@
-package com.totel.totel
+package com.ktotel.ktotel
 
 import io.flutter.embedding.android.FlutterActivity
 

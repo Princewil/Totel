@@ -5,6 +5,9 @@ import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/app/app.router.dart';
 import 'package:cheffy/core/services/location_service.dart';
 
+import '../location_change/location_change_view.dart';
+import 'location_change_map_view.dart';
+
 class LocationChangeMapViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator.get();
   final LocationService _locationService = locator.get();
@@ -17,7 +20,12 @@ class LocationChangeMapViewModel extends BaseViewModel {
 
   void onPressedChanged() {}
 
-  void onSubmit() => _navigationService.back();
+  void onSubmit() {
+    if (locationEntity != null) {
+      resentSearch.add(locationEntity!);
+    }
+    _navigationService.back(result: locationEntity);
+  }
 
   void onPressedBack() => _navigationService.back();
 

@@ -1,9 +1,13 @@
 import 'package:cheffy/app/app.locator.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
+import 'package:cheffy/modules/posts/create/create_post_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_support_pack/flutter_support_pack.dart';
+import 'package:flutter_time_range/flutter_time_range.dart';
 import 'package:reactive_date_range_picker/reactive_date_range_picker.dart';
 import 'package:reactive_flutter_rating_bar/reactive_flutter_rating_bar.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:stacked/stacked.dart';
 import 'package:cheffy/core/enums/post_type.dart';
 import 'package:cheffy/r.g.dart';
@@ -16,6 +20,8 @@ import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'create_post_view_model.dart';
 import 'image_item_view.dart';
 
+String avaliable = '';
+
 class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
   final PostType type;
 
@@ -24,9 +30,12 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
   @override
   Widget builder(
       BuildContext context, CreatePostViewModel viewModel, Widget? child) {
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Travel Details')),
+      appBar: AppBar(
+          title: Text(
+        'Add Travel Details',
+        style: normaltextFont.copyWith(fontWeight: FontWeight.bold),
+      )),
       body: BackgroundProgress<CreatePostViewModel>(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -65,7 +74,10 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                                 const SizedBox(height: 8),
                                 Text(
                                   '${state.errorText}',
-                                  style: AppStyle.of(context).b5.wCError,
+                                  style: AppStyle.of(context)
+                                      .b5
+                                      .wCError!
+                                      .merge(headerTextFont),
                                 ),
                               ],
                             ],
@@ -83,6 +95,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                       field: ReactiveTextField(
                         formControlName: viewModel.controls.location,
                         onTap: viewModel.onLocation,
+                        style: headerTextFont,
                         readOnly: true,
                       ),
                     ),
@@ -96,6 +109,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                       field: Theme(
                         data: Theme.of(context).copyWith(useMaterial3: false),
                         child: ReactiveDateRangePicker(
+                          style: headerTextFont,
                           formControlName: viewModel.controls.date,
                         ),
                       ),
@@ -109,6 +123,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                         field: ReactiveTextField(
                           formControlName: viewModel.controls.hotel,
                           textInputAction: TextInputAction.next,
+                          style: headerTextFont,
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -160,6 +175,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                       field: ReactiveTextField(
                         formControlName: viewModel.controls.price,
                         keyboardType: TextInputType.number,
+                        style: headerTextFont,
                         decoration: const InputDecoration(prefixText: '\$'),
                         textInputAction: TextInputAction.next,
                       ),
@@ -177,7 +193,10 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                             ),
                             const TextSpan(text: ' to you'),
                           ]),
-                          style: AppStyle.of(context).b5.wCRhythm,
+                          style: AppStyle.of(context)
+                              .b5
+                              .wCRhythm!
+                              .merge(headerTextFont),
                         ),
                       ),
                     ],
@@ -188,6 +207,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                       label: 'Message for your partner',
                       field: ReactiveTextField(
                         formControlName: viewModel.controls.message,
+                        style: headerTextFont,
                       ),
                     ),
                     //endregion
@@ -203,16 +223,22 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                             icon: R.svg.ic_male(width: 21, height: 28),
                             name: 'Male',
                             isSelected: viewModel.isMalePartner,
-                            callback: () => viewModel
-                                .onTapMalePartner(viewModel.isMalePartner),
+                            callback: () {
+                              KeyboardUtil.hideKeyboard(context);
+                              viewModel
+                                  .onTapMalePartner(viewModel.isMalePartner);
+                            },
                           ),
                           const SizedBox(width: 16),
                           AppToggleButton(
                             icon: R.svg.ic_female(width: 21, height: 28),
                             name: 'Female',
                             isSelected: viewModel.isFemalePartner,
-                            callback: () => viewModel
-                                .onTapFemalePartner(viewModel.isFemalePartner),
+                            callback: () {
+                              KeyboardUtil.hideKeyboard(context);
+                              viewModel.onTapFemalePartner(
+                                  viewModel.isFemalePartner);
+                            },
                           ),
                         ],
                       ),
@@ -220,22 +246,31 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                     //endregion
                     const SizedBox(height: 24),
                     if (viewModel.type == PostType.finding) ...[
-                      AppFormField(
-                        field: ReactiveSwitchListTile(
-                          formControlName: viewModel.controls.hourly,
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            'Available to Hourly?',
-                            style: AppStyle.of(context).b4.wCRhythm,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: AppFormField(
+                          field: ReactiveSwitchListTile(
+                            formControlName: viewModel.controls.hourly,
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(
+                              'Available to Hourly?',
+                              style: AppStyle.of(context)
+                                  .b4
+                                  .wCRhythm!
+                                  .merge(headerTextFont),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 24),
                     ],
-                    ElevatedButton(
-                      onPressed: viewModel.onSubmit,
-                      child: const Text('Post it'),
-                    ),
+                    AvaliableHour(viewModel: viewModel),
+                    const SizedBox(height: 24),
+
+                    // ElevatedButton(
+                    //   onPressed: viewModel.onSubmit,
+                    //   child: const Text('Post it'),
+                    // ),
                   ],
                 ),
               ),
@@ -249,4 +284,91 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
   @override
   CreatePostViewModel viewModelBuilder(BuildContext context) =>
       CreatePostViewModel(type, locator.get());
+}
+
+Future<List<TimeOfDay>?> showTimeRange(BuildContext context) async {
+  return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Choose event', style: headerTextFont),
+          content: TimeRangePicker(
+            initialFromHour: 1,
+            initialToHour: 2,
+            initialFromMinutes: 3,
+            initialToMinutes: 4,
+            is24Format: false,
+            onSelect: (from, to) {
+              Navigator.pop(context, [from, to]);
+            },
+          ),
+        );
+      });
+}
+
+String avaliableHour = '';
+final RoundedLoadingButtonController postItController =
+    RoundedLoadingButtonController();
+
+class AvaliableHour extends StatefulWidget {
+  final CreatePostViewModel viewModel;
+  AvaliableHour({Key? key, required this.viewModel}) : super(key: key);
+
+  @override
+  State<AvaliableHour> createState() => _AvaliableHourState();
+}
+
+class _AvaliableHourState extends State<AvaliableHour> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (widget.viewModel.type == PostType.booked) ...[
+          ListTile(
+            title: Text(
+              'Avaliable Hour:',
+              style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
+            ),
+            subtitle: avaliableHour.isEmpty
+                ? Text(
+                    'Tap to adjust',
+                    style: headerTextFont.copyWith(
+                        color: Colors.blueGrey, fontSize: 11),
+                  )
+                : null,
+            trailing: Text(
+              avaliableHour.isEmpty ? "-- : --" : avaliableHour,
+              style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
+            ),
+            onTap: () {
+              KeyboardUtil.hideKeyboard(context);
+              showTimeRange(context).then(
+                (value) {
+                  if (value != null) {
+                    String from = '${value.first.format(context)}';
+                    String to = '${value.last.format(context)}';
+                    avaliableHour = "$from - $to";
+                    setState(() {});
+                  }
+                },
+              );
+            },
+          ),
+        ],
+        const SizedBox(height: 20),
+        RoundedLoadingButton(
+            controller: postItController,
+            animateOnTap: false,
+            color: Theme.of(context).primaryColor,
+            onPressed: () async {
+              KeyboardUtil.hideKeyboard(context);
+              widget.viewModel.onSubmit();
+            },
+            child: Text(
+              'Post it',
+              style: headerTextFont,
+            ))
+      ],
+    );
+  }
 }

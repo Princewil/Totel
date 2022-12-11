@@ -1,6 +1,8 @@
 import 'package:cheffy/Utils/stacked_nav_keys.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
+import 'package:cheffy/modules/posts/create/create_post_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fresh_dio/fresh_dio.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -44,7 +46,8 @@ class MainViewModel extends BaseViewModel {
     });
   }
 
-  void onAddPostHandler() {
+  void onAddPostHandler(BuildContext context) {
+    KeyboardUtil.hideKeyboard(context);
     _bottomSheetService
         .showCustomSheet<PostType, PostType>(
             variant: BottomSheetType.postCreate)

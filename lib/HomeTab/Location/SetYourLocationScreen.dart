@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../modules/main/discover/presentation/pages/search_hotels_page.dart';
+
 class SetYourLocationScreen extends StatefulWidget {
   const SetYourLocationScreen({Key? key}) : super(key: key);
 
@@ -31,7 +33,8 @@ class _SetYourLocationScreenState extends State<SetYourLocationScreen> {
           ),
           title: Text(
             'Set Your location',
-            style: TextStyle(fontSize: 18, color: Colors.black),
+            style: TextStyle(fontSize: 18, color: Colors.black)
+                .merge(headerTextFont),
           ),
         ),
         body: SafeArea(
@@ -80,11 +83,18 @@ class _SetYourLocationScreenState extends State<SetYourLocationScreen> {
                   ),
                   title: Text(
                     'Set Current location',
-                    style: AppStyle.of(context).b4M.wCPlumpPurplePrimary,
+                    style: AppStyle.of(context)
+                        .b4M
+                        .wCPlumpPurplePrimary!
+                        .merge(headerTextFont)
+                        .merge(headerTextFont),
                   ),
                   subtitle: Text(
                     'Using GPS',
-                    style: AppStyle.of(context).b5.wCCrayola,
+                    style: AppStyle.of(context)
+                        .b5
+                        .wCCrayola!
+                        .merge(headerTextFont),
                   ),
                   // onTap: viewModel.onTapSetCurrentLocation,
                   onTap: () {
@@ -102,7 +112,8 @@ class _SetYourLocationScreenState extends State<SetYourLocationScreen> {
                 const SizedBox(height: 12),
                 Text(
                   'Recently Search',
-                  style: AppStyle.of(context).b5.wCRhythm,
+                  style:
+                      AppStyle.of(context).b5.wCRhythm!.merge(headerTextFont),
                 ),
                 Expanded(
                   child: ListView(
@@ -112,11 +123,17 @@ class _SetYourLocationScreenState extends State<SetYourLocationScreen> {
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           'Miami - Florida',
-                          style: AppStyle.of(context).b4M.wCChineseBlack,
+                          style: AppStyle.of(context)
+                              .b4M
+                              .wCChineseBlack!
+                              .merge(headerTextFont),
                         ),
                         subtitle: Text(
                           '4425 SW 8th St, Coral Gables, FL 33134',
-                          style: AppStyle.of(context).b5.wCRhythm,
+                          style: AppStyle.of(context)
+                              .b5
+                              .wCRhythm!
+                              .merge(headerTextFont),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -126,11 +143,17 @@ class _SetYourLocationScreenState extends State<SetYourLocationScreen> {
                         contentPadding: EdgeInsets.zero,
                         title: Text(
                           'Los Angeles - California',
-                          style: AppStyle.of(context).b4M.wCChineseBlack,
+                          style: AppStyle.of(context)
+                              .b4M
+                              .wCChineseBlack!
+                              .merge(headerTextFont),
                         ),
                         subtitle: Text(
                           '1160 Santee St, Los Angeles, CA 90015, United States',
-                          style: AppStyle.of(context).b5.wCRhythm,
+                          style: AppStyle.of(context)
+                              .b5
+                              .wCRhythm!
+                              .merge(headerTextFont),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),

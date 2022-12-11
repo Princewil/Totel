@@ -3,13 +3,16 @@ import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/app/app.router.dart';
 import 'package:cheffy/core/enums/day_night_enum.dart';
 import 'package:cheffy/core/enums/day_week_enum.dart';
-import 'package:cheffy/modules/main/discover/domain/entities/hotel_entity.dart';
-import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
+// checkScreen(BuildContext context) {
+//   MediaQuery.of(context).size.width < 450 ? true : false;
+// }
+
+bool smallScreen = true;
 
 class SearchProvider extends BaseViewModel {
   final NavigationService _navigationService = locator.get();

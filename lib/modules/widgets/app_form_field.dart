@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_support_pack/flutter_support_pack.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 
+import '../main/discover/presentation/pages/search_hotels_page.dart';
+import '../theme/color.dart';
+
 class AppFormField extends StatelessWidget {
   final String? label;
   final Widget field;
@@ -15,7 +18,8 @@ class AppFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (label.isNotNullOrEmpty) ...[
-          Text(label!, style: AppStyle.of(context).b4.wCRhythm),
+          Text(label!,
+              style: AppStyle.of(context).b4.wCRhythm!.merge(headerTextFont)),
           const SizedBox(height: 8),
         ],
         field,

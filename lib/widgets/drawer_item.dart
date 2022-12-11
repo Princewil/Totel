@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -20,11 +21,11 @@ class DrawerItem extends StatelessWidget {
     return ListTile(
       title: Text(
         title,
-        style: titleStyle,
+        style: titleStyle?.merge(headerTextFont) ?? headerTextFont,
       ),
       leading: FaIcon(
         icon,
-        color: Colors.grey,
+        color: Colors.blueGrey.withOpacity(0.7),
       ),
       onTap: onPress,
     );

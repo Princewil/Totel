@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_phone_form_field/reactive_phone_form_field.dart';
@@ -32,12 +33,16 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                 children: [
                   Text(
                     'Sign up',
-                    style: AppStyle.of(context).b1B.wCChineseBlack,
+                    style: AppStyle.of(context)
+                        .b1B
+                        .wCChineseBlack!
+                        .merge(normaltextFont),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'We want some basic information about you',
-                    style: AppStyle.of(context).b4.wCRhythm,
+                    style:
+                        AppStyle.of(context).b4.wCRhythm!.merge(headerTextFont),
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -47,6 +52,7 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                           label: 'First Name',
                           field: ReactiveTextField(
                             formControlName: viewModel.controls.firstName,
+                            style: headerTextFont,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: AppColors.soap,
@@ -65,6 +71,7 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                           label: 'Last Name',
                           field: ReactiveTextField(
                             formControlName: viewModel.controls.lastName,
+                            style: headerTextFont,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: AppColors.soap,
@@ -84,14 +91,17 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                     label: 'Email Address',
                     field: ReactiveTextField(
                       formControlName: viewModel.controls.email,
+                      style: headerTextFont,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: AppColors.soap,
                         hintText: 'E.g. willie.jennings@example.com',
                       ),
                       validationMessages: {
-                        ValidationMessage.required: (val) => 'Enter your E-mail',
-                        ValidationMessage.email: (val) => 'Enter a valid E-mail',
+                        ValidationMessage.required: (val) =>
+                            'Enter your E-mail',
+                        ValidationMessage.email: (val) =>
+                            'Enter a valid E-mail',
                       },
                     ),
                   ),
@@ -100,13 +110,15 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                     label: 'Enter your phone number',
                     field: ReactivePhoneFormField(
                       formControlName: viewModel.controls.phone,
+                      style: headerTextFont,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: AppColors.soap,
                         hintText: 'E.g. 64888 88245',
                       ),
                       validationMessages: {
-                        ValidationMessage.required: (val) => 'Enter phone number',
+                        ValidationMessage.required: (val) =>
+                            'Enter phone number',
                         ValidationMessage.minLength: (val) =>
                             'Phone number must be 10 characters',
                         ValidationMessage.maxLength: (val) =>
@@ -119,6 +131,7 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                     label: 'Password',
                     field: ReactiveTextField(
                       formControlName: viewModel.controls.password,
+                      style: headerTextFont,
                       obscureText: viewModel.obscureText,
                       validationMessages: {
                         ValidationMessage.required: (val) =>
@@ -145,6 +158,7 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                     label: 'Confirm Password',
                     field: ReactiveTextField(
                       formControlName: viewModel.controls.confirmPassword,
+                      style: headerTextFont,
                       obscureText: viewModel.obscureText,
                       validationMessages: {
                         ValidationMessage.required: (val) =>
@@ -171,6 +185,7 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                   const SizedBox(height: 52),
                   ElevatedButton(
                     onPressed: viewModel.onRegisterSubmit,
+                    style: ElevatedButton.styleFrom(textStyle: headerTextFont),
                     child: const Text('Finish'),
                   ),
                   SizedBox(

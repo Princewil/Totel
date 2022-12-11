@@ -1,15 +1,13 @@
 import 'package:cheffy/Utils/key.dart';
 import 'package:cheffy/Utils/stacked_nav_keys.dart';
-import 'package:cheffy/app/app.locator.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
 import 'package:cheffy/widgets/app_drawer.dart';
-import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:cheffy/r.g.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 
@@ -56,7 +54,7 @@ class _MainViewState extends State<MainView> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: ClipOval(
         child: FloatingActionButton(
-          onPressed: mainViewModel.onAddPostHandler,
+          onPressed: () => mainViewModel.onAddPostHandler(context),
           elevation: 8,
           child: Icon(
             Icons.add,
@@ -76,8 +74,9 @@ class _MainViewState extends State<MainView> {
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: true,
             showUnselectedLabels: true,
-            selectedLabelStyle: AppStyle.of(context).b5M,
-            unselectedLabelStyle: AppStyle.of(context).b5M,
+            selectedLabelStyle: AppStyle.of(context).b5M!.merge(headerTextFont),
+            unselectedLabelStyle:
+                AppStyle.of(context).b5M!.merge(headerTextFont),
             selectedItemColor: AppColors.plumpPurplePrimary,
             unselectedItemColor: AppColors.rhythm,
             onTap: mainViewModel.onTapItem,
@@ -86,10 +85,12 @@ class _MainViewState extends State<MainView> {
                 icon: FaIcon(
                   FontAwesomeIcons.magnifyingGlass,
                   color: AppColors.rhythm,
+                  size: 20,
                 ),
                 activeIcon: FaIcon(
                   FontAwesomeIcons.magnifyingGlass,
                   color: AppColors.plumpPurplePrimary,
+                  size: 20,
                 ),
                 label: 'Discover',
               ),
@@ -97,10 +98,12 @@ class _MainViewState extends State<MainView> {
                 icon: FaIcon(
                   FontAwesomeIcons.map,
                   color: AppColors.rhythm,
+                  size: 20,
                 ),
                 activeIcon: FaIcon(
                   FontAwesomeIcons.solidMap,
                   color: AppColors.plumpPurplePrimary,
+                  size: 20,
                 ),
                 label: 'Map',
               ),
@@ -108,10 +111,12 @@ class _MainViewState extends State<MainView> {
                 icon: FaIcon(
                   FontAwesomeIcons.image,
                   color: AppColors.rhythm,
+                  size: 20,
                 ),
                 activeIcon: FaIcon(
                   FontAwesomeIcons.solidImage,
                   color: AppColors.plumpPurplePrimary,
+                  size: 20,
                 ),
                 label: 'Posts',
               ),
@@ -119,10 +124,12 @@ class _MainViewState extends State<MainView> {
                 icon: FaIcon(
                   FontAwesomeIcons.user,
                   color: AppColors.rhythm,
+                  size: 20,
                 ),
                 activeIcon: FaIcon(
                   FontAwesomeIcons.solidUser,
                   color: AppColors.plumpPurplePrimary,
+                  size: 20,
                 ),
                 label: 'Profile',
               ),

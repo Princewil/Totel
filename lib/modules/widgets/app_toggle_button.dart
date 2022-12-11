@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
@@ -40,8 +41,14 @@ class AppToggleButton extends StatelessWidget {
             const SizedBox(width: 8),
             Text(name,
                 style: isSelected
-                    ? AppStyle.of(context).b3.wCPlumpPurplePrimary
-                    : AppStyle.of(context).b3.wCChineseBlack),
+                    ? AppStyle.of(context)
+                        .b3
+                        .wCPlumpPurplePrimary!
+                        .merge(headerTextFont)
+                    : AppStyle.of(context)
+                        .b3
+                        .wCChineseBlack!
+                        .merge(headerTextFont)),
           ],
         ),
       ),

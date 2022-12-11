@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/posts/create/create_post_view.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_params.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
 import 'package:cheffy/modules/posts/posts/domain/repositories/post_repo.dart';
@@ -123,6 +124,7 @@ class CreatePostViewModel extends BaseViewModel {
     return;
 */
     if (form.valid) {
+      postItController.start();
       final attch = attachments
           .where((element) => element != null)
           .map((e) => e!)
@@ -147,7 +149,9 @@ class CreatePostViewModel extends BaseViewModel {
                   name: form.control(controls.hotel).value,
                   gender: _getGender(),
                   overview: form.control(controls.message).value,
-                  location: _selectedLocation!.id.toString(),
+                  // location: _selectedLocation!.id.toString(),
+                  location:
+                      "${_selectedLocation!.latitude}~${_selectedLocation!.longitude}",
                   notes: form.control(controls.message).value,
                   partnerAmount: form.control(controls.price).value as double,
                   rate: form.control(controls.rating).value as double,
@@ -159,12 +163,16 @@ class CreatePostViewModel extends BaseViewModel {
           case PostType.finding:
             await _postsRepo.createFindingPost(CreateFindingPostParams(
               gender: _getGender(),
-              location: _selectedLocation!.id.toString(),
+              // location: _selectedLocation!.id.toString(),
+              location:
+                  "${_selectedLocation!.latitude}~${_selectedLocation!.longitude}",
               notes: form.control(controls.message).value,
               partnerAmount: form.control(controls.price).value,
               dateFrom: form.control(controls.date).value.start,
               dateTo: form.control(controls.date).value.end,
-              isAcceptHourly: form.control(controls.hourly).value,
+              isAcceptHourly: form.control(controls.hourly).value != null
+                  ? form.control(controls.hourly).value
+                  : false,
             ));
 
             break;
@@ -179,6 +187,7 @@ class CreatePostViewModel extends BaseViewModel {
         _snackbarService.showSnackbar(message: e.toString());
         rethrow;
       } finally {
+        postItController.reset();
         setBusy(false);
       }
     } else {

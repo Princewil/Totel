@@ -1,13 +1,9 @@
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
-import 'package:cheffy/modules/main/map/map_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:reactive_forms/reactive_forms.dart';
-import 'package:reactive_phone_form_field/reactive_phone_form_field.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/app/app.router.dart';
-import 'package:cheffy/core/services/authentication_service.dart';
 
 class LoginViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator.get();
@@ -80,9 +76,9 @@ class LoginViewModel extends BaseViewModel {
     try {
       if (form.valid) {
         setBusy(true);
-        final result = await authRepo.login(
-            form.control(controls.username).value,
-            form.control(controls.password).value);
+        // final result = await authRepo.login(
+        //     form.control(controls.username).value,
+        //     form.control(controls.password).value);
 
         // Goes to Main Screen
         _navigationService.clearStackAndShow(Routes.mainView);
