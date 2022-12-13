@@ -1,4 +1,5 @@
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
+import 'package:cheffy/modules/posts/create/create_post_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_phone_form_field/reactive_phone_form_field.dart';
@@ -184,7 +185,10 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                   ),
                   const SizedBox(height: 52),
                   ElevatedButton(
-                    onPressed: viewModel.onRegisterSubmit,
+                    onPressed: () {
+                      KeyboardUtil.hideKeyboard(context);
+                      viewModel.onRegisterSubmit();
+                    },
                     style: ElevatedButton.styleFrom(textStyle: headerTextFont),
                     child: const Text('Finish'),
                   ),

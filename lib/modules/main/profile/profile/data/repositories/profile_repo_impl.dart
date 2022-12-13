@@ -5,6 +5,7 @@ import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/core/failures/failures.dart';
 import 'package:cheffy/core/services/api/api_routes.dart';
 import 'package:cheffy/core/services/secure_storage_service.dart';
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/profile/profile/domain/repositories/profile_repo.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/post_entity.dart';
@@ -21,10 +22,11 @@ class ProfileRepoImpl extends ProfileRepo {
   @override
   Future<UserEntity> get() async {
     try {
-      final result = await _apiClient.get(ApiRoutes.profile);
-      final resultData = result.data;
+      // final result = await _apiClient.get(ApiRoutes.profile);
+      final result = await getUserDetails();
+      final resultData = result;
 
-      return UserEntity.fromJson(resultData);
+      return UserEntity.fromMap(resultData!);
     } on DioError catch (e) {
       throw e;
     } catch (e) {
@@ -93,7 +95,7 @@ class ProfileRepoImpl extends ProfileRepo {
 
       final resultData = result.data;
 
-      return UserEntity.fromJson(resultData);
+      return UserEntity.fromMap(resultData);
     } on DioError catch (e) {
       print(e);
       throw e;

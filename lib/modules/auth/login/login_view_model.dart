@@ -76,9 +76,17 @@ class LoginViewModel extends BaseViewModel {
     try {
       if (form.valid) {
         setBusy(true);
-        // final result = await authRepo.login(
-        //     form.control(controls.username).value,
-        //     form.control(controls.password).value);
+        final result = await authRepo.loginWithEmail(
+            form.control(controls.username).value,
+            form.control(controls.password).value);
+        if (result is bool) {
+          _navigationService.clearStackAndShow(Routes.mainView);
+        } else {
+          _snackbarService.showSnackbar(
+            title: 'Wrong Credentials',
+            message: 'E-mail or password is wrong',
+          );
+        }
 
         // Goes to Main Screen
         _navigationService.clearStackAndShow(Routes.mainView);
@@ -88,6 +96,7 @@ class LoginViewModel extends BaseViewModel {
         form.markAllAsTouched();
       }
     } catch (e) {
+      setBusy(false);
       _snackbarService.showSnackbar(
         title: 'Wrong Credentials',
         message: 'E-mail or password is wrong',
@@ -97,16 +106,25 @@ class LoginViewModel extends BaseViewModel {
 
   void onGoogle() async {
     try {
-      await authRepo.signInWithGoogle();
-      _navigationService.navigateToMainView();
+      setBusy(true);
+      bool _success = await authRepo.continueWithGoogleAccnt();
+      if (_success) {
+        // _navigationService.navigateToMainView();
+        _navigationService.clearStackAndShow(Routes.mainView);
+      } else {
+        setBusy(false);
+        _snackbarService.showSnackbar(
+            message: 'An error occured. Try again later');
+      }
     } catch (e) {
+      setBusy(true);
       _snackbarService.showSnackbar(message: e.toString());
     }
   }
 
   void onFacebook() async {
     try {
-      await authRepo.signInWithGoogle();
+      //await authRepo.signInWithGoogle();
     } catch (e) {
       _snackbarService.showSnackbar(message: e.toString());
     }

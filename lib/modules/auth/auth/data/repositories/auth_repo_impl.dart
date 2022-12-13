@@ -1,6 +1,7 @@
 import 'package:cheffy/app/app.router.dart';
 import 'package:cheffy/app/constants/error_messages.dart';
 import 'package:cheffy/core/services/api/api_routes.dart';
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
 import 'package:cheffy/app/app.locator.dart';
@@ -41,6 +42,16 @@ class AuthRepoImpl implements AuthRepo {
       }
       print('on DioError catch ($e)');
       throw UnExpectedException();
+    } catch (e) {
+      print('catch ($e)');
+      throw UnExpectedException();
+    }
+  }
+
+  @override
+  Future loginWithEmail(String email, String password) async {
+    try {
+      return await signInWithEmail(email, password).then((value) => true);
     } catch (e) {
       print('catch ($e)');
       throw UnExpectedException();
@@ -89,6 +100,23 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
+  Future createWithEmail({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    required String phoneNumber,
+  }) async {
+    try {
+      return await registerWithEmailAndPassword(
+          email, password, '$lastName $firstName', phoneNumber);
+    } catch (e) {
+      print(e);
+      return e;
+    }
+  }
+
+  @override
   Future<void> sendOtp({
     required String phoneNumber,
     required void Function(PhoneAuthCredential) onVerificationCompleted,
@@ -108,6 +136,31 @@ class AuthRepoImpl implements AuthRepo {
       forceResendingToken: forceResendingToken,
       codeAutoRetrievalTimeout: onCodeAutoRetrievalTimeout,
     );
+  }
+
+  @override
+  Future<bool> continueWithGoogleAccnt() async {
+    return await signInWithGoogleAccnt().then((User? user) async {
+      if (user != null) {
+        bool notNew = await authenticateUser(user);
+        if (!notNew) {
+          CurrentUser _user = CurrentUser(
+            uid: user.uid,
+            email: user.email,
+            userName: user.displayName,
+            profilePhoto: user.photoURL,
+            phoneNumber: '',
+          );
+          await registerNewUser(_user);
+          return true;
+        } else
+          return true;
+      } else {
+        return false;
+      }
+    }).catchError((e) {
+      return false;
+    });
   }
 
   // google login
@@ -160,7 +213,10 @@ class AuthRepoImpl implements AuthRepo {
     await _secureStorageService.setAccessToken(null);
     await _secureStorageService.setRefreshToken(null);
     // await _secureStorageService.setAppUser(null);
-    await _apiClient.fresh.clearToken();
+    // await _apiClient.fresh.clearToken();
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
     _navigationService.clearStackAndShow(Routes.loginView);
   }
 }
+//

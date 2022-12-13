@@ -32,7 +32,7 @@ class _MainViewState extends State<MainView> {
       mainViewModel.init();
 
       // To get drawer profile and name
-      profileProvider.getProfile();
+      profileProvider.getProfile(); //TODO
     });
   }
 

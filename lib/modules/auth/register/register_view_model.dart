@@ -77,6 +77,7 @@ class RegisterViewModel extends BaseViewModel {
       print(accountForm.valid);
       if (accountForm.valid) {
         setBusy(true);
+        await Future.delayed(Duration(seconds: 2));
         final phoneNumberWithCountryCode = '+' +
             accountForm.control(controls.phone).value.countryCode +
             accountForm.control(controls.phone).value.nsn;
@@ -88,13 +89,14 @@ class RegisterViewModel extends BaseViewModel {
             print(credential.asMap());
 
             await auth.signInWithCredential(credential);
-            await authRepo.register(
+            await authRepo.createWithEmail(
               email: accountForm.control(controls.email).value,
               password: accountForm.control(controls.password).value,
               firstName: accountForm.control(controls.firstName).value,
               lastName: accountForm.control(controls.lastName).value,
+              phoneNumber: phoneNumberWithCountryCode,
             );
-            _navigationService.clearStackAndShow(Routes.loginView);
+            _navigationService.clearStackAndShow(Routes.mainView);
           },
           onVerificationFailed: (FirebaseAuthException e) {
             print('verificationFailed');
@@ -114,7 +116,8 @@ class RegisterViewModel extends BaseViewModel {
 
             final otpArg = await _navigationService.navigateToOTPView();
 
-            await signInWithFirebaseCredentials(otpArg);
+            await signInWithFirebaseCredentials(
+                otpArg, phoneNumberWithCountryCode);
           },
           forceResendingToken: _resendToken,
           onCodeAutoRetrievalTimeout: (String verificationId) {
@@ -143,7 +146,8 @@ class RegisterViewModel extends BaseViewModel {
 
   void onLogin() => _navigationService.back();
 
-  Future<void> signInWithFirebaseCredentials(String otp) async {
+  Future<void> signInWithFirebaseCredentials(
+      String otp, String phoneNumberWithCountryCode) async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
@@ -153,14 +157,22 @@ class RegisterViewModel extends BaseViewModel {
     // Sign the user in (or link) with the credential
     await auth.signInWithCredential(credential);
 
-    final registerMsg = await authRepo.register(
-      email: accountForm.control(controls.email).value,
-      password: accountForm.control(controls.password).value,
-      firstName: accountForm.control(controls.firstName).value,
-      lastName: accountForm.control(controls.lastName).value,
-    );
-    _snackbarService.showSnackbar(message: registerMsg);
-    _navigationService.clearStackAndShow(Routes.loginView);
+    // final registerMsg = await authRepo.register(
+    //   email: accountForm.control(controls.email).value,
+    //   password: accountForm.control(controls.password).value,
+    //   firstName: accountForm.control(controls.firstName).value,
+    //   lastName: accountForm.control(controls.lastName).value,
+    // );
+
+    var registerMsg = await authRepo.createWithEmail(
+        email: accountForm.control(controls.email).value,
+        password: accountForm.control(controls.password).value,
+        firstName: accountForm.control(controls.firstName).value,
+        lastName: accountForm.control(controls.lastName).value,
+        phoneNumber: phoneNumberWithCountryCode);
+    _navigationService.clearStackAndShow(Routes.mainView);
+    _snackbarService.showSnackbar(message: registerMsg.toString());
+    _navigationService.clearStackAndShow(Routes.mainView);
   }
 }
 

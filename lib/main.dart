@@ -7,6 +7,7 @@ import 'package:stacked_themes/stacked_themes.dart';
 import 'app/app.dart';
 import 'app/app.router.dart';
 import 'modules/theme/theme.dart';
+import 'route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,8 @@ class App extends StatelessWidget {
           // localizationsDelegates: context.localizationDelegates,
           // supportedLocales: context.supportedLocales,
           // locale: context.locale,
+          // initialRoute: ,
+          // onGenerateRoute: RouteGenerator.generateRoute,
           navigatorKey: StackedService.navigatorKey,
           onGenerateRoute: StackedRouter().onGenerateRoute,
         ),

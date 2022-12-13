@@ -125,7 +125,7 @@ class Post {
           .toList(),
       createdAt: map['createdAt'] != null ? map['createdAt'] as String : null,
       updatedAt: map['updatedAt'] != null ? map['updatedAt'] as String : null,
-      user: UserEntity.fromJson(map['user'] as Map<String, dynamic>),
+      user: UserEntity.fromMap(map['user'] as Map<String, dynamic>), //TODO
       hotel: HotelEntity.fromMap(map['hotel'] as Map<String, dynamic>),
     );
   }

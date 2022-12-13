@@ -1,5 +1,6 @@
 import 'package:cheffy/Models/occupation.dart';
 import 'package:cheffy/app/app.dart';
+import 'package:cheffy/firebase_method.dart';
 
 class UserEntity {
   final int id;
@@ -40,21 +41,22 @@ class UserEntity {
     required this.occupation,
   });
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) => UserEntity(
-        id: json["id"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        username: json["username"],
-        email: json["email"],
+  factory UserEntity.fromMap(Map<String, dynamic> json) => UserEntity(
+        id: 1,
+        firstName: json[usernamekey].split(' ').last,
+        lastName: json[usernamekey].split(' ').first,
+        username: json[usernamekey],
+        email: json[usersGmailkey],
         native: json["native"],
         bio: json["bio"],
-        phoneNo: json["phone_no"],
+        phoneNo: json[phoneNumberkey],
         dateOfBrith: json["date_of_brith"] == null
             ? null
             : DateTime.tryParse(json["date_of_brith"]),
         avatar: json["avatar"].toString().replaceAll('public/', ''),
         city: json["city"],
-        rating: json["rating"],
+        // rating: json["rating"],
+        rating: 3,
         gender: json["gender"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null
@@ -67,9 +69,10 @@ class UserEntity {
       );
 
   Map<String, dynamic> toJson() => {
-        "first_name": firstName,
-        "last_name": lastName,
-        "email": email,
+        // "first_name": firstName,
+        // "last_name": lastName,
+        usernamekey: '$lastName $firstName',
+        usersGmailkey: email,
         "native": native,
         "bio": bio,
         "gender": gender,
