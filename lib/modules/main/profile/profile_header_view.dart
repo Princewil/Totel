@@ -1,6 +1,8 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 import 'package:cheffy/r.g.dart';
@@ -43,8 +45,13 @@ class ProfileHeaderView extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 40,
                           backgroundColor: AppColors.rhythm,
-                          backgroundImage:
-                              profileProvider.profileEntity?.avatar == null
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.white.withOpacity(0.7),
+                            size: 50,
+                          ),
+                          foregroundImage:
+                              profileProvider.profileEntity?.avatar == ''
                                   ? null
                                   : NetworkImage(
                                       profileProvider.profileEntity!.avatar!,
@@ -70,9 +77,8 @@ class ProfileHeaderView extends StatelessWidget {
                             children: [
                               Text(
                                 "${profileProvider.profileEntity?.rating}",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                ),
+                                style: headerTextFont.copyWith(
+                                    color: Colors.white),
                               ),
                               SizedBox(
                                 width: 4,
@@ -98,12 +104,18 @@ class ProfileHeaderView extends StatelessWidget {
                     children: [
                       Text(
                         "${profileProvider.profileEntity?.firstName ?? ''} ${profileProvider.profileEntity?.lastName ?? ''}",
-                        style: AppStyle.of(context).b3M.wCChineseBlack,
+                        style: AppStyle.of(context)
+                            .b3M
+                            .wCChineseBlack!
+                            .merge(headerTextFont),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "${profileProvider.profileEntity?.occupation?.name ?? ''}",
-                        style: AppStyle.of(context).b4.wCRhythm,
+                        "${profileProvider.profileEntity?.occupation ?? ''}",
+                        style: AppStyle.of(context)
+                            .b4
+                            .wCRhythm!
+                            .merge(headerTextFont),
                       ),
                     ],
                   ),
@@ -113,13 +125,26 @@ class ProfileHeaderView extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               "Bio",
-              style: AppStyle.of(context).b5M.wCCrayola,
+              style: AppStyle.of(context).b5M.wCCrayola!.merge(headerTextFont),
             ),
             const SizedBox(height: 8),
-            Text(
-              profileProvider.profileEntity?.bio ?? 'No bio available',
-              style: AppStyle.of(context).b4.wCChineseBlack,
-            ),
+            if (profileProvider.profileEntity!.bio != '')
+              Text(
+                profileProvider.profileEntity!.bio!,
+                style: AppStyle.of(context)
+                    .b4
+                    .wCChineseBlack!
+                    .merge(headerTextFont),
+              ),
+            if (profileProvider.profileEntity!.bio == '')
+              Text(
+                'No bio available',
+                style: AppStyle.of(context)
+                    .b4
+                    .wCChineseBlack!
+                    .merge(headerTextFont)
+                    .copyWith(fontStyle: FontStyle.italic, color: Colors.grey),
+              ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,8 +161,11 @@ class ProfileHeaderView extends StatelessWidget {
                       side: BorderSide(color: AppColors.soap),
                     ),
                     child: Text(
-                      '${profileProvider.postEntity?.posts.length ?? 0} Posts',
-                      style: AppStyle.of(context).b4M.wCChineseBlack,
+                      '${profileProvider.postEntity?.length ?? 0} Posts',
+                      style: AppStyle.of(context)
+                          .b4M
+                          .wCChineseBlack!
+                          .merge(headerTextFont),
                     ),
                   ),
                 ),

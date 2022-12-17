@@ -39,7 +39,7 @@ class _PostsPageViewState extends State<PostsPageView> {
       drawer: AppDrawer(),
       body: BackgroundProgress<PostsProvider>(
         child: postsProvider.postEntity == null ||
-                postsProvider.postEntity!.posts.isEmpty
+                postsProvider.postEntity!.isEmpty
             ? Center(
                 child: Text(
                   'No posts available, please try again later',
@@ -47,9 +47,9 @@ class _PostsPageViewState extends State<PostsPageView> {
                 ),
               )
             : ListView.builder(
-                itemCount: postsProvider.postEntity!.posts.length,
+                itemCount: postsProvider.postEntity!.length,
                 itemBuilder: (context, i) {
-                  final postItem = postsProvider.postEntity!.posts[i];
+                  final postItem = postsProvider.postEntity![i];
                   return PostListingItemVerticalLayoutView(
                     post: postItem,
                     onPress: () {

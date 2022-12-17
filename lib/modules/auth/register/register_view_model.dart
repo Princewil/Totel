@@ -1,5 +1,6 @@
 import 'package:cheffy/Utils/stacked_nav_keys.dart';
 import 'package:cheffy/core/exceptions/custom_exceptions.dart';
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:reactive_forms/reactive_forms.dart';
@@ -9,7 +10,32 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/app/app.router.dart';
 
+import '../auth/domain/entities/user_entity.dart';
+import 'register_form_view.dart';
+
 class RegisterViewModel extends BaseViewModel {
+  UserEntity userEntity() {
+    var now = DateTime.now();
+    return UserEntity(
+      avatar: '',
+      bio: accountForm.control(controls.bio).value ?? '',
+      city: accountForm.control(controls.city).value ?? '',
+      country: accountForm.control(controls.contry).value ?? '',
+      createdAt: now.toString(),
+      dateOfBrith: regDOB.toString(),
+      email: currentUser()?.email ?? '',
+      firstName: accountForm.control(controls.firstName).value ?? '',
+      gender: maleFemaleRegEnum.toString(),
+      hobbies: accountForm.control(controls.hobbies).value ?? '',
+      lastName: accountForm.control(controls.lastName).value ?? '',
+      occupation: accountForm.control(controls.occupation).value ?? '',
+      phoneNo: accountForm.control(controls.phone).value?.toString() ?? '',
+      rating: 0,
+      uid: currentUser()?.uid ?? '',
+      updatedAt: now.toString(),
+    );
+  }
+
   RegisterViewModel(this.authRepo) {
     accountForm = FormGroup(
       {
@@ -19,15 +45,24 @@ class RegisterViewModel extends BaseViewModel {
         controls.lastName: FormControl<String>(validators: [
           Validators.required,
         ]),
-        controls.email: FormControl<String>(validators: [
+        controls.city: FormControl<String>(validators: [
           Validators.required,
-          Validators.email,
         ]),
-        controls.password: FormControl<String>(validators: [
+        controls.contry: FormControl<String>(validators: [
           Validators.required,
-          Validators.minLength(6),
         ]),
-        controls.confirmPassword: FormControl<String>(),
+        controls.bio: FormControl<String>(),
+        controls.hobbies: FormControl<String>(),
+        controls.occupation: FormControl<String>(),
+        // controls.email: FormControl<String>(validators: [
+        //   Validators.required,
+        //   Validators.email,
+        // ]),
+        // controls.password: FormControl<String>(validators: [
+        //   Validators.required,
+        //   Validators.minLength(6),
+        // ]),
+        //controls.confirmPassword: FormControl<String>(),
         controls.phone: FormControl<PhoneNumber>(validators: [
           Validators.required,
           // Validators.maxLength(12),
@@ -35,7 +70,7 @@ class RegisterViewModel extends BaseViewModel {
         ]),
       },
       validators: [
-        Validators.mustMatch(controls.password, controls.confirmPassword),
+        //Validators.mustMatch(controls.password, controls.confirmPassword),
       ],
     );
   }
@@ -76,6 +111,11 @@ class RegisterViewModel extends BaseViewModel {
     try {
       print(accountForm.valid);
       if (accountForm.valid) {
+        if (maleFemaleRegEnum == null) {
+          _snackbarService.showSnackbar(
+              message: 'You forgot to state your gender');
+          return;
+        }
         setBusy(true);
         await Future.delayed(Duration(seconds: 2));
         final phoneNumberWithCountryCode = '+' +
@@ -88,14 +128,14 @@ class RegisterViewModel extends BaseViewModel {
             print('verificationCompleted');
             print(credential.asMap());
 
-            await auth.signInWithCredential(credential);
+            //await auth.signInWithCredential(credential);
             await authRepo.createWithEmail(
-              email: accountForm.control(controls.email).value,
-              password: accountForm.control(controls.password).value,
-              firstName: accountForm.control(controls.firstName).value,
-              lastName: accountForm.control(controls.lastName).value,
-              phoneNumber: phoneNumberWithCountryCode,
-            );
+                // email: accountForm.control(controls.email).value,
+                // password: accountForm.control(controls.password).value,
+                // firstName: accountForm.control(controls.firstName).value,
+                // lastName: accountForm.control(controls.lastName).value,
+                // phoneNumber: phoneNumberWithCountryCode,
+                userEntity: userEntity());
             _navigationService.clearStackAndShow(Routes.mainView);
           },
           onVerificationFailed: (FirebaseAuthException e) {
@@ -155,7 +195,7 @@ class RegisterViewModel extends BaseViewModel {
       smsCode: otp.toString(),
     );
     // Sign the user in (or link) with the credential
-    await auth.signInWithCredential(credential);
+    //await auth.signInWithCredential(credential);
 
     // final registerMsg = await authRepo.register(
     //   email: accountForm.control(controls.email).value,
@@ -165,14 +205,14 @@ class RegisterViewModel extends BaseViewModel {
     // );
 
     var registerMsg = await authRepo.createWithEmail(
-        email: accountForm.control(controls.email).value,
-        password: accountForm.control(controls.password).value,
-        firstName: accountForm.control(controls.firstName).value,
-        lastName: accountForm.control(controls.lastName).value,
-        phoneNumber: phoneNumberWithCountryCode);
+        // email: accountForm.control(controls.email).value,
+        // password: accountForm.control(controls.password).value,
+        // firstName: accountForm.control(controls.firstName).value,
+        // lastName: accountForm.control(controls.lastName).value,
+        // phoneNumber: phoneNumberWithCountryCode,
+        userEntity: userEntity());
     _navigationService.clearStackAndShow(Routes.mainView);
     _snackbarService.showSnackbar(message: registerMsg.toString());
-    _navigationService.clearStackAndShow(Routes.mainView);
   }
 }
 
@@ -182,9 +222,14 @@ class _Controls {
   String get firstName => 'first_name';
 
   String get lastName => 'last_name';
+  String get city => 'city';
+  String get contry => 'Country';
+  String get bio => 'Bio';
+  String get occupation => 'Occupation';
+  String get hobbies => 'Hobbies';
 
-  String get email => 'email';
+  // String get email => 'email';
 
-  String get password => 'password';
-  String get confirmPassword => 'confirmPassword';
+  // String get password => 'password';
+  // String get confirmPassword => 'confirmPassword';
 }

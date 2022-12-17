@@ -1,3 +1,4 @@
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/posts/create/create_post_view.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_params.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
@@ -12,6 +13,9 @@ import 'package:cheffy/app/app.router.dart';
 import 'package:cheffy/core/enums/post_type.dart';
 import 'package:cheffy/core/methods/extensions.dart';
 import 'package:cheffy/core/models/data/locations_entity.dart';
+
+import '../../../core/enums/male_female_enum.dart';
+import '../../location_change_map/location_change_map_view.dart';
 
 class CreatePostViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator.get();
@@ -39,7 +43,9 @@ class CreatePostViewModel extends BaseViewModel {
         form = FormGroup({
           controls.attachments:
               FormControl(validators: [_validatorAttachments]),
-          controls.location: FormControl(validators: [Validators.required]),
+          controls.location: FormControl(validators: [
+            //Validators.required
+          ]),
           controls.date:
               FormControl<DateTimeRange>(validators: [Validators.required]),
           controls.hotel:
@@ -123,12 +129,14 @@ class CreatePostViewModel extends BaseViewModel {
     print('type is ${form.value}');
     return;
 */
-    if (form.valid) {
+    if (
+        //form.valid
+        true) {
       postItController.start();
-      final attch = attachments
-          .where((element) => element != null)
-          .map((e) => e!)
-          .toList(growable: false);
+      // final attch = attachments
+      //     .where((element) => element != null)
+      //     .map((e) => e!)
+      //     .toList(growable: false);
       setBusy(true);
       try {
         switch (type) {
@@ -161,15 +169,16 @@ class CreatePostViewModel extends BaseViewModel {
                 files: selectedAttachments);
             break;
           case PostType.finding:
-            await _postsRepo.createFindingPost(CreateFindingPostParams(
+            await _postsRepo.createFindingPost(FindingPostParams(
               gender: _getGender(),
+              locationLatLng:
+                  '${locationEntity!.latitude}~${locationEntity!.longitude}',
+              userUID: currentUser()!.uid,
               // location: _selectedLocation!.id.toString(),
-              location:
-                  "${_selectedLocation!.latitude}~${_selectedLocation!.longitude}",
               notes: form.control(controls.message).value,
               partnerAmount: form.control(controls.price).value,
-              dateFrom: form.control(controls.date).value.start,
-              dateTo: form.control(controls.date).value.end,
+              dateFrom: form.control(controls.date).value.start.toString(),
+              dateTo: form.control(controls.date).value.end.toString(),
               isAcceptHourly: form.control(controls.hourly).value != null
                   ? form.control(controls.hourly).value
                   : false,
@@ -184,7 +193,8 @@ class CreatePostViewModel extends BaseViewModel {
 
         _navigationService.back();
       } catch (e) {
-        _snackbarService.showSnackbar(message: e.toString());
+        _snackbarService.showSnackbar(
+            message: 'An error occured, please try again');
         rethrow;
       } finally {
         postItController.reset();
@@ -197,11 +207,11 @@ class CreatePostViewModel extends BaseViewModel {
 
   String _getGender() {
     if (_isMalePartner && _isFemalePartner) {
-      return 'male/female';
+      return '${MaleFemaleEnum.male}/${MaleFemaleEnum.female}';
     } else if (_isFemalePartner) {
-      return 'female';
+      return MaleFemaleEnum.female.toString();
     } else {
-      return 'male';
+      return MaleFemaleEnum.male.toString();
     }
   }
 
@@ -257,11 +267,13 @@ class CreatePostViewModel extends BaseViewModel {
     form.control(controls.attachments).value = attachments;
   }
 
-  void onLocation(FormControl control) {
+  void onLocation(
+      //FormControl control
+      ) {
     _navigationService.navigateToLocationChangeView().then((value) {
       if (value is LocationEntity) {
         _selectedLocation = value;
-        control.value = value.name;
+        // control.value = value.name;
       }
     });
   }

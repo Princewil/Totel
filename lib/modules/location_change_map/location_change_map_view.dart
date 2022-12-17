@@ -46,12 +46,50 @@ class LocationChangeMapView
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Select your location',
-                      style: AppStyle.of(context)
-                          .b5M
-                          .wCRhythm!
-                          .merge(headerTextFont),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select your location',
+                          style: AppStyle.of(context)
+                              .b5M
+                              .wCRhythm!
+                              .merge(headerTextFont),
+                        ),
+                        const SizedBox(width: 8),
+                        OutlinedButton(
+                          //onPressed: widget.viewModel.onPressedChanged,
+                          onPressed: () {
+                            locationFromAddress(
+                                    "Golden royale hotels enugu nigeria ")
+                                .then((value) {
+                              print(value.length);
+                              print(value.first.latitude);
+                              print(value.first.longitude);
+                              placemarkFromCoordinates(value.first.latitude,
+                                      value.first.longitude)
+                                  .then((value) {
+                                print(value.first.street);
+                                print(value.first.country);
+                                print(value.first.name);
+                                print(value.first.subLocality);
+                                print(value.first.subAdministrativeArea);
+                              });
+                            });
+                          },
+                          style: OutlinedButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            side: BorderSide(color: AppColors.soap),
+                          ),
+                          child: Text(
+                            'Change',
+                            style: AppStyle.of(context)
+                                .b5M
+                                .wCChineseBlack!
+                                .merge(headerTextFont),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     LocationDetails(viewModel: viewModel),
@@ -110,15 +148,25 @@ class _LocationDetailsState extends State<LocationDetails> {
   Placemark? _info;
   getCurrentLocation() async {
     await Future.delayed(Duration(seconds: 3));
-    Position myLocation = await LocationService().determinePosition();
-    locationInfo = await placemarkFromCoordinates(
-        myLocation.latitude, myLocation.longitude);
-    _info = locationInfo.first;
-    locationEntity = LocationEntity(
-        name:
-            '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
-        latitude: myLocation.latitude,
-        longitude: myLocation.longitude);
+    if (location != null) {
+      locationInfo = await placemarkFromCoordinates(
+          location!.latitude, location!.longitude);
+      _info = locationInfo.first;
+      locationEntity = LocationEntity(
+          name:
+              '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
+          latitude: location!.latitude,
+          longitude: location!.longitude);
+    } else {
+      Position myLocation = await LocationService().determinePosition();
+      locationInfo = await placemarkFromCoordinates(
+          myLocation.latitude, myLocation.longitude);
+      _info = locationInfo.first;
+      locationEntity = LocationEntity(
+          name: fullAddress(_info!),
+          latitude: myLocation.latitude,
+          longitude: myLocation.longitude);
+    }
 
     setState(() {});
   }
@@ -132,30 +180,52 @@ class _LocationDetailsState extends State<LocationDetails> {
         Expanded(
           child: Column(
             children: [
-              Row(
-                children: [
-                  Image(
-                    image: R.svg.ic_location(width: 17, height: 20),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    locationInfo.isEmpty
-                        // ? 'Miami - Florida'
-                        ? ' - '
-                        : '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
-                    style: AppStyle.of(context)
-                        .b3B
-                        .wCChineseBlack!
-                        .merge(normaltextFont),
-                  ),
-                ],
+              ListTile(
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                minLeadingWidth: 0,
+                //horizontalTitleGap: 10,
+                isThreeLine: false,
+                leading: Image(
+                  image: R.svg.ic_location(width: 17, height: 20),
+                ),
+                title: Text(
+                  locationInfo.isEmpty
+                      // ? 'Miami - Florida'
+                      ? ' - '
+                      : '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
+                  style: AppStyle.of(context)
+                      .b3B
+                      .wCChineseBlack!
+                      .merge(normaltextFont),
+                  softWrap: true,
+                ),
               ),
+              // Row(
+              //   children: [
+              //     Image(
+              //       image: R.svg.ic_location(width: 17, height: 20),
+              //     ),
+              //     const SizedBox(width: 8),
+              //     Text(
+              //       locationInfo.isEmpty
+              //           // ? 'Miami - Florida'
+              //           ? ' - '
+              //           : '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
+              //       style: AppStyle.of(context)
+              //           .b3B
+              //           .wCChineseBlack!
+              //           .merge(normaltextFont),
+              //       softWrap: true,
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 10),
               Text(
                 locationInfo.isEmpty
                     // ? '4425 SW 8th St, Coral Gables, FL 33134'
                     ? ' - '
-                    : "${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}, ${_info!.administrativeArea}, ${_info!.locality}, ${_info!.country}",
+                    : fullAddress(_info!),
                 style: AppStyle.of(context).b5.wCRhythm!.merge(headerTextFont),
                 maxLines: 2,
                 softWrap: true,
@@ -164,20 +234,10 @@ class _LocationDetailsState extends State<LocationDetails> {
             ],
           ),
         ),
-        const SizedBox(width: 8),
-        OutlinedButton(
-          onPressed: widget.viewModel.onPressedChanged,
-          style: OutlinedButton.styleFrom(
-            visualDensity: VisualDensity.compact,
-            side: BorderSide(color: AppColors.soap),
-          ),
-          child: Text(
-            'Change',
-            style:
-                AppStyle.of(context).b5M.wCChineseBlack!.merge(headerTextFont),
-          ),
-        ),
       ],
     );
   }
 }
+
+String fullAddress(Placemark _info) =>
+    "${_info.street}, ${_info.subLocality}, ${_info.subAdministrativeArea}, ${_info.administrativeArea}, ${_info.locality}, ${_info.country}";

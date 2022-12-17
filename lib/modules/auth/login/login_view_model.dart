@@ -21,7 +21,11 @@ class LoginViewModel extends BaseViewModel {
   ) {
     form = FormGroup({
       controls.username: FormControl(
-          value: 'usertest@gmail.com', asyncValidators: [_usernameValidation]),
+        //'usertest@gmail.com'
+        value: '',
+        validators: [Validators.required, Validators.email],
+        asyncValidators: [_usernameValidation],
+      ),
       controls.password:
           FormControl(value: '123456', validators: [Validators.required]),
     });
@@ -88,9 +92,6 @@ class LoginViewModel extends BaseViewModel {
           );
         }
 
-        // Goes to Main Screen
-        _navigationService.clearStackAndShow(Routes.mainView);
-
         setBusy(false);
       } else {
         form.markAllAsTouched();
@@ -107,17 +108,18 @@ class LoginViewModel extends BaseViewModel {
   void onGoogle() async {
     try {
       setBusy(true);
-      bool _success = await authRepo.continueWithGoogleAccnt();
-      if (_success) {
+      bool? notNew = await authRepo.continueWithGoogleAccnt();
+      setBusy(false);
+      if (notNew == null) {
+        _snackbarService.showSnackbar(message: 'An error occured. Try again');
+      } else if (notNew) {
         // _navigationService.navigateToMainView();
         _navigationService.clearStackAndShow(Routes.mainView);
       } else {
-        setBusy(false);
-        _snackbarService.showSnackbar(
-            message: 'An error occured. Try again later');
+        _navigationService.clearStackAndShow(Routes.registerView);
       }
     } catch (e) {
-      setBusy(true);
+      setBusy(false);
       _snackbarService.showSnackbar(message: e.toString());
     }
   }

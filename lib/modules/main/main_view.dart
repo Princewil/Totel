@@ -1,5 +1,8 @@
 import 'package:cheffy/Utils/key.dart';
 import 'package:cheffy/Utils/stacked_nav_keys.dart';
+import 'package:cheffy/core/enums/male_female_enum.dart';
+import 'package:cheffy/firebase_method.dart';
+import 'package:cheffy/modules/auth/register/register_form_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
 import 'package:cheffy/widgets/app_drawer.dart';
@@ -12,6 +15,7 @@ import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 
 import '../../../app/app.router.dart';
+import '../auth/auth/domain/entities/user_entity.dart';
 import 'main_view_model.dart';
 
 class MainView extends StatefulWidget {
@@ -25,14 +29,25 @@ class _MainViewState extends State<MainView> {
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  init() async {
+    final result = await getUserDetails();
+    initialProfileDetails = UserEntity.fromMap(result!);
+    regDOB = DateTime.tryParse(initialProfileDetails?.dateOfBrith ?? '');
+    if (initialProfileDetails?.gender != '') {
+      maleFemaleRegEnum =
+          initialProfileDetails!.gender == MaleFemaleEnum.male.toString()
+              ? MaleFemaleEnum.male
+              : MaleFemaleEnum.female;
+    }
     final mainViewModel = context.read<MainViewModel>();
     final profileProvider = context.read<ProfileProvider>();
-
     Future.delayed(Duration.zero, () {
       mainViewModel.init();
-
       // To get drawer profile and name
-      profileProvider.getProfile(); //TODO
+      profileProvider.getProfile();
     });
   }
 

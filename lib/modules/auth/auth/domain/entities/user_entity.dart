@@ -3,31 +3,30 @@ import 'package:cheffy/app/app.dart';
 import 'package:cheffy/firebase_method.dart';
 
 class UserEntity {
-  final int id;
+  final String uid;
   final String firstName;
   final String lastName;
-  final String username;
   final String email;
-  final String? native;
+  final String? country;
   final String? bio;
   final String? phoneNo;
-  final DateTime? dateOfBrith;
+  final String? dateOfBrith;
   final String? avatar;
   final String? city;
   final int rating;
   final String? gender;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final String? createdAt;
+  final String? updatedAt;
   final String? hobbies;
-  final Occupation? occupation;
+  // final Occupation? occupation;
+  final String? occupation;
 
   UserEntity({
-    required this.id,
+    required this.uid,
     required this.firstName,
     required this.lastName,
-    required this.username,
     required this.email,
-    required this.native,
+    required this.country,
     required this.bio,
     required this.phoneNo,
     required this.dateOfBrith,
@@ -42,41 +41,45 @@ class UserEntity {
   });
 
   factory UserEntity.fromMap(Map<String, dynamic> json) => UserEntity(
-        id: 1,
-        firstName: json[usernamekey].split(' ').last,
-        lastName: json[usernamekey].split(' ').first,
-        username: json[usernamekey],
+        uid: json[userUIDkey],
+        firstName: json[firstNamekey],
+        lastName: json[secondNamekey],
         email: json[usersGmailkey],
-        native: json["native"],
-        bio: json["bio"],
-        phoneNo: json[phoneNumberkey],
-        dateOfBrith: json["date_of_brith"] == null
-            ? null
-            : DateTime.tryParse(json["date_of_brith"]),
-        avatar: json["avatar"].toString().replaceAll('public/', ''),
-        city: json["city"],
-        // rating: json["rating"],
-        rating: 3,
-        gender: json["gender"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        hobbies: json["hobbies"],
-        occupation: json["occupation"] == null
-            ? null
-            : Occupation.fromMap(json["occupation"]),
+        country: json[countryKey] ?? '',
+        bio: json[biokey] ?? '',
+        phoneNo: json[phoneNumberkey] ?? '0',
+        dateOfBrith: json[doBKey],
+        // avatar: json[profilePictureKey].toString().replaceAll('public/', ''),
+        avatar: json[avartarKey] ?? '',
+        city: json[cityKey] ?? '',
+        rating: json[ratingKey] ?? 0,
+        gender: json[genderkey],
+        createdAt: json[createdAtKey],
+        updatedAt: json[updatedAtKey],
+        hobbies: json[hobbiesKey] ?? '',
+        // occupation: json[occupationKey] == null
+        //     ? null
+        //     : Occupation.fromMap(json[occupationKey]),
+        occupation: json[occupationKey],
       );
 
-  Map<String, dynamic> toJson() => {
-        // "first_name": firstName,
-        // "last_name": lastName,
-        usernamekey: '$lastName $firstName',
-        usersGmailkey: email,
-        "native": native,
-        "bio": bio,
-        "gender": gender,
-        "occupation": occupation?.id,
+  Map<String, dynamic> toMap(UserEntity userEntity) => {
+        firstNamekey: userEntity.firstName,
+        secondNamekey: userEntity.lastName,
+        usersGmailkey: userEntity.email,
+        countryKey: userEntity.country ?? '',
+        biokey: userEntity.bio ?? '',
+        genderkey: userEntity.gender ?? '',
+        occupationKey: userEntity.occupation,
+        userUIDkey: userEntity.uid,
+        ratingKey: userEntity.rating,
+        hobbiesKey: userEntity.hobbies,
+        updatedAtKey: userEntity.updatedAt,
+        createdAtKey: userEntity.createdAt,
+        cityKey: userEntity.city,
+        phoneNumberkey: userEntity.phoneNo,
+        doBKey: userEntity.dateOfBrith,
+        avartarKey: userEntity.avatar ?? "",
       };
 
   // String getImgFullUrlPath(String avatarUrl) {

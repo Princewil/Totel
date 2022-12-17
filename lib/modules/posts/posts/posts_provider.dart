@@ -5,6 +5,9 @@ import 'package:cheffy/modules/posts/posts/domain/repositories/post_repo.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../create/create_post_functions.dart';
+import 'domain/entities/create_finding_post_params.dart';
+
 class PostsProvider extends BaseViewModel {
   final NavigationService _navigationService = locator.get();
 
@@ -12,7 +15,7 @@ class PostsProvider extends BaseViewModel {
 
   PostsProvider(this.postRepo);
 
-  PostsEntity? postEntity;
+  List<FindingPostParams>? postEntity;
 
   Future<void> getPosts() async {
     try {
@@ -26,7 +29,7 @@ class PostsProvider extends BaseViewModel {
     }
   }
 
-  void onTapPost(Post selectedPost) {
+  void onTapPost(FindingPostParams selectedPost) {
     _navigationService.navigateTo(
       Routes.postDetailView,
       arguments: PostDetailViewArguments(post: selectedPost),

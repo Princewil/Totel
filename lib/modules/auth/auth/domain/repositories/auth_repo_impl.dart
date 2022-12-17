@@ -51,7 +51,7 @@ class AuthRepoImpl implements AuthRepo {
   @override
   Future loginWithEmail(String email, String password) async {
     try {
-      return await signInWithEmail(email, password).then((value) => true);
+      //return await signInWithEmail(email, password).then((value) => true);
     } catch (e) {
       print('catch ($e)');
       throw UnExpectedException();
@@ -60,8 +60,8 @@ class AuthRepoImpl implements AuthRepo {
 
   @override
   Future<String> register({
-    required String email,
-    required String password,
+    // required String email,
+    // required String password,
     required String firstName,
     required String lastName,
   }) async {
@@ -70,8 +70,8 @@ class AuthRepoImpl implements AuthRepo {
       final result = await _apiClient.post(
         ApiRoutes.register,
         data: {
-          'email': email,
-          'password': password,
+          //'email': email,
+          //'password': password,
           'first_name': firstName,
           'last_name': lastName,
         },
@@ -100,16 +100,22 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future createWithEmail({
-    required String email,
-    required String password,
-    required String firstName,
-    required String lastName,
-    required String phoneNumber,
-  }) async {
+  Future createWithEmail(
+      {
+      // required String email,
+      // required String password,
+      // required String firstName,
+      // required String lastName,
+      // required String phoneNumber,
+      required UserEntity userEntity}) async {
     try {
-      return await registerWithEmailAndPassword(
-          email, password, '$lastName $firstName', phoneNumber);
+      var user = currentUser();
+      await user!
+          .updateDisplayName('${userEntity.lastName} ${userEntity.firstName}');
+      await user.reload();
+      await registerNewUser(userEntity);
+      // return await registerWithEmailAndPassword(
+      //     email, password, '$lastName $firstName', phoneNumber);
     } catch (e) {
       print(e);
       return e;
@@ -139,27 +145,16 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<bool> continueWithGoogleAccnt() async {
+  Future<bool?> continueWithGoogleAccnt() async {
     return await signInWithGoogleAccnt().then((User? user) async {
       if (user != null) {
         bool notNew = await authenticateUser(user);
-        if (!notNew) {
-          CurrentUser _user = CurrentUser(
-            uid: user.uid,
-            email: user.email,
-            userName: user.displayName,
-            profilePhoto: user.photoURL,
-            phoneNumber: '',
-          );
-          await registerNewUser(_user);
-          return true;
-        } else
-          return true;
+        return notNew;
       } else {
-        return false;
+        return null;
       }
     }).catchError((e) {
-      return false;
+      return null;
     });
   }
 

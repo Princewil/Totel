@@ -1,3 +1,4 @@
+import 'package:cheffy/firebase_method.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -55,11 +56,13 @@ class ReactiveFormControls {
   static const String searchHourRangeEnd = 'search_hours_range_end';
 
   // Profile
-  static String firstName = 'first_name';
-  static String lastName = 'last_name';
-  static String native = 'native';
-  static String avatar = 'avatar';
-  static String occupation = 'occupation';
-  static String bio = 'bio';
-  static String gender = 'gender';
+  static String firstName = firstNamekey;
+  static String lastName = secondNamekey;
+  static String country = countryKey;
+  static String avatar = avartarKey;
+  static String occupation = occupationKey;
+  static String bio = biokey;
+  static String gender = genderkey;
+  static String city = cityKey;
+  static String hobbies = hobbiesKey;
 }

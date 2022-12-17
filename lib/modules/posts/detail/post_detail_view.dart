@@ -15,11 +15,12 @@ import 'package:cheffy/modules/widgets/carousel/carousel_view.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_view.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../posts/domain/entities/create_finding_post_params.dart';
 import 'post_detail_view_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PostDetailView extends StatefulWidget {
-  final Post post;
+  final FindingPostParams post;
   const PostDetailView({super.key, required this.post});
 
   @override
@@ -33,7 +34,8 @@ class _PostDetailViewState extends State<PostDetailView> {
   void initState() {
     super.initState();
     cameraPosition = CameraPosition(
-      target: LatLng(widget.post.hotel.latitude, widget.post.hotel.longitude),
+      target: LatLng(double.parse(widget.post.locationLatLng!.split('~').first),
+          double.parse(widget.post.locationLatLng!.split('~').last)),
       zoom: 16,
     );
     Future.delayed(
@@ -182,11 +184,11 @@ class _PostDetailViewState extends State<PostDetailView> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: SharedWidgets.buildImageNetwork(
-                            imgUrl: widget.post.hotel.imageUrl,
-                            width: 120,
-                            height: 100,
-                          ),
+                          // child: SharedWidgets.buildImageNetwork(
+                          //   imgUrl: widget.post.hotel.imageUrl,
+                          //   width: 120,
+                          //   height: 100,
+                          // ),
                         ),
                         SizedBox(
                           width: 10,
@@ -196,16 +198,17 @@ class _PostDetailViewState extends State<PostDetailView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.post.hotel.name,
+                                '', //widget.post.hotel.name,
                                 style: AppStyle.of(context).b4M.wCChineseBlack,
                               ),
                               SizedBox(height: 8),
                               Row(
                                 children: [
                                   Text(
-                                    widget.post.hotel.rating
-                                            ?.toStringAsFixed(1) ??
-                                        '0.0',
+                                    // widget.post.hotel.rating
+                                    //         ?.toStringAsFixed(1) ??
+                                    //     '0.0',
+                                    '',
                                     style: AppStyle.of(context).b5.wCRhythm,
                                   ),
                                   SizedBox(
@@ -224,14 +227,16 @@ class _PostDetailViewState extends State<PostDetailView> {
                                   borderRadius: BorderRadius.circular(26),
                                 ),
                                 child: Text(
-                                  '${UniversalVariables.dayMonthDateFormat.format(widget.post.startDate)} - ${UniversalVariables.dayMonthDateFormat.format(widget.post.endDate)}',
+                                  //'${UniversalVariables.dayMonthDateFormat.format(widget.post.startDate)} - ${UniversalVariables.dayMonthDateFormat.format(widget.post.endDate)}',
+                                  '',
                                   style:
                                       AppStyle.of(context).b4M.wCChineseBlack,
                                 ),
                               ),
                               SizedBox(height: 8),
                               Text(
-                                '\$${widget.post.paymentAmountPerNight.toStringAsFixed(2)} / Night',
+                                //'\$${widget.post.paymentAmountPerNight.toStringAsFixed(2)} / Night',
+                                '',
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppStyle.of(context).b4B.wCChineseBlack,
@@ -252,7 +257,8 @@ class _PostDetailViewState extends State<PostDetailView> {
                         const SizedBox(width: 4),
                         Flexible(
                           child: Text(
-                            widget.post.hotel.address ?? '',
+                            //widget.post.hotel.address ?? '',
+                            '',
                             style: AppStyle.of(context).b5.wCRhythm,
                           ),
                         )
@@ -266,11 +272,11 @@ class _PostDetailViewState extends State<PostDetailView> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: SharedWidgets.buildImageNetwork(
-                            imgUrl: widget.post.user.avatar ?? '',
-                            height: 80,
-                            width: 80,
-                          ),
+                          // child: SharedWidgets.buildImageNetwork(
+                          //   imgUrl: widget.post.user.avatar ?? '',
+                          //   height: 80,
+                          //   width: 80,
+                          // ),//TODO
                         ),
                         SizedBox(
                           width: 10,
@@ -280,21 +286,24 @@ class _PostDetailViewState extends State<PostDetailView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${widget.post.user.firstName} ${widget.post.user.lastName}",
+                                //"${widget.post.user.firstName} ${widget.post.user.lastName}",
+                                '',
                                 style: AppStyle.of(context).b4B.wCChineseBlack,
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
-                                widget.post.user.occupation?.name ?? '',
+                                //widget.post.user.occupation ?? '',
+                                '',
                                 style: AppStyle.of(context).b5.wCRhythm,
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
-                                widget.post.user.native ?? '',
+                                //widget.post.user.country ?? '',
+                                '',
                                 style: AppStyle.of(context).b5.wCRhythm,
                               ),
                             ],
@@ -303,7 +312,8 @@ class _PostDetailViewState extends State<PostDetailView> {
                         Row(
                           children: [
                             Text(
-                              widget.post.user.rating.toStringAsFixed(1),
+                              //widget.post.user.rating.toStringAsFixed(1),
+                              '',
                               style: AppStyle.of(context).b5.wCRhythm,
                             ),
                             SizedBox(
@@ -324,21 +334,21 @@ class _PostDetailViewState extends State<PostDetailView> {
                     Divider(),
                     //Description
                     buildSection(
-                      title: 'Description',
-                      body: widget.post.hotel.description ?? '',
-                    ),
+                        title: 'Description',
+                        //body: widget.post.hotel.description ?? '',
+                        body: ''),
                     Divider(),
                     // Message to partner
                     buildSection(
-                      title: 'Message to partner',
-                      body: widget.post.messageToPartner,
-                    ),
+                        title: 'Message to partner',
+                        //body: widget.post.messageToPartner,
+                        body: ''),
                     Divider(),
                     // Gender
                     buildSection(
-                      title: 'Partner Gender',
-                      body: widget.post.partnerGender,
-                    ),
+                        title: 'Partner Gender',
+                        //body: widget.post.partnerGender,
+                        body: ''),
                     Divider(),
                     requiredQuestion(
                         'What does this place have for you?',

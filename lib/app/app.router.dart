@@ -11,6 +11,7 @@ import 'package:cheffy/modules/payment/presentation/options/payment_percentage_v
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_location_page.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_filter_page.dart';
+import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/post_entity.dart';
 import 'package:cheffy/modules/settings/presentation/SettingsMain.dart';
 import 'package:cheffy/modules/about/presentation/about_screen_view.dart';
@@ -344,7 +345,7 @@ class CreatePostViewArguments {
 /// CreatePostView arguments holder class
 class PostDetailViewArguments {
   final Key? key;
-  final Post post;
+  final FindingPostParams post;
   PostDetailViewArguments({this.key, required this.post});
 }
 

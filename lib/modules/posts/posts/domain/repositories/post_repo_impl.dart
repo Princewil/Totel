@@ -10,6 +10,8 @@ import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_pa
 import 'package:cheffy/modules/posts/posts/domain/entities/attachment_entity.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../firebase_method.dart';
+
 class PostRepoImpl implements PostRepo {
   PostRepoImpl(this._apiClient);
 
@@ -37,9 +39,15 @@ class PostRepoImpl implements PostRepo {
   }
 
   @override
-  Future<PostsEntity> getAllPosts() async {
-    final res = await _apiClient.get(ApiRoutes.posts);
-    return PostsEntity.fromMap(res.data);
+  Future<List<FindingPostParams>> getAllPosts() async {
+    List<FindingPostParams> list = [];
+    final res = await getAllUsersPost();
+    for (var element in res!) {
+      final _ =
+          FindingPostParams.fromMap(element.data() as Map<String, dynamic>);
+      list.add(_);
+    }
+    return list;
   }
 
   @override
@@ -73,9 +81,8 @@ class PostRepoImpl implements PostRepo {
   }
 
   @override
-  Future<void> createFindingPost(CreateFindingPostParams entity) async {
-    final body = entity.toJson();
-    print(jsonEncode(body));
-    final res = await _apiClient.post('post', data: body);
+  Future createFindingPost(FindingPostParams entity) async {
+    return await uploadPost(entity);
+    //final res = await _apiClient.post('post', data: body);
   }
 }

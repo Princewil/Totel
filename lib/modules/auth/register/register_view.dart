@@ -1,6 +1,6 @@
 import 'package:cheffy/Utils/stacked_nav_keys.dart';
 import 'package:cheffy/app/app.locator.dart';
-import 'package:cheffy/modules/auth/auth/data/repositories/auth_repo_impl.dart';
+import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo_impl.dart';
 import 'package:cheffy/modules/auth/auth/domain/repositories/auth_repo.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:flutter/material.dart';

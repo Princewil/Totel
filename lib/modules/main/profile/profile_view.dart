@@ -1,3 +1,4 @@
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/tabs/posts_tab.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _ProfileViewState extends State<ProfileView> {
     super.initState();
     final profileProvider = context.read<ProfileProvider>();
     Future.delayed(Duration.zero, () {
-      profileProvider.getProfile();
+      //profileProvider.getProfile();
       profileProvider.getUserPosts();
     });
   }
@@ -41,7 +42,10 @@ class _ProfileViewState extends State<ProfileView> {
           child: NestedScrollView(
             headerSliverBuilder: (context, _) => [
               SliverAppBar(
-                title: Text('Profile'),
+                title: Text(
+                  'Profile',
+                  style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
+                ),
                 backgroundColor: Colors.white,
                 pinned: true,
                 flexibleSpace: const FlexibleSpaceBar(
@@ -52,7 +56,8 @@ class _ProfileViewState extends State<ProfileView> {
                   preferredSize: const Size.fromHeight(48),
                   child: Container(
                     color: Colors.white,
-                    child: const TabBar(
+                    child: TabBar(
+                      labelStyle: headerTextFont,
                       tabs: [
                         Tab(
                           text: "Posts",

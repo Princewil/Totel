@@ -1,4 +1,5 @@
 import 'package:cheffy/app/app.locator.dart';
+import 'package:cheffy/modules/location_change_map/location_change_map_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/posts/create/create_post_functions.dart';
 import 'package:flutter/material.dart';
@@ -88,15 +89,33 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                     ],
                     //endregion
                     //region location
-                    AppFormField(
-                      label: viewModel.type == PostType.booked
-                          ? 'Where you are going'
-                          : 'Where you want to go',
-                      field: ReactiveTextField(
-                        formControlName: viewModel.controls.location,
+                    // AppFormField(
+                    //   label: viewModel.type == PostType.booked
+                    //       ? 'Where you are going'
+                    //       : 'Where you want to go',
+                    //   field: ReactiveTextField(
+                    //     formControlName: viewModel.controls.location,
+                    //     onTap: viewModel.onLocation,
+                    //     style: headerTextFont,
+                    //     readOnly: true,
+                    //   ),
+                    // ),
+                    Card(
+                      elevation: 0,
+                      child: ListTile(
                         onTap: viewModel.onLocation,
-                        style: headerTextFont,
-                        readOnly: true,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                width: 0.6, color: Colors.grey.shade400),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        title:
+                            Text('Where you are going?', style: headerTextFont),
+                        subtitle: locationEntity != null
+                            ? Text(locationEntity!.name)
+                            : Text('Tap to edit',
+                                style: headerTextFont.copyWith(
+                                    fontStyle: FontStyle.italic)),
                       ),
                     ),
                     const SizedBox(height: 24),

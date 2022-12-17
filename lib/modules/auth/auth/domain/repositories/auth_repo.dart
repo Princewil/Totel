@@ -8,18 +8,19 @@ abstract class AuthRepo {
   Future loginWithEmail(String email, String password); //my own implementation
 
   Future<String> register({
-    required String email,
-    required String password,
+    // required String email,
+    // required String password,
     required String firstName,
     required String lastName,
   });
 
   Future createWithEmail({
-    required String email,
-    required String password,
-    required String firstName,
-    required String lastName,
-    required String phoneNumber,
+    // required String email,
+    // required String password,
+    // required String firstName,
+    // required String lastName,
+    // required String phoneNumber,
+    required UserEntity userEntity,
   });
 
   Future<void> sendOtp({
@@ -30,7 +31,7 @@ abstract class AuthRepo {
     required void Function(String) onCodeAutoRetrievalTimeout,
     int? forceResendingToken,
   });
-  Future<bool> continueWithGoogleAccnt(); //my own implementation
+  Future<bool?> continueWithGoogleAccnt(); //my own implementation
 
   Future<void> signInWithGoogle();
 
