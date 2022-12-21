@@ -34,6 +34,7 @@ class PostsTab extends StatelessWidget {
                 final post = postEntity![i];
                 return PostListingItemVerticalLayoutView(
                   post: post,
+                  userEntity: initialProfileDetails!,
                   onDelete: () async {
                     await profileProvider.deletePost(0); //TODO
                   },

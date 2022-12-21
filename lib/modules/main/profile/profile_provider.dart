@@ -83,8 +83,6 @@ class ProfileProvider extends BaseViewModel {
       setBusy(true);
       profileEntity = await profileRepo.get();
       initialProfileDetails = profileEntity;
-      print(
-          "Initialia details ${initialProfileDetails!.toMap(initialProfileDetails!)}");
       // await _secureStorageService.setAppUser(profileEntity);
       notifyListeners();
     } catch (e) {
@@ -112,7 +110,8 @@ class ProfileProvider extends BaseViewModel {
     try {
       setBusy(true);
 
-      if (true) {
+      if (true //TODO
+          ) {
         //for now no parameter is required
         final editedProfile = UserEntity(
           //id: profileEntity!.id,

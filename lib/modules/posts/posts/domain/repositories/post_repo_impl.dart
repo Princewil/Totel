@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cheffy/core/services/api/api_client.dart';
 import 'package:cheffy/core/services/api/api_routes.dart';
@@ -21,59 +22,55 @@ class PostRepoImpl implements PostRepo {
   Future<void> createBookedPost(CreateBookedPostParams params,
       {List<XFile> files = const []}) async {
     try {
-      final List<int> attachments = [];
-
+      final List<String> attachments = [];
+      Map<String, dynamic> data = params.toMap(params);
       if (files.isNotEmpty) {
         attachments.addAll(await _uploadAttachments(files));
       }
-      final body = params.copyWith(attachments: attachments).toJson();
-
-      print(jsonEncode(body));
-      final res = await _apiClient.post('post', data: body);
+      data.update(imagesKey, (value) => attachments,
+          ifAbsent: () => attachments);
+      await uploadPost(data);
       return;
-    } on DioError catch (e) {
-      rethrow;
     } catch (e) {
       rethrow;
     }
   }
 
   @override
-  Future<List<FindingPostParams>> getAllPosts() async {
-    List<FindingPostParams> list = [];
+  Future<List<Map<String, dynamic>>> getAllPosts() async {
+    List<Map<String, dynamic>> list = [];
     final res = await getAllUsersPost();
     for (var element in res!) {
       final _ =
           FindingPostParams.fromMap(element.data() as Map<String, dynamic>);
-      list.add(_);
+      var user =
+          await getUserDetails(getThisUserDetails: false, uid: _.userUID);
+      Map<String, dynamic> map = {};
+      map.addAll(user!);
+      map.addAll(element.data() as Map<String, dynamic>);
+      list.add(map);
     }
     return list;
   }
 
   @override
-  Future<AttachmentEntity> uploadAttachment(
-      String path, String fileName) async {
-    FormData data = FormData.fromMap(
-      {"file": await MultipartFile.fromFile(path, filename: fileName)},
-    );
-    final result = await _apiClient.post(
-      'attachment',
-      data: data,
-    );
-    return AttachmentEntity.fromJson(result.data);
+  Future<String> uploadAttachment(String path, XFile file) async {
+    return await uploadFile(File(file.path), path);
   }
 
-  Future<List<int>> _uploadAttachments(List<XFile>? attachments) async {
+  Future<List<String>> _uploadAttachments(List<XFile>? attachments) async {
     if (attachments != null) {
-      final List<int> result = [];
-      for (var att in attachments) {
+      final List<String> result = [];
+      for (var e in attachments) {
         try {
-          var res = await uploadAttachment(att.path, att.name);
-          result.add(res.id);
+          var time = DateTime.now().millisecondsSinceEpoch;
+          String res = await uploadAttachment('$time', e);
+          result.add(res);
         } catch (e) {
           rethrow;
         }
       }
+
       return result;
     }
 
@@ -82,7 +79,7 @@ class PostRepoImpl implements PostRepo {
 
   @override
   Future createFindingPost(FindingPostParams entity) async {
-    return await uploadPost(entity);
+    return await uploadPost(entity.toMap(entity));
     //final res = await _apiClient.post('post', data: body);
   }
 }

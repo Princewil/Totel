@@ -64,7 +64,16 @@ Future registerNewUser(UserEntity user) async {
 //   });
 // }
 
-Future<Map<String, dynamic>?> getUserDetails() async {
+Future<Map<String, dynamic>?> getUserDetails(
+    {bool getThisUserDetails = true, String? uid}) async {
+  if (!getThisUserDetails) {
+    //when we are getting other users using their UID
+    return firebaseFirestore
+        .collection(userCollectionKey)
+        .where(userUIDkey, isEqualTo: uid)
+        .get()
+        .then((value) => value.docs.first.data());
+  }
   var user = currentUser();
   return firebaseFirestore
       .collection(userCollectionKey)
@@ -89,11 +98,10 @@ Future<void> updateProfile(UserEntity userEntity) async {
       .set(userEntity.toMap(userEntity), SetOptions(merge: true));
 }
 
-Future<String> uploadFile(File file) async {
+Future<String> uploadFile(File file, String path) async {
   var user = currentUser();
   late String text;
-  var task =
-      firebaseStorage.ref(user!.email).child('myProfilePic').putFile(file);
+  var task = firebaseStorage.ref(user!.email).child(path).putFile(file);
   await task.whenComplete(() async {
     if (task.snapshot.state == TaskState.success) {
       text = await task.snapshot.ref.getDownloadURL();
@@ -106,10 +114,8 @@ Future<String> uploadFile(File file) async {
 
 const error = 'Error';
 
-Future uploadPost(FindingPostParams data) async {
-  return await firebaseFirestore
-      .collection(findingPostCollection)
-      .add(data.toMap(data));
+Future uploadPost(Map<String, dynamic> data) async {
+  return await firebaseFirestore.collection(findingPostCollection).add(data);
 }
 
 Future<List<QueryDocumentSnapshot>?> getThisUserPost() async {

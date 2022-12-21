@@ -11,6 +11,7 @@ import '../location_change/location_change_view.dart';
 import 'location_change_map_view.dart';
 
 Location? location;
+PostType? selectedPosttype;
 
 class LocationChangeMapViewModel extends BaseViewModel {
   final NavigationService _navigationService = locator.get();
@@ -26,7 +27,7 @@ class LocationChangeMapViewModel extends BaseViewModel {
 
   void onSubmit() {
     //_navigationService.back(result: locationEntity);
-    _navigationService.navigateToCreatePostView(type: PostType.finding);
+    _navigationService.navigateToCreatePostView(type: selectedPosttype!); //
   }
 
   void onPressedBack() => _navigationService.back();

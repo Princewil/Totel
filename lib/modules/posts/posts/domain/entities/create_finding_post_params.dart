@@ -1,4 +1,5 @@
 import 'package:cheffy/firebase_method.dart';
+import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_params.dart';
 
 // To parse this JSON data, do
 //
@@ -13,6 +14,7 @@ class FindingPostParams {
   num? partnerAmount;
   String? locationLatLng;
   String? userUID;
+  String? postType;
 
   FindingPostParams({
     this.isAcceptHourly,
@@ -23,28 +25,31 @@ class FindingPostParams {
     this.partnerAmount,
     this.locationLatLng,
     this.userUID,
+    this.postType,
   });
 
   Map<String, dynamic> toMap(FindingPostParams params) => {
         postNoteKey: params.notes,
-        postbudgetKey: params.partnerAmount,
+        partnerAmountKey: params.partnerAmount,
         allowedGenderKey: params.gender,
         locationLatLngKey: params.locationLatLng,
         dateFromKey: params.dateFrom,
         dateToKey: params.dateTo,
         isAccptHourKey: params.isAcceptHourly,
-        userUIDkey: params.userUID
+        userUIDkey: params.userUID,
+        postTypeKey: params.postType
       };
 
   FindingPostParams.fromMap(Map<String, dynamic> map) {
     this.notes = map[postNoteKey];
-    this.partnerAmount = map[postbudgetKey];
+    this.partnerAmount = map[partnerAmountKey];
     this.gender = map[allowedGenderKey];
     this.locationLatLng = map[locationLatLng];
     this.dateFrom = map[dateFromKey];
     this.dateTo = map[dateToKey];
     this.isAcceptHourly = map[isAccptHourKey];
     this.userUID = map[userUIDkey];
+    this.postType = map[postTypeKey];
   }
 
   // FindingPostParams copyWith(
@@ -82,9 +87,10 @@ class FindingPostParams {
 }
 
 const postNoteKey = "Note";
-const postbudgetKey = "partner_amount";
+const partnerAmountKey = "partner_amount";
 const allowedGenderKey = "gender";
 const locationLatLngKey = "locationLatLngKey";
 const dateFromKey = 'date_from';
 const dateToKey = 'date_to';
 const isAccptHourKey = 'is_accept_hourly';
+const findingPostType = 'Finding';

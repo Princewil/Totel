@@ -46,51 +46,58 @@ class LocationChangeMapView
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Select your location',
-                          style: AppStyle.of(context)
-                              .b5M
-                              .wCRhythm!
-                              .merge(headerTextFont),
-                        ),
-                        const SizedBox(width: 8),
-                        OutlinedButton(
-                          //onPressed: widget.viewModel.onPressedChanged,
-                          onPressed: () {
-                            locationFromAddress(
-                                    "Golden royale hotels enugu nigeria ")
-                                .then((value) {
-                              print(value.length);
-                              print(value.first.latitude);
-                              print(value.first.longitude);
-                              placemarkFromCoordinates(value.first.latitude,
-                                      value.first.longitude)
-                                  .then((value) {
-                                print(value.first.street);
-                                print(value.first.country);
-                                print(value.first.name);
-                                print(value.first.subLocality);
-                                print(value.first.subAdministrativeArea);
-                              });
-                            });
-                          },
-                          style: OutlinedButton.styleFrom(
-                            visualDensity: VisualDensity.compact,
-                            side: BorderSide(color: AppColors.soap),
-                          ),
-                          child: Text(
-                            'Change',
-                            style: AppStyle.of(context)
-                                .b5M
-                                .wCChineseBlack!
-                                .merge(headerTextFont),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      'Select your location',
+                      style: AppStyle.of(context)
+                          .b5M
+                          .wCRhythm!
+                          .merge(headerTextFont),
                     ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       'Select your location',
+                    //       style: AppStyle.of(context)
+                    //           .b5M
+                    //           .wCRhythm!
+                    //           .merge(headerTextFont),
+                    //     ),
+                    //     const SizedBox(width: 8),
+                    //     OutlinedButton(
+                    //       //onPressed: widget.viewModel.onPressedChanged,
+                    //       onPressed: () {
+                    //         locationFromAddress(
+                    //                 "Golden royale hotels enugu nigeria ")
+                    //             .then((value) {
+                    //           print(value.length);
+                    //           print(value.first.latitude);
+                    //           print(value.first.longitude);
+                    //           placemarkFromCoordinates(value.first.latitude,
+                    //                   value.first.longitude)
+                    //               .then((value) {
+                    //             print(value.first.street);
+                    //             print(value.first.country);
+                    //             print(value.first.name);
+                    //             print(value.first.subLocality);
+                    //             print(value.first.subAdministrativeArea);
+                    //           });
+                    //         });
+                    //       },
+                    //       style: OutlinedButton.styleFrom(
+                    //         visualDensity: VisualDensity.compact,
+                    //         side: BorderSide(color: AppColors.soap),
+                    //       ),
+                    //       child: Text(
+                    //         'Change',
+                    //         style: AppStyle.of(context)
+                    //             .b5M
+                    //             .wCChineseBlack!
+                    //             .merge(headerTextFont),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     const SizedBox(height: 16),
                     LocationDetails(viewModel: viewModel),
                     const SizedBox(height: 16),

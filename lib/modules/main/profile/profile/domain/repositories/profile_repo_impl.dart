@@ -22,7 +22,6 @@ class ProfileRepoImpl extends ProfileRepo {
       final result = await getUserDetails();
       // print(result);
       var x = UserEntity.fromMap(result!);
-      print(x.toMap(x));
       return x;
     } catch (e) {
       throw e;
@@ -74,7 +73,7 @@ class ProfileRepoImpl extends ProfileRepo {
     Map<String, dynamic> _profileEntity = profileEntity.toMap(profileEntity);
     try {
       if (newAvatar != null) {
-        String url = await uploadFile(newAvatar);
+        String url = await uploadFile(newAvatar, 'myProfilePic');
         if (url == error) {
           return null;
         } else {

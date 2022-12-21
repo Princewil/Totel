@@ -11,6 +11,7 @@ import 'package:cheffy/modules/theme/styles.dart';
 
 class PostListingItemVerticalLayoutView extends StatefulWidget {
   final FindingPostParams post;
+  final UserEntity userEntity;
   final VoidCallback? onPress;
   final VoidCallback? onDelete;
 
@@ -19,6 +20,7 @@ class PostListingItemVerticalLayoutView extends StatefulWidget {
     required this.post,
     this.onPress,
     this.onDelete,
+    required this.userEntity,
   });
 
   @override
@@ -28,18 +30,6 @@ class PostListingItemVerticalLayoutView extends StatefulWidget {
 
 class _PostListingItemVerticalLayoutViewState
     extends State<PostListingItemVerticalLayoutView> {
-  UserEntity? userEntity;
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  init() async {
-    var user = await getUserPostDetails(widget.post.userUID!);
-    userEntity = UserEntity.fromMap(user!);
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -61,7 +51,8 @@ class _PostListingItemVerticalLayoutViewState
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(userEntity?.avatar ?? ''),
+                        backgroundImage:
+                            NetworkImage(widget.userEntity.avatar ?? ''),
                         backgroundColor:
                             Theme.of(context).colorScheme.secondary,
                         radius: 24,
@@ -71,11 +62,11 @@ class _PostListingItemVerticalLayoutViewState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${userEntity?.firstName} ${userEntity?.lastName}',
+                            '${widget.userEntity.firstName} ${widget.userEntity.lastName}',
                             style: AppStyle.of(context).b4M.wCChineseBlack,
                           ),
                           Text(
-                            userEntity?.occupation ?? '',
+                            widget.userEntity.occupation ?? '',
                             style: AppStyle.of(context).b6.wCCrayola,
                           ),
                         ],

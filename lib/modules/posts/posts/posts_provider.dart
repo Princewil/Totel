@@ -15,7 +15,7 @@ class PostsProvider extends BaseViewModel {
 
   PostsProvider(this.postRepo);
 
-  List<FindingPostParams>? postEntity;
+  List<Map<String, dynamic>>? postEntity;
 
   Future<void> getPosts() async {
     try {

@@ -12,7 +12,7 @@ abstract class PostRepo {
 
   Future createFindingPost(FindingPostParams entity);
 
-  Future<List<FindingPostParams>> getAllPosts();
+  Future<List<Map<String, dynamic>>> getAllPosts();
 
-  Future<AttachmentEntity> uploadAttachment(String path, String fileName);
+  Future<String> uploadAttachment(String path, XFile file);
 }

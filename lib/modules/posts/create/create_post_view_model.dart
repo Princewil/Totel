@@ -1,4 +1,5 @@
 import 'package:cheffy/firebase_method.dart';
+import 'package:cheffy/modules/main/main_view.dart';
 import 'package:cheffy/modules/posts/create/create_post_view.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_params.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
@@ -32,7 +33,7 @@ class CreatePostViewModel extends BaseViewModel {
   List<XFile?> _attachments = [null];
   bool _isMalePartner = true;
   bool _isFemalePartner = true;
-  LocationEntity? _selectedLocation;
+  String? _avaliableHour;
 
   CreatePostViewModel(
     this.type,
@@ -43,9 +44,8 @@ class CreatePostViewModel extends BaseViewModel {
         form = FormGroup({
           controls.attachments:
               FormControl(validators: [_validatorAttachments]),
-          controls.location: FormControl(validators: [
-            //Validators.required
-          ]),
+          controls.location: FormControl(validators: [validateLocation]),
+          // controls.hourlyRange: FormControl(validators: [validateHourlyRange]),
           controls.date:
               FormControl<DateTimeRange>(validators: [Validators.required]),
           controls.hotel:
@@ -108,12 +108,34 @@ class CreatePostViewModel extends BaseViewModel {
         : {'Minimum 1 or maximum 3 pictures must attach': true};
   }
 
+  Map<String, dynamic>? validateLocation(AbstractControl<dynamic> control) {
+    if (locationEntity == null) {
+      return {"Please specify the location": true};
+    } else
+      return null;
+  }
+
+  // String? get setAvaliableHour => _avaliableHour;
+
+  // set setAvaliableHour(String? val) {
+  //   _avaliableHour = val;
+  //   notifyListeners();
+  // }
+
+  // Map<String, dynamic>? validateHourlyRange(AbstractControl<dynamic> control) {
+  //   if (setAvaliableHour == null) {
+  //     return {"Please specify the avaliable hours": true};
+  //   } else
+  //     return null;
+  // }
+
   double get partnerAmount =>
       (double.tryParse(form.control(controls.price).value.toString()) ?? 0) / 2;
 
   void onTapMalePartner(bool val) => isMalePartner = !val;
 
   void onTapFemalePartner(bool val) => isFemalePartner = !val;
+  //void a(String val) => setAvaliableHour = val;
 
   void onSubmit() async {
     // form.markAsUntouched();
@@ -129,9 +151,8 @@ class CreatePostViewModel extends BaseViewModel {
     print('type is ${form.value}');
     return;
 */
-    if (
-        //form.valid
-        true) {
+    if (form.valid) {
+      print("HHHHHHHHHHHHH");
       postItController.start();
       // final attch = attachments
       //     .where((element) => element != null)
@@ -147,24 +168,20 @@ class CreatePostViewModel extends BaseViewModel {
                 .toList(growable: false);
             await _postsRepo.createBookedPost(
                 CreateBookedPostParams(
-                  bidEnds: form.control(controls.date).value!.end,
-                  bidStart: form.control(controls.date).value!.start,
-                  hotel: form.control(controls.hotel).value,
-                  checkIn: 'form.control(controls.date).value!.start',
-                  checkout: 'form.control(controls.date).value!.end',
-                  lat: _selectedLocation!.latitude,
-                  long: _selectedLocation!.longitude,
-                  name: form.control(controls.hotel).value,
+                  hotelRating: form.control(controls.rating).value as double,
+                  hourAvaliable: avaliableHour,
+                  nameOfHotel: form.control(controls.hotel).value,
+                  imagesURL: [],
+                  userUID: currentUser()!.uid,
+                  locationLatLng:
+                      '${locationEntity!.latitude}~${locationEntity!.longitude}',
                   gender: _getGender(),
-                  overview: form.control(controls.message).value,
                   // location: _selectedLocation!.id.toString(),
-                  location:
-                      "${_selectedLocation!.latitude}~${_selectedLocation!.longitude}",
                   notes: form.control(controls.message).value,
                   partnerAmount: form.control(controls.price).value as double,
-                  rate: form.control(controls.rating).value as double,
-                  dateFrom: form.control(controls.date).value.start,
-                  dateTo: form.control(controls.date).value.end,
+                  dateFrom: form.control(controls.date).value.start.toString(),
+                  dateTo: form.control(controls.date).value.end.toString(),
+                  postType: bookingPostType,
                 ),
                 files: selectedAttachments);
             break;
@@ -182,6 +199,7 @@ class CreatePostViewModel extends BaseViewModel {
               isAcceptHourly: form.control(controls.hourly).value != null
                   ? form.control(controls.hourly).value
                   : false,
+              postType: findingPostType,
             ));
 
             break;
@@ -191,7 +209,7 @@ class CreatePostViewModel extends BaseViewModel {
             title: 'Create Post',
             description: 'Your post has been successfully created.');
 
-        _navigationService.back();
+        _navigationService.clearStackAndShow(Routes.mainView);
       } catch (e) {
         _snackbarService.showSnackbar(
             message: 'An error occured, please try again');
@@ -270,12 +288,7 @@ class CreatePostViewModel extends BaseViewModel {
   void onLocation(
       //FormControl control
       ) {
-    _navigationService.navigateToLocationChangeView().then((value) {
-      if (value is LocationEntity) {
-        _selectedLocation = value;
-        // control.value = value.name;
-      }
-    });
+    _navigationService.navigateToLocationChangeView();
   }
 }
 
@@ -295,4 +308,6 @@ class _Controls {
   String get hourly => 'hourly';
 
   String get attachments => 'attachments';
+
+  String get hourlyRange => 'hourly_range';
 }

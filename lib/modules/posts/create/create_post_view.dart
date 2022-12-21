@@ -18,6 +18,7 @@ import 'package:cheffy/modules/widgets/app_form_field.dart';
 import 'package:cheffy/modules/widgets/app_toggle_button.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 
+import '../../location_change_map/location_change_map_view_model.dart';
 import 'create_post_view_model.dart';
 import 'image_item_view.dart';
 
@@ -87,6 +88,47 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                       ),
                       const SizedBox(height: 24),
                     ],
+                    ReactiveFormField(
+                      formControlName: viewModel.controls.location,
+                      builder: (state) => Card(
+                        elevation: 0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                selectedPosttype = viewModel.type;
+                                viewModel.onLocation();
+                              },
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 0.6, color: Colors.grey.shade400),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              title: Text(
+                                  viewModel.type == PostType.booked
+                                      ? "Where is the hotel"
+                                      : 'Where you are going?',
+                                  style: headerTextFont),
+                              subtitle: locationEntity != null
+                                  ? Text(locationEntity!.name)
+                                  : Text('Tap to edit', style: headerTextFont),
+                            ),
+                            if (state.errorText.isNotNullOrEmpty) ...[
+                              const SizedBox(height: 8),
+                              Text(
+                                '${state.errorText}',
+                                style: AppStyle.of(context)
+                                    .b5
+                                    .wCError!
+                                    .merge(headerTextFont),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
                     //endregion
                     //region location
                     // AppFormField(
@@ -100,24 +142,7 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                     //     readOnly: true,
                     //   ),
                     // ),
-                    Card(
-                      elevation: 0,
-                      child: ListTile(
-                        onTap: viewModel.onLocation,
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                width: 0.6, color: Colors.grey.shade400),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        title:
-                            Text('Where you are going?', style: headerTextFont),
-                        subtitle: locationEntity != null
-                            ? Text(locationEntity!.name)
-                            : Text('Tap to edit',
-                                style: headerTextFont.copyWith(
-                                    fontStyle: FontStyle.italic)),
-                      ),
-                    ),
+
                     const SizedBox(height: 24),
                     //endregion
                     //region date
@@ -316,7 +341,7 @@ Future<List<TimeOfDay>?> showTimeRange(BuildContext context) async {
             initialToHour: 2,
             initialFromMinutes: 3,
             initialToMinutes: 4,
-            is24Format: false,
+            is24Format: true,
             onSelect: (from, to) {
               Navigator.pop(context, [from, to]);
             },
@@ -325,7 +350,7 @@ Future<List<TimeOfDay>?> showTimeRange(BuildContext context) async {
       });
 }
 
-String avaliableHour = '';
+String? avaliableHour;
 final RoundedLoadingButtonController postItController =
     RoundedLoadingButtonController();
 
@@ -348,7 +373,7 @@ class _AvaliableHourState extends State<AvaliableHour> {
               'Avaliable Hour:',
               style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
             ),
-            subtitle: avaliableHour.isEmpty
+            subtitle: avaliableHour == null
                 ? Text(
                     'Tap to adjust',
                     style: headerTextFont.copyWith(
@@ -356,7 +381,7 @@ class _AvaliableHourState extends State<AvaliableHour> {
                   )
                 : null,
             trailing: Text(
-              avaliableHour.isEmpty ? "-- : --" : avaliableHour,
+              avaliableHour == null ? "-- : --" : avaliableHour!,
               style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
             ),
             onTap: () {
@@ -373,6 +398,58 @@ class _AvaliableHourState extends State<AvaliableHour> {
               );
             },
           ),
+          // ReactiveFormField(
+          //     formControlName: widget.viewModel.controls.hourlyRange,
+          //     builder: (state) => Column(
+          //           mainAxisSize: MainAxisSize.min,
+          //           mainAxisAlignment: MainAxisAlignment.start,
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             ListTile(
+          //               title: Text(
+          //                 'Avaliable Hour:',
+          //                 style: headerTextFont.copyWith(
+          //                     fontWeight: FontWeight.w400),
+          //               ),
+          //               subtitle: avaliableHour == null
+          //                   ? Text(
+          //                       'Tap to adjust',
+          //                       style: headerTextFont.copyWith(
+          //                           color: Colors.blueGrey, fontSize: 11),
+          //                     )
+          //                   : null,
+          //               trailing: Text(
+          //                 avaliableHour == null ? "-- : --" : avaliableHour!,
+          //                 style: headerTextFont.copyWith(
+          //                     fontWeight: FontWeight.w400),
+          //               ),
+          //               onTap: () {
+          //                 KeyboardUtil.hideKeyboard(context);
+          //                 showTimeRange(context).then(
+          //                   (value) {
+          //                     if (value != null) {
+          //                       String from = '${value.first.format(context)}';
+          //                       String to = '${value.last.format(context)}';
+          //                       avaliableHour = "$from - $to";
+          //                       setState(() {});
+          //                       widget.viewModel.a(avaliableHour!);
+          //                     }
+          //                   },
+          //                 );
+          //               },
+          //             ),
+          //             if (state.errorText.isNotNullOrEmpty) ...[
+          //               const SizedBox(height: 8),
+          //               Text(
+          //                 '${state.errorText}',
+          //                 style: AppStyle.of(context)
+          //                     .b5
+          //                     .wCError!
+          //                     .merge(headerTextFont),
+          //               ),
+          //             ],
+          //           ],
+          //         )),
         ],
         const SizedBox(height: 20),
         RoundedLoadingButton(
