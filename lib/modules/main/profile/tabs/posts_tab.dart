@@ -5,6 +5,7 @@ import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_verti
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:cheffy/modules/widgets/progress/provider_progress_loader.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -12,7 +13,7 @@ import 'package:cheffy/modules/posts/posts/domain/entities/post_entity.dart';
 import 'package:provider/provider.dart';
 
 class PostsTab extends StatelessWidget {
-  final List<FindingPostParams>? postEntity;
+  final List<PostViewParams>? postEntity;
 
   const PostsTab({
     Key? key,
@@ -28,7 +29,7 @@ class PostsTab extends StatelessWidget {
           ? Center(
               child: Text('No posts available. Try adding new posts!'),
             )
-          : ListView.builder(
+          : ListView.separated(
               itemCount: postEntity!.length,
               itemBuilder: (context, i) {
                 final post = postEntity![i];
@@ -39,6 +40,9 @@ class PostsTab extends StatelessWidget {
                     await profileProvider.deletePost(0); //TODO
                   },
                 );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider();
               },
             ),
     );

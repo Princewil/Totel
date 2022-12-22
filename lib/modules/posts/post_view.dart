@@ -48,21 +48,24 @@ class _PostsPageViewState extends State<PostsPageView> {
                   style: TextStyle(color: Colors.grey),
                 ),
               )
-            : ListView.builder(
+            : ListView.separated(
                 itemCount: postsProvider.postEntity!.length,
                 itemBuilder: (context, i) {
                   final _ = postsProvider.postEntity![i];
-                  final postItem = FindingPostParams.fromMap(_);
+                  final postItem = PostViewParams.fromMap(_);
                   final user = UserEntity.fromMap(_);
                   print(postItem.userUID);
                   return PostListingItemVerticalLayoutView(
                     post: postItem, userEntity: user,
                     onPress: () {
-                      //postsProvider.onTapPost(postItem); //TODO
+                      postsProvider.onTapPost(postItem); //TODO
                     },
                     // Users can't delete public posts
                     onDelete: null,
                   );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return Divider();
                 },
               ),
       ),

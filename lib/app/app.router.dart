@@ -45,6 +45,7 @@ import '../modules/main/profile/edit/edit_profile_view.dart';
 import '../modules/main/profile/profile_view.dart';
 import '../modules/request/request_view.dart';
 import '../modules/wallet/wallet_view.dart';
+import '../modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 
 class Routes {
   static const String splashView = '/';
@@ -345,7 +346,7 @@ class CreatePostViewArguments {
 /// CreatePostView arguments holder class
 class PostDetailViewArguments {
   final Key? key;
-  final FindingPostParams post;
+  final PostViewParams post;
   PostDetailViewArguments({this.key, required this.post});
 }
 

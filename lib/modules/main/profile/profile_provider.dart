@@ -14,6 +14,7 @@ import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/app/app.router.dart';
 
 import '../../auth/register/register_form_view.dart';
+import '../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 
 UserEntity? initialProfileDetails;
 
@@ -22,7 +23,7 @@ class ProfileProvider extends BaseViewModel {
   final BottomSheetService _bottomSheetService = locator.get();
   final SnackbarService _snackbarService = locator.get();
   final SecureStorageService _secureStorageService = locator.get();
-  List<FindingPostParams>? postEntity = [];
+  List<PostViewParams>? postEntity = [];
 
   bool isLoading = false;
 

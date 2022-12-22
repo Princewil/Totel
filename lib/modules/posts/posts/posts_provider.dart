@@ -5,6 +5,7 @@ import 'package:cheffy/modules/posts/posts/domain/repositories/post_repo.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import '../create/create_post_functions.dart';
 import 'domain/entities/create_finding_post_params.dart';
 
@@ -29,7 +30,7 @@ class PostsProvider extends BaseViewModel {
     }
   }
 
-  void onTapPost(FindingPostParams selectedPost) {
+  void onTapPost(PostViewParams selectedPost) {
     _navigationService.navigateTo(
       Routes.postDetailView,
       arguments: PostDetailViewArguments(post: selectedPost),

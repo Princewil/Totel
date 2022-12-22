@@ -93,4 +93,4 @@ const locationLatLngKey = "locationLatLngKey";
 const dateFromKey = 'date_from';
 const dateToKey = 'date_to';
 const isAccptHourKey = 'is_accept_hourly';
-const findingPostType = 'Finding';
+const findingPostType = 'Find';

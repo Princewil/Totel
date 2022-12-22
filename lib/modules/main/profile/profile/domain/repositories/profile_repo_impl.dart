@@ -12,6 +12,8 @@ import 'package:cheffy/core/services/api/api_client.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 
+import '../../../../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
+
 class ProfileRepoImpl extends ProfileRepo {
   final ApiClient _apiClient = locator.get();
 
@@ -29,15 +31,15 @@ class ProfileRepoImpl extends ProfileRepo {
   }
 
   @override
-  Future<List<FindingPostParams>> getUserPosts() async {
+  Future<List<PostViewParams>> getUserPosts() async {
     try {
       // final result = await _apiClient.get(ApiRoutes.postsByCurrentUser);
       // final resultData = result.data;
-      List<FindingPostParams> list = [];
+      List<PostViewParams> list = [];
       var resultData = await getThisUserPost();
       for (var element in resultData!) {
         final _ =
-            FindingPostParams.fromMap(element.data() as Map<String, dynamic>);
+            PostViewParams.fromMap(element.data() as Map<String, dynamic>);
         list.add(_);
       }
       return list;

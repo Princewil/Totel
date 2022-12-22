@@ -15,12 +15,13 @@ import 'package:cheffy/modules/widgets/carousel/carousel_view.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_view.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import '../posts/domain/entities/create_finding_post_params.dart';
 import 'post_detail_view_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PostDetailView extends StatefulWidget {
-  final FindingPostParams post;
+  final PostViewParams post;
   const PostDetailView({super.key, required this.post});
 
   @override

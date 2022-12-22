@@ -181,4 +181,4 @@ const String imagesKey = 'Hotel images';
 const String hotelRatekey = 'Hotel Rate';
 const String hoursRangeKey = 'Avaliable hours';
 const postTypeKey = 'Post type';
-const bookingPostType = 'Booking';
+const bookingPostType = 'Booked';
