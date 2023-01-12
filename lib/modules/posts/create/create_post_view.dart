@@ -367,7 +367,8 @@ class _AvaliableHourState extends State<AvaliableHour> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (widget.viewModel.type == PostType.booked) ...[
+        if (widget.viewModel.type == PostType.booked ||
+            widget.viewModel.type == PostType.finding) ...[
           ListTile(
             title: Text(
               'Avaliable Hour:',

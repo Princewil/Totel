@@ -1,8 +1,12 @@
 import 'dart:math';
 import 'package:animations/animations.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/result.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_funct.dart';
 import 'package:cheffy/modules/main/discover/presentation/search_provider.dart';
+import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_fade/image_fade.dart';
@@ -15,107 +19,162 @@ class SearchHotelsPage extends StatefulWidget {
 }
 
 class _SearchHotelsPageState extends State<SearchHotelsPage> {
+  bool loading = true;
+  bool error = false;
+  List<QueryDocumentSnapshot> list = [];
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    loading = true;
+    error = false;
+    setState(() {});
+    try {
+      list = await normalSearch();
+      loading = false;
+      setState(() {});
+    } catch (e) {
+      print(e);
+      loading = false;
+      error = true;
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(title: 'Discover Hotels'),
-      body: ListView.builder(
-        itemCount: searchResult.length,
-        itemBuilder: (BuildContext context, int i) {
-          SearchResult item = searchResult[i];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-            child: OpenContainer(
-              openBuilder: (_, __) {
-                selected = item;
-                return Result();
-              },
-              closedBuilder: (_, openContainer) {
-                return GestureDetector(
-                  onTap: openContainer,
-                  child: Container(
-                    height: smallScreen
-                        ? MediaQuery.of(context).size.height * 0.45
-                        : MediaQuery.of(context).size.height * 0.35,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                      border: Border.all(width: 1.5, color: Colors.blueGrey),
-                    ),
-                    child: Column(
-                      children: [
-                        Flexible(
-                          child: imageView(
-                              item.images!.first,
-                              BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20)),
-                              alreadyLoaded: false),
-                          flex: 4,
-                        ),
-                        if (smallScreen)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: ListTile(
-                              title: Text(item.title!, style: headerTextFont),
-                              subtitle:
-                                  Text(item.subtitle!, style: headerTextFont),
-                              trailing: Text("\$${Random().nextInt(50)}",
-                                  style: headerTextFont.copyWith(fontSize: 16)),
-                            ),
-                          ),
-                        if (smallScreen)
-                          ListTile(
-                            title: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
-                                  child: Icon(
-                                    Icons.location_on_outlined,
-                                    //size: 30,
-                                    color: iconColor,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 2.0),
-                                  child: Text(
-                                    '${Random().nextInt(50)} km from here',
-                                    style: headerTextFont.copyWith(),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        if (!smallScreen)
-                          Flexible(
-                            child: roomDetails(
-                                context, item.title!, item.subtitle!),
-                          ),
-                        if (!smallScreen)
-                          Flexible(
-                            child: distance(),
-                          ),
-                      ],
-                    ),
+      body: loading
+          ? Center(child: CupertinoActivityIndicator())
+          // : error
+          //     ? Center(
+          //         child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Text('An error occurred', style: headerTextFont),
+          //           TextButton(
+          //               onPressed: init,
+          //               child: Text('Try again', style: headerTextFont))
+          //         ],
+          //       ))
+          : list.isEmpty || error
+              ? Center(
+                  child: Text(
+                    'No results found!\nEnsure you provide enough address information as possible.',
+                    style: headerTextFont,
+                    textAlign: TextAlign.center,
                   ),
-                );
-              },
-              closedElevation: 0,
-              transitionType: ContainerTransitionType.fadeThrough,
-              closedShape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              transitionDuration: const Duration(milliseconds: 700),
-            ),
-          );
-        },
-      ),
+                )
+              : ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (BuildContext context, int i) {
+                    PostViewParams item = PostViewParams.fromMap(
+                        list[i].data() as Map<String, dynamic>);
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 30),
+                      child: OpenContainer(
+                        openBuilder: (_, __) {
+                          return Result(postViewParams: item);
+                        },
+                        closedBuilder: (_, openContainer) {
+                          return GestureDetector(
+                            onTap: openContainer,
+                            child: Container(
+                              height: smallScreen
+                                  ? MediaQuery.of(context).size.height * 0.45
+                                  : MediaQuery.of(context).size.height * 0.35,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                                border: Border.all(
+                                    width: 1.5, color: Colors.blueGrey),
+                              ),
+                              child: Column(
+                                children: [
+                                  Flexible(
+                                    child: imageView(
+                                        item.imagesURL!.first,
+                                        BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20)),
+                                        alreadyLoaded: false),
+                                    flex: 4,
+                                  ),
+                                  if (smallScreen)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: ListTile(
+                                        title: Text(item.nameOfHotel!,
+                                            style: headerTextFont),
+                                        subtitle: Text(
+                                            resultAddressFromLatLng[i],
+                                            style: headerTextFont),
+                                        trailing: Text(
+                                            "\$${item.partnerAmount}",
+                                            style: headerTextFont.copyWith(
+                                                fontSize: 16)),
+                                      ),
+                                    ),
+                                  if (smallScreen)
+                                    ListTile(
+                                      title: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            child: Icon(
+                                              Icons.location_on_outlined,
+                                              //size: 30,
+                                              color: iconColor,
+                                            ),
+                                          ),
+                                          // Padding(
+                                          //   padding: const EdgeInsets.only(left: 2.0),
+                                          //   child: Text(
+                                          //     '${Random().nextInt(50)} km from here',
+                                          //     style: headerTextFont.copyWith(),
+                                          //   ),
+                                          // )
+                                        ],
+                                      ),
+                                    ),
+                                  if (!smallScreen)
+                                    Flexible(
+                                      child: roomDetails(
+                                          context,
+                                          item.nameOfHotel!,
+                                          resultAddressFromLatLng[i]),
+                                    ),
+                                  if (!smallScreen)
+                                    Flexible(
+                                      child: distance(),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        closedElevation: 0,
+                        transitionType: ContainerTransitionType.fadeThrough,
+                        closedShape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        transitionDuration: const Duration(milliseconds: 700),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }
 
-SearchResult? selected;
 Widget imageView(String image, BorderRadius borderRadius,
     {bool alreadyLoaded = true}) {
   return ClipRRect(
@@ -222,63 +281,6 @@ Widget distance() => Padding(
       ),
     );
 
-class SearchResult {
-  String? title;
-  String? subtitle;
-  List<String>? images;
-  SearchResult({
-    this.title,
-    this.subtitle,
-    this.images,
-  });
-}
-
-List<SearchResult> searchResult = [
-  SearchResult(
-    images: [
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-    ],
-    title: 'Affordable accomodation with incredible views',
-    subtitle: 'Independence Avenue, GRA, Asaba',
-  ),
-  SearchResult(
-    images: [
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80',
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80',
-    ],
-    title: 'Affordable accomodation with incredible views',
-    subtitle: 'Independence Avenue, GRA, Enugu',
-  ),
-  SearchResult(
-    images: [
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80'
-    ],
-    title: 'Affordable accomodation with incredible views',
-    subtitle: 'Independence Avenue, GRA, Abia',
-  ),
-  SearchResult(
-    images: [
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80',
-      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80'
-    ],
-    title: 'Affordable accomodation with incredible views',
-    subtitle: 'Independence Avenue, GRA, Sokoto',
-  ),
-];
 //Font style for Logo
 final logoFont = GoogleFonts.rubik();
 

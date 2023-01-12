@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
+import 'search_funct.dart';
+
 class SearchLocationPage extends StatelessWidget {
   SearchLocationPage({super.key});
 
@@ -88,6 +90,9 @@ class SearchLocationPage extends StatelessWidget {
                   formControlName: ReactiveFormControls.searchLocation,
                   style: headerTextFont,
                   autofocus: false,
+                  onChanged: (v) {
+                    searchVal = v.value as String?;
+                  },
                   decoration: InputDecoration(
                     labelText: 'Where you want to go?',
                     hintText: 'Search anywhere',

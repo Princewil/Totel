@@ -152,7 +152,6 @@ class CreatePostViewModel extends BaseViewModel {
     return;
 */
     if (form.valid) {
-      print("HHHHHHHHHHHHH");
       postItController.start();
       // final attch = attachments
       //     .where((element) => element != null)

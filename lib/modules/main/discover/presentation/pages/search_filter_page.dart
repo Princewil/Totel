@@ -147,30 +147,30 @@ class SearchFilterPage extends StatelessWidget {
                     height: 8,
                   ),
                 ],
-                SharedWidgets.buildListTileTitle(title: 'Room Service Type'),
-                SharedWidgets.buildSwitchListTile(
-                  val: searchProvider.isFullBoard,
-                  title: 'Full Board',
-                  onChange: searchProvider.switchFullBoard,
-                ),
-                SharedWidgets.buildSwitchListTile(
-                  val: searchProvider.isHalfBoard,
-                  title: 'Half Board',
-                  onChange: searchProvider.switchHalfBoard,
-                ),
-                SharedWidgets.buildSwitchListTile(
-                  val: searchProvider.isBedAndBreakfast,
-                  title: 'Bed & Breakfast',
-                  onChange: searchProvider.switchBedAndBreakfast,
-                ),
-                SharedWidgets.buildSwitchListTile(
-                  val: searchProvider.isRoomOnly,
-                  title: 'Room Only',
-                  onChange: searchProvider.switchRoomOnly,
-                ),
-                SizedBox(
-                  height: 8,
-                ),
+                // SharedWidgets.buildListTileTitle(title: 'Room Service Type'),
+                // SharedWidgets.buildSwitchListTile(
+                //   val: searchProvider.isFullBoard,
+                //   title: 'Full Board',
+                //   onChange: searchProvider.switchFullBoard,
+                // ),
+                // SharedWidgets.buildSwitchListTile(
+                //   val: searchProvider.isHalfBoard,
+                //   title: 'Half Board',
+                //   onChange: searchProvider.switchHalfBoard,
+                // ),
+                // SharedWidgets.buildSwitchListTile(
+                //   val: searchProvider.isBedAndBreakfast,
+                //   title: 'Bed & Breakfast',
+                //   onChange: searchProvider.switchBedAndBreakfast,
+                // ),
+                // SharedWidgets.buildSwitchListTile(
+                //   val: searchProvider.isRoomOnly,
+                //   title: 'Room Only',
+                //   onChange: searchProvider.switchRoomOnly,
+                // ),
+                // SizedBox(
+                //   height: 8,
+                // ),
                 SharedWidgets.buildListTileTitle(title: 'Price Range'),
                 Row(
                   children: [

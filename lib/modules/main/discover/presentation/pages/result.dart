@@ -1,9 +1,16 @@
 import 'dart:math';
 import 'package:card_swiper/card_swiper.dart';
-import 'package:cheffy/modules/main/discover/presentation/search_provider.dart';
+import 'package:cheffy/Utils/Utils.dart';
+import 'package:cheffy/core/enums/male_female_enum.dart';
+import 'package:cheffy/modules/location_change_map/location_change_map_view.dart';
+import 'package:cheffy/modules/main/discover/presentation/pages/search_funct.dart';
 import 'package:cheffy/modules/main/map/map_view_model.dart';
+import 'package:cheffy/modules/posts/detail/post_detail_view.dart';
+import 'package:cheffy/modules/theme/styles.dart';
+import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:we_slide/we_slide.dart';
@@ -11,7 +18,8 @@ import 'package:we_slide/we_slide.dart';
 import 'search_hotels_page.dart';
 
 class Result extends StatefulWidget {
-  const Result({Key? key}) : super(key: key);
+  final PostViewParams postViewParams;
+  const Result({Key? key, required this.postViewParams}) : super(key: key);
 
   @override
   State<Result> createState() => _ResultState();
@@ -19,8 +27,19 @@ class Result extends StatefulWidget {
 
 class _ResultState extends State<Result> {
   late final controller = WeSlideController();
-
+  String address = '';
   late final footerController = WeSlideController(initial: true);
+  @override
+  void initState() {
+    super.initState();
+    placemarkFromCoordinates(
+            double.parse(
+                widget.postViewParams.locationLatLng!.split(split).first),
+            double.parse(
+                widget.postViewParams.locationLatLng!.split(split).last))
+        .then((value) => setState(() => address = fullAddress(value.first)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +54,8 @@ class _ResultState extends State<Result> {
         overlay: true,
         overlayOpacity: 0.4,
         blurSigma: 30,
-        appBar: SharedWidgets.buildHomeAppBar(title: selected!.title!),
+        appBar: SharedWidgets.buildHomeAppBar(
+            title: widget.postViewParams.nameOfHotel ?? ''),
         backgroundColor: Theme.of(context).canvasColor,
         isUpSlide: false,
         panel: Card(
@@ -94,8 +114,9 @@ class _ResultState extends State<Result> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Swiper(
-                itemCount: selected!.images!.length,
-                itemBuilder: (context, i) => imageView(selected!.images![i],
+                itemCount: widget.postViewParams.imagesURL!.length,
+                itemBuilder: (context, i) => imageView(
+                    widget.postViewParams.imagesURL![i],
                     BorderRadius.all(Radius.circular(20))),
                 curve: Curves.easeIn,
                 autoplayDisableOnInteraction: false,
@@ -111,19 +132,20 @@ class _ResultState extends State<Result> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Strand Place hotel',
-                        style: headerTextFont.copyWith(fontSize: 16)),
-                    if (smallScreen)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 20),
-                        child: Text(
-                          selected!.title!,
-                          style: headerTextFont.copyWith(
-                              fontWeight: FontWeight.bold, fontSize: 17),
-                        ),
+                    //if (smallScreen)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 10),
+                      child: Text(
+                        widget.postViewParams.nameOfHotel!,
+                        style: headerTextFont.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 17),
                       ),
-                    if (smallScreen)
-                      Row(
+                    ),
+                    Text(address, style: headerTextFont.copyWith(fontSize: 16)),
+                    //if (smallScreen)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 8),
+                      child: Row(
                         children: [
                           Card(
                             color: iconColor,
@@ -139,7 +161,7 @@ class _ResultState extends State<Result> {
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 5),
                                     child: Text(
-                                      "\$${Random().nextInt(100)}",
+                                      "\$${widget.postViewParams.partnerAmount}",
                                       style: headerTextFont.copyWith(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -153,17 +175,28 @@ class _ResultState extends State<Result> {
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              '2pm-3pm',
+                              '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateTo!)!)}',
                               style: headerTextFont.copyWith(
                                   fontWeight: FontWeight.bold),
                             ),
                           )
                         ],
                       ),
-                    if (!smallScreen) cost(),
-                    overview(),
-                    SizedBox(height: 50),
-                    amenities(),
+                    ),
+                    Text(
+                        'Avaliable Hours: ${widget.postViewParams.hourAvaliable != null && widget.postViewParams.hourAvaliable != '' ? widget.postViewParams.hourAvaliable : allDayAvaliable}',
+                        style: headerTextFont),
+                    SizedBox(height: 30),
+                    // if (!smallScreen)
+                    //   cost(widget
+                    //       .postViewParams), //TODO: i will remove this code, i am owk with the ui for small screen
+                    Divider(),
+                    overview(widget.postViewParams.notes!),
+                    Divider(),
+                    SizedBox(height: 40),
+                    owner(context),
+                    SizedBox(height: 40)
+                    //amenities(),
                   ],
                 ),
               ),
@@ -175,10 +208,10 @@ class _ResultState extends State<Result> {
   }
 }
 
-Widget cost() => Row(
+Widget cost(PostViewParams postViewParams) => Row(
       children: [
         Text(
-          selected!.title!,
+          postViewParams.nameOfHotel!,
           style: headerTextFont.copyWith(
               fontWeight: FontWeight.bold, fontSize: 17),
         ),
@@ -272,25 +305,69 @@ Widget amenities() {
   );
 }
 
-Widget overview() => Column(
+Widget owner(BuildContext context) {
+  String occupation = postDetailViewuserEntity?.occupation != ''
+      ? 'Occupation: ${postDetailViewuserEntity?.occupation}'
+      : '';
+  String bio = postDetailViewuserEntity?.bio != ''
+      ? 'Bio: ${postDetailViewuserEntity?.bio}'
+      : '';
+  String hobbies = postDetailViewuserEntity?.hobbies != ''
+      ? 'Hobbies: ${postDetailViewuserEntity?.hobbies}'
+      : '';
+  String gender = postDetailViewuserEntity?.gender != ''
+      ? 'Gender: ${postDetailViewuserEntity?.gender == MaleFemaleEnum.male.toString() ? 'Male' : 'Female'}'
+      : '';
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Text(
+          'Roommate profile:',
+          style: headerTextFont.copyWith(fontSize: 16),
+        ),
+      ),
+      ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 0.0),
+        leading: CircleAvatar(
+          backgroundImage: postDetailViewuserEntity!.avatar != null &&
+                  postDetailViewuserEntity!.avatar != ''
+              ? NetworkImage(postDetailViewuserEntity!.avatar!)
+              : null,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          radius: 24,
+        ),
+        title: Text(
+          '${postDetailViewuserEntity!.firstName} ${postDetailViewuserEntity!.lastName}',
+          style: AppStyle.of(context).b4M.wCChineseBlack!.merge(headerTextFont),
+        ),
+        subtitle: Text(
+          '$gender\n$occupation\n$bio\n$hobbies',
+          style: AppStyle.of(context).b6.wCCrayola!.merge(headerTextFont),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget overview(String note) => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Text(
-            'Overview',
+            'Notes:',
             style: headerTextFont.copyWith(fontSize: 16),
           ),
         ),
         Text(
-          roomDescription,
+          note,
           style: headerTextFont,
         )
       ],
     );
-
-String roomDescription =
-    'The living room is furnished with the standard-issue accoutrements supplied to all Victorian grandmothers; if only you could see any of them beneath the morass of doilies.\nThe living room was a rambling semicircle arranged around Grandmother’s vast paisley-print sofa. Sunlight, dappled and blued, filtered dirtily through the dusty lace curtains, highlighting the pits and scratches in the furniture (made of the broken bodies of distant forests), the doilies (made of wasted hours and old lace), and the photographs (made of stiff smiles and shadows on silver).';
 
 class Direction extends ViewModelBuilderWidget<MapViewModel> {
   const Direction({Key? key}) : super(key: key);

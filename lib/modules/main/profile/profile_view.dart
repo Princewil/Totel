@@ -3,14 +3,11 @@ import 'package:cheffy/modules/main/profile/tabs/posts_tab.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stacked/stacked.dart';
 import 'package:cheffy/r.g.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/main/profile/profile_header_view.dart';
 import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
 import 'package:cheffy/modules/widgets/booking_listing_item/booking_listing_item_view.dart';
-import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_view.dart';
-import 'package:cheffy/modules/widgets/review_listing_item/review_listing_item_view.dart';
 
 import 'profile_provider.dart';
 
@@ -37,7 +34,7 @@ class _ProfileViewState extends State<ProfileView> {
     final profileProvider = context.watch<ProfileProvider>();
     return BackgroundProgress<ProfileProvider>(
       child: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Material(
           child: NestedScrollView(
             headerSliverBuilder: (context, _) => [
@@ -65,24 +62,24 @@ class _ProfileViewState extends State<ProfileView> {
                         Tab(
                           text: "Bookings",
                         ),
-                        Tab(
-                          text: "Reviews",
-                        ),
+                        // Tab(
+                        //   text: "Reviews",
+                        // ),
                       ],
                     ),
                   ),
                 ),
                 actions: [
-                  AppBarActionButton(
-                    onPressed: profileProvider.onShare,
-                    showElevation: false,
-                    child: Image(image: R.svg.ic_share(width: 20, height: 20)),
-                  ),
-                  AppBarActionButton(
-                    onPressed: profileProvider.onWallet,
-                    backgroundColor: AppColors.plumpPurplePrimary,
-                    child: Image(image: R.svg.ic_wallet(width: 17, height: 17)),
-                  ),
+                  // AppBarActionButton(
+                  //   onPressed: profileProvider.onShare,
+                  //   showElevation: false,
+                  //   child: Image(image: R.svg.ic_share(width: 20, height: 20)),
+                  // ),
+                  // AppBarActionButton(
+                  //   onPressed: profileProvider.onWallet,
+                  //   backgroundColor: AppColors.plumpPurplePrimary,
+                  //   child: Image(image: R.svg.ic_wallet(width: 17, height: 17)),
+                  // ),
                 ],
               )
             ],
@@ -101,16 +98,16 @@ class _ProfileViewState extends State<ProfileView> {
                   itemBuilder: (BuildContext context, int index) =>
                       const BookingListingItemView(),
                 ),
-                ListView.separated(
-                  itemCount: 5,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Divider(
-                    thickness: 4,
-                    color: AppColors.soap,
-                  ),
-                  itemBuilder: (BuildContext context, int index) =>
-                      const ReviewListingItemView(),
-                ),
+                // ListView.separated(
+                //   itemCount: 5,
+                //   separatorBuilder: (BuildContext context, int index) =>
+                //       Divider(
+                //     thickness: 4,
+                //     color: AppColors.soap,
+                //   ),
+                //   itemBuilder: (BuildContext context, int index) =>
+                //       const ReviewListingItemView(),
+                // ),
               ],
             ),
           ),

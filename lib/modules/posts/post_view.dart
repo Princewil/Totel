@@ -6,8 +6,12 @@ import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_verti
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:cheffy/widgets/app_drawer.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../main/discover/presentation/pages/result.dart';
+import 'detail/post_detail_view.dart';
 
 class PostsPageView extends StatefulWidget {
   const PostsPageView({super.key});
@@ -48,25 +52,42 @@ class _PostsPageViewState extends State<PostsPageView> {
                   style: TextStyle(color: Colors.grey),
                 ),
               )
-            : ListView.separated(
+            : ListView.builder(
                 itemCount: postsProvider.postEntity!.length,
                 itemBuilder: (context, i) {
                   final _ = postsProvider.postEntity![i];
                   final postItem = PostViewParams.fromMap(_);
                   final user = UserEntity.fromMap(_);
-                  print(postItem.userUID);
-                  return PostListingItemVerticalLayoutView(
-                    post: postItem, userEntity: user,
-                    onPress: () {
-                      postsProvider.onTapPost(postItem); //TODO
-                    },
-                    // Users can't delete public posts
-                    onDelete: null,
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    child: GestureDetector(
+                      onTap: () {
+                        postDetailViewuserEntity = user;
+                        postsProvider.onTapPost(postItem);
+                      },
+                      child: Card(
+                        elevation: 10,
+                        color: Theme.of(context).cardColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: PostListingItemVerticalLayoutView(
+                          post: postItem, userEntity: user,
+                          onPress: () {
+                            postDetailViewuserEntity = user;
+                            postsProvider.onTapPost(postItem);
+                          },
+                          // Users can't delete public posts
+                          onDelete: null,
+                        ),
+                      ),
+                    ),
                   );
                 },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider();
-                },
+                // separatorBuilder: (BuildContext context, int index) {
+                //   return Divider();
+                // },
               ),
       ),
     );

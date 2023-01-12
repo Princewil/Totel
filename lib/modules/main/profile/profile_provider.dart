@@ -230,5 +230,10 @@ class ProfileProvider extends BaseViewModel {
 
   void onMessage() {}
 
-  void onTapPost() {}
+  void onTapPost(PostViewParams selectedPost) {
+    _navigationService.navigateTo(
+      Routes.postDetailView,
+      arguments: PostDetailViewArguments(post: selectedPost),
+    );
+  }
 }

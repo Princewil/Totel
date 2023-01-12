@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
+import 'package:cheffy/modules/posts/detail/post_detail_view.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
@@ -29,21 +30,37 @@ class PostsTab extends StatelessWidget {
           ? Center(
               child: Text('No posts available. Try adding new posts!'),
             )
-          : ListView.separated(
+          : ListView.builder(
               itemCount: postEntity!.length,
               itemBuilder: (context, i) {
                 final post = postEntity![i];
-                return PostListingItemVerticalLayoutView(
-                  post: post,
-                  userEntity: initialProfileDetails!,
-                  onDelete: () async {
-                    await profileProvider.deletePost(0); //TODO
-                  },
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  child: GestureDetector(
+                    onTap: () {
+                      postDetailViewuserEntity = initialProfileDetails;
+                      profileProvider.onTapPost(post);
+                    },
+                    child: Card(
+                      elevation: 10,
+                      color: Theme.of(context).cardColor,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: PostListingItemVerticalLayoutView(
+                        post: post,
+                        userEntity: initialProfileDetails!,
+                        onDelete: () async {
+                          await profileProvider.deletePost(0); //TODO
+                        },
+                      ),
+                    ),
+                  ),
                 );
               },
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
+              // separatorBuilder: (BuildContext context, int index) {
+              //   return Divider();
+              // },
             ),
     );
   }

@@ -58,40 +58,40 @@ class ProfileHeaderView extends StatelessWidget {
                                     ),
                         ),
                       ),
-                      Positioned(
-                        right: 8,
-                        left: 8,
-                        bottom: -10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.profileGreen,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "${profileProvider.profileEntity?.rating}",
-                                style: headerTextFont.copyWith(
-                                    color: Colors.white),
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Icon(
-                                Icons.star,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Positioned(
+                      //   right: 8,
+                      //   left: 8,
+                      //   bottom: -10,
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       color: AppColors.profileGreen,
+                      //       borderRadius: BorderRadius.circular(20),
+                      //     ),
+                      //     padding: const EdgeInsets.symmetric(
+                      //       horizontal: 8,
+                      //       vertical: 4,
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       crossAxisAlignment: CrossAxisAlignment.center,
+                      //       children: [
+                      //         Text(
+                      //           "${profileProvider.profileEntity?.rating}",
+                      //           style: headerTextFont.copyWith(
+                      //               color: Colors.white),
+                      //         ),
+                      //         SizedBox(
+                      //           width: 4,
+                      //         ),
+                      //         Icon(
+                      //           Icons.star,
+                      //           color: Colors.white,
+                      //           size: 20,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -171,23 +171,23 @@ class ProfileHeaderView extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 // if (!viewModel.isMyProfile)
-                AppBarActionButton(
-                  child: Icon(Icons.message),
-                  onPressed: profileProvider.onMessage,
-                ),
+                // AppBarActionButton(
+                //   child: Icon(Icons.message),
+                //   onPressed: profileProvider.onMessage,
+                // ),
                 // if (viewModel.isMyProfile)
                 AppBarActionButton(
                   child: Icon(Icons.edit),
                   onPressed: profileProvider.onEdit,
                 ),
                 const SizedBox(width: 16),
-                AppBarActionButton(
-                  child: Image(
-                    image: R.svg.ic_bookmark_filled(width: 24, height: 24),
-                  ),
-                  backgroundColor: AppColors.plumpPurplePrimary,
-                  onPressed: profileProvider.onEdit,
-                ),
+                // AppBarActionButton(
+                //   child: Image(
+                //     image: R.svg.ic_bookmark_filled(width: 24, height: 24),
+                //   ),
+                //   backgroundColor: AppColors.plumpPurplePrimary,
+                //   onPressed: profileProvider.onEdit,
+                // ),
               ],
             ),
           ],

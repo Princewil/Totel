@@ -68,6 +68,7 @@ dependencies:
   rounded_loading_button:
   geocoding:
   magic_sdk:
+  flutter_stripe:
 #  flutter_svg:
 
   # Firebase
