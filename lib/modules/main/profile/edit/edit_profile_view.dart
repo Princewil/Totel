@@ -1,5 +1,7 @@
 import 'package:cheffy/Utils/Utils.dart';
 import 'package:cheffy/core/enums/male_female_enum.dart';
+import 'package:cheffy/firebase_method.dart';
+import 'package:cheffy/modules/auth/login/login_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
@@ -39,6 +41,35 @@ class _EditProfileViewState extends State<EditProfileView> {
           "Edit Profile",
           style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: Text('Are sure you want to logout?',
+                              style: headerTextFont),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('No', style: headerTextFont)),
+                            TextButton(
+                                onPressed: () {
+                                  logOut();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginView()),
+                                      (route) => false);
+                                },
+                                child: Text('Yes', style: headerTextFont)),
+                          ],
+                        ));
+              },
+              icon: Icon(Icons.logout, color: Colors.deepOrange))
+        ],
       ),
       body: BackgroundProgress<ProfileProvider>(
         child: SafeArea(

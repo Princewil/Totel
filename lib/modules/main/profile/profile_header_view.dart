@@ -1,3 +1,4 @@
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
@@ -107,6 +108,14 @@ class ProfileHeaderView extends StatelessWidget {
                         style: AppStyle.of(context)
                             .b3M
                             .wCChineseBlack!
+                            .merge(headerTextFont),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        currentUser()!.email!,
+                        style: AppStyle.of(context)
+                            .b4
+                            .wCRhythm!
                             .merge(headerTextFont),
                       ),
                       const SizedBox(height: 4),

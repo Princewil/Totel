@@ -178,6 +178,11 @@ Future deleteUserPost(String locationLatLng) async {
       .delete();
 }
 
+logOut() async {
+  await FirebaseAuth.instance.signOut();
+  await _googleSignIn.signOut();
+}
+
 /// USER MODEL ///
 // class CurrentUser {
 //   String? uid;
