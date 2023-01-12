@@ -5,7 +5,6 @@ import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
-import 'package:cheffy/r.g.dart';
 import 'package:flutter/material.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
@@ -92,24 +91,43 @@ class _PostListingItemVerticalLayoutViewState
                   ],
                 ),
               ),
-              PopupMenuButton<String>(
-                elevation: 16,
-                color: AppColors.soap,
-                itemBuilder: (context) {
-                  return [
-                    if (widget.onPress != null)
-                      PopupMenuItem(
-                        child: Text('View'),
-                        onTap: widget.onPress,
+              (widget.post.alreadyBoooked != null &&
+                          widget.post.alreadyBoooked == true) ||
+                      (widget.post.bookerUID == currentUser()!.uid)
+                  ? Card(
+                      color: Colors.deepOrange,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Row(
+                          children: [
+                            Text('Booked',
+                                style: headerTextFont.copyWith(
+                                    color: Colors.white)),
+                            SizedBox(width: 3),
+                            Icon(Icons.check_circle,
+                                color: Colors.white, size: 20),
+                          ],
+                        ),
                       ),
-                    if (widget.onDelete != null)
-                      PopupMenuItem(
-                        child: Text('Delete'),
-                        onTap: widget.onDelete,
-                      ),
-                  ];
-                },
-              ),
+                    )
+                  : PopupMenuButton<String>(
+                      elevation: 16,
+                      color: AppColors.soap,
+                      itemBuilder: (context) {
+                        return [
+                          if (widget.onPress != null)
+                            PopupMenuItem(
+                              child: Text('View'),
+                              onTap: widget.onPress,
+                            ),
+                          if (widget.onDelete != null)
+                            PopupMenuItem(
+                              child: Text('Delete'),
+                              onTap: widget.onDelete,
+                            ),
+                        ];
+                      },
+                    ),
             ],
           ),
           SizedBox(height: 8),
@@ -208,10 +226,11 @@ class _PostListingItemVerticalLayoutViewState
               SizedBox(width: 10),
               Chip(
                 label: Text(
-                  widget.post.hourAvaliable == null &&
-                          widget.post.hourAvaliable != ''
-                      ? '${widget.post.hourAvaliable!} each day'
-                      : allDayAvaliable,
+                  // widget.post.hourAvaliable == null &&
+                  //         widget.post.hourAvaliable != ''
+                  //     ? '${widget.post.hourAvaliable!} each day'
+                  //     : allDayAvaliable,
+                  '${widget.post.hourAvaliable!} each day',
                   style: AppStyle.of(context)
                       .b5M
                       .wCChineseBlack!
@@ -256,7 +275,7 @@ class _PostListingItemVerticalLayoutViewState
   }
 }
 
-String allDayAvaliable = '24 hours each day';
+String x = '24 hours each day';
 
 class PostViewParams {
   bool? isAcceptHourly;
@@ -272,6 +291,8 @@ class PostViewParams {
   List<String>? imagesURL;
   num? hotelRating;
   String? hourAvaliable;
+  String? bookerUID;
+  bool? alreadyBoooked;
 
   PostViewParams({
     this.isAcceptHourly,
@@ -287,6 +308,8 @@ class PostViewParams {
     this.imagesURL,
     this.nameOfHotel,
     this.hourAvaliable,
+    this.alreadyBoooked,
+    this.bookerUID,
   });
 
   Map<String, dynamic> toMap(PostViewParams params) => {
@@ -303,6 +326,8 @@ class PostViewParams {
         hotelRatekey: params.hotelRating,
         hoursRangeKey: params.hourAvaliable,
         nameOfHotelKey: params.nameOfHotel,
+        bookerUIDKey: params.bookerUID,
+        alreadyBookedKey: params.alreadyBoooked,
       };
 
   PostViewParams.fromMap(Map<String, dynamic> map) {
@@ -319,5 +344,7 @@ class PostViewParams {
     this.hotelRating = map[hotelRatekey] ?? 0;
     this.hourAvaliable = map[hoursRangeKey];
     this.nameOfHotel = map[nameOfHotelKey];
+    this.bookerUID = map[bookerUIDKey];
+    this.alreadyBoooked = map[alreadyBookedKey];
   }
 }

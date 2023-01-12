@@ -2,10 +2,10 @@ import 'package:cheffy/Models/occupation.dart';
 import 'package:cheffy/Utils/Utils.dart';
 import 'package:cheffy/core/enums/male_female_enum.dart';
 import 'package:cheffy/core/services/secure_storage_service.dart';
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/profile/profile/domain/repositories/profile_repo.dart';
-import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
-import 'package:cheffy/modules/posts/posts/domain/entities/post_entity.dart';
+import 'package:cheffy/modules/main/profile/profile_view.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_image_picker/image_file.dart';
 import 'package:stacked/stacked.dart';
@@ -184,6 +184,7 @@ class ProfileProvider extends BaseViewModel {
     try {
       setBusyForObject(postEntity, true);
       var _ = await profileRepo.getUserPosts();
+      userBookedPost = await profileRepo.getUserBookedPosts();
       postEntity = _;
       notifyListeners();
     } catch (e) {
@@ -196,16 +197,14 @@ class ProfileProvider extends BaseViewModel {
     }
   }
 
-  Future<void> deletePost(int postId) async {
+  Future<void> deletePost(String laglng) async {
     try {
       setBusyForObject(postEntity, true);
-      await profileRepo.deletePostById(postId);
-
+      // await profileRepo.deletePostById(postId);
+      await deleteUserPost(laglng);
       // Remove the deleted post
-      //postEntity!.posts.removeWhere((element) => element.id == postId); //TODO
-
+      //postEntity!.posts.removeWhere((element) => element.id == postId);
       _snackbarService.showSnackbar(message: 'Post deleted successfully');
-
       notifyListeners();
     } catch (e) {
       print(e);

@@ -181,12 +181,14 @@ class CreatePostViewModel extends BaseViewModel {
                   dateFrom: form.control(controls.date).value.start.toString(),
                   dateTo: form.control(controls.date).value.end.toString(),
                   postType: bookingPostType,
+                  booked: false,
+                  bookerUID: '',
                 ),
                 files: selectedAttachments);
             break;
           case PostType.finding:
             await _postsRepo.createFindingPost(FindingPostParams(
-              gender: _getGender(),
+              gender: _getGender(), alreadyBooked: false, bookUID: '',
               locationLatLng:
                   '${locationEntity!.latitude}~${locationEntity!.longitude}',
               userUID: currentUser()!.uid,

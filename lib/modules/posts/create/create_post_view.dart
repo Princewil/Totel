@@ -289,28 +289,27 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                     ),
                     //endregion
                     const SizedBox(height: 24),
-                    if (viewModel.type == PostType.finding) ...[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: AppFormField(
-                          field: ReactiveSwitchListTile(
-                            formControlName: viewModel.controls.hourly,
-                            contentPadding: EdgeInsets.zero,
-                            title: Text(
-                              'Available to Hourly?',
-                              style: AppStyle.of(context)
-                                  .b4
-                                  .wCRhythm!
-                                  .merge(headerTextFont),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
+                    // if (viewModel.type == PostType.finding) ...[
+                    //   Padding(
+                    //     padding: const EdgeInsets.only(left: 15.0),
+                    //     child: AppFormField(
+                    //       field: ReactiveSwitchListTile(
+                    //         formControlName: viewModel.controls.hourly,
+                    //         contentPadding: EdgeInsets.zero,
+                    //         title: Text(
+                    //           'Available to Hourly?',
+                    //           style: AppStyle.of(context)
+                    //               .b4
+                    //               .wCRhythm!
+                    //               .merge(headerTextFont),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   const SizedBox(height: 24),
+                    // ],
                     AvaliableHour(viewModel: viewModel),
                     const SizedBox(height: 24),
-
                     // ElevatedButton(
                     //   onPressed: viewModel.onSubmit,
                     //   child: const Text('Post it'),

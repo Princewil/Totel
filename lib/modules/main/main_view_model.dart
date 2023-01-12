@@ -73,19 +73,19 @@ class MainViewModel extends BaseViewModel {
         _navigationService.navigateToNestedSearchView(
             routerId: StackedNavKeys.mainNavKey);
         break;
+      // case 1:
+      //   // Map Page View
+      //   appBarTitle = 'Map';
+      //   _navigationService.navigateToNestedMapView(
+      //       routerId: StackedNavKeys.mainNavKey);
+      //   break;
       case 1:
-        // Map Page View
-        appBarTitle = 'Map';
-        _navigationService.navigateToNestedMapView(
-            routerId: StackedNavKeys.mainNavKey);
-        break;
-      case 2:
         // Posts Page View
         appBarTitle = 'Posts';
         _navigationService.navigateToNestedPostView(
             routerId: StackedNavKeys.mainNavKey);
         break;
-      case 3:
+      case 2:
         // Chats Page View
         appBarTitle = 'Profile';
         _navigationService.navigateToNestedProfileView(

@@ -20,6 +20,7 @@ class ChatPageView extends ViewModelBuilderWidget<ChatViewModel> {
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(
         title: mainViewModel.appBarTitle,
+        showBackBotton: true,
         onNotificationPressed: mainViewModel.onPressedNotifications,
       ),
       body: ListView(

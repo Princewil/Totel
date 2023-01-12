@@ -1,16 +1,8 @@
-import 'package:cheffy/core/enums/post_type.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/result.dart';
-import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cheffy/r.g.dart';
-import 'package:cheffy/modules/theme/styles.dart';
-import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
 
 import '../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
-import 'post_detail_view_model.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 UserEntity? postDetailViewuserEntity;
 
@@ -115,10 +107,7 @@ class _PostDetailViewState extends State<PostDetailView> {
   @override
   Widget build(BuildContext context) {
     //final postDetailProvider = context.watch<PostDetailViewModel>();
-    return widget.post.postType!.toLowerCase() ==
-            PostType.finding.toString().toLowerCase()
-        ? Container()
-        : Result(postViewParams: widget.post);
+    return Result(postViewParams: widget.post);
     // return Scaffold(
     //   extendBodyBehindAppBar: true,
     //   appBar: AppBar(

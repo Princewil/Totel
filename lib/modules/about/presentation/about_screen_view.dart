@@ -27,7 +27,8 @@ class AboutScreenView extends ViewModelBuilderWidget<AboutViewModel> {
   Widget builder(
       BuildContext context, AboutViewModel viewModel, Widget? child) {
     return Scaffold(
-      appBar: SharedWidgets.buildHomeAppBar(title: 'About Totel'),
+      appBar: SharedWidgets.buildHomeAppBar(
+          title: 'About Totel', showBackBotton: true),
       body: ListView(
         children: [
           buildAboutListTile(

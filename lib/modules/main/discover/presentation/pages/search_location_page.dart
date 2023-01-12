@@ -56,9 +56,10 @@ class SearchLocationPage extends StatelessWidget {
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(
         title: mainViewModel.appBarTitle,
+        showBackBotton: false,
         onNotificationPressed: mainViewModel.onPressedNotifications,
       ),
-      drawer: AppDrawer(),
+      //drawer: AppDrawer(),
       body: ReactiveForm(
         formGroup: searchProvider.searchLocationForm,
         child: SingleChildScrollView(

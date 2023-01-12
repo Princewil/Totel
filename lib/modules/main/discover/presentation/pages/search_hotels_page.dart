@@ -47,7 +47,8 @@ class _SearchHotelsPageState extends State<SearchHotelsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SharedWidgets.buildHomeAppBar(title: 'Discover Hotels'),
+      appBar: SharedWidgets.buildHomeAppBar(
+          title: 'Discover Hotels', showBackBotton: true),
       body: loading
           ? Center(child: CupertinoActivityIndicator())
           // : error

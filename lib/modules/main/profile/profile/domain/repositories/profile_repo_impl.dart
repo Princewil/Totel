@@ -5,11 +5,7 @@ import 'package:cheffy/core/services/api/api_routes.dart';
 import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/profile/profile/domain/repositories/profile_repo.dart';
-import 'package:cheffy/modules/posts/create/create_post_functions.dart';
-import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
-import 'package:cheffy/modules/posts/posts/domain/entities/post_entity.dart';
 import 'package:cheffy/core/services/api/api_client.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 
 import '../../../../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
@@ -108,6 +104,22 @@ class ProfileRepoImpl extends ProfileRepo {
 
       // final resultData = result.data;
 
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @override
+  Future<List<PostViewParams>> getUserBookedPosts() async {
+    try {
+      List<PostViewParams> list = [];
+      var resultData = await getThisUserBookedPost();
+      for (var element in resultData!) {
+        final _ =
+            PostViewParams.fromMap(element.data() as Map<String, dynamic>);
+        list.add(_);
+      }
+      return list;
     } catch (e) {
       throw e;
     }

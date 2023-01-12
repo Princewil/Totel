@@ -3,13 +3,12 @@ import 'package:cheffy/modules/main/profile/tabs/posts_tab.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cheffy/r.g.dart';
-import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/main/profile/profile_header_view.dart';
-import 'package:cheffy/modules/widgets/app_bar_action_button.dart';
-import 'package:cheffy/modules/widgets/booking_listing_item/booking_listing_item_view.dart';
 
+import '../../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'profile_provider.dart';
+
+List<PostViewParams> userBookedPost = [];
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -43,6 +42,8 @@ class _ProfileViewState extends State<ProfileView> {
                   'Profile',
                   style: headerTextFont.copyWith(fontWeight: FontWeight.w400),
                 ),
+                leading: SizedBox(),
+                centerTitle: true,
                 backgroundColor: Colors.white,
                 pinned: true,
                 flexibleSpace: const FlexibleSpaceBar(
@@ -88,16 +89,19 @@ class _ProfileViewState extends State<ProfileView> {
                 PostsTab(
                   postEntity: profileProvider.postEntity,
                 ),
-                ListView.separated(
-                  itemCount: 5,
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Divider(
-                    thickness: 4,
-                    color: AppColors.soap,
-                  ),
-                  itemBuilder: (BuildContext context, int index) =>
-                      const BookingListingItemView(),
-                ),
+                PostsTab(
+                  postEntity: userBookedPost,
+                )
+                // ListView.separated(
+                //   itemCount: userBookedPost.length,
+                //   separatorBuilder: (BuildContext context, int index) =>
+                //       Divider(
+                //     thickness: 4,
+                //     color: AppColors.soap,
+                //   ),
+                //   itemBuilder: (BuildContext context, int index) =>
+                //       const BookingListingItemView(),
+                // ),
                 // ListView.separated(
                 //   itemCount: 5,
                 //   separatorBuilder: (BuildContext context, int index) =>

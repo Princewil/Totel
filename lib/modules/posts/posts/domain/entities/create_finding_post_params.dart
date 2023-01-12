@@ -15,6 +15,8 @@ class FindingPostParams {
   String? locationLatLng;
   String? userUID;
   String? postType;
+  bool? alreadyBooked;
+  String? bookUID;
 
   FindingPostParams({
     this.isAcceptHourly,
@@ -26,6 +28,8 @@ class FindingPostParams {
     this.locationLatLng,
     this.userUID,
     this.postType,
+    this.alreadyBooked,
+    this.bookUID,
   });
 
   Map<String, dynamic> toMap(FindingPostParams params) => {
@@ -37,7 +41,9 @@ class FindingPostParams {
         dateToKey: params.dateTo,
         isAccptHourKey: params.isAcceptHourly,
         userUIDkey: params.userUID,
-        postTypeKey: params.postType
+        postTypeKey: params.postType,
+        bookerUIDKey: params.bookUID,
+        alreadyBookedKey: params.alreadyBooked,
       };
 
   FindingPostParams.fromMap(Map<String, dynamic> map) {
@@ -50,6 +56,8 @@ class FindingPostParams {
     this.isAcceptHourly = map[isAccptHourKey];
     this.userUID = map[userUIDkey];
     this.postType = map[postTypeKey];
+    this.alreadyBooked = map[alreadyBookedKey];
+    this.bookUID = map[bookerUIDKey];
   }
 
   // FindingPostParams copyWith(

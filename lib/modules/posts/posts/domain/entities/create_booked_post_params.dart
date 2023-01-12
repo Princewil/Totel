@@ -21,6 +21,8 @@ class CreateBookedPostParams {
   String? userUID;
   String? hourAvaliable;
   String? postType;
+  bool? booked;
+  String? bookerUID;
 
   CreateBookedPostParams({
     this.dateFrom,
@@ -35,6 +37,8 @@ class CreateBookedPostParams {
     this.nameOfHotel,
     this.hourAvaliable,
     this.postType,
+    this.booked,
+    this.bookerUID,
   });
 
   Map<String, dynamic> toMap(CreateBookedPostParams params) => {
@@ -50,6 +54,8 @@ class CreateBookedPostParams {
         hoursRangeKey: params.hourAvaliable,
         nameOfHotelKey: params.nameOfHotel,
         postTypeKey: params.postType,
+        alreadyBookedKey: params.booked,
+        bookerUIDKey: params.bookerUID,
       };
 
   CreateBookedPostParams.fromMap(Map<String, dynamic> map) {
@@ -65,6 +71,8 @@ class CreateBookedPostParams {
     this.hourAvaliable = map[hoursRangeKey];
     this.nameOfHotel = map[nameOfHotelKey];
     this.postType = map[postTypeKey];
+    this.booked = map[alreadyBookedKey];
+    this.bookerUID = map[bookerUIDKey];
   }
 }
 
@@ -182,3 +190,5 @@ const String hotelRatekey = 'Hotel Rate';
 const String hoursRangeKey = 'Avaliable hours';
 const postTypeKey = 'Post type';
 const bookingPostType = 'Booked';
+const alreadyBookedKey = 'AlreadyBooked';
+const bookerUIDKey = 'BookerUID';

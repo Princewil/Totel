@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
+import 'package:cheffy/modules/posts/posts/domain/entities/create_booked_post_params.dart';
+import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'modules/posts/posts/domain/entities/create_finding_post_params.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -126,11 +126,56 @@ Future<List<QueryDocumentSnapshot>?> getThisUserPost() async {
       .then((value) => value.docs);
 }
 
+Future<List<QueryDocumentSnapshot>?> getThisUserBookedPost() async {
+  return await firebaseFirestore
+      .collection(findingPostCollection)
+      .where(bookerUIDKey, isEqualTo: currentUser()!.uid)
+      .get()
+      .then((value) => value.docs);
+}
+
 Future<List<QueryDocumentSnapshot>?> getAllUsersPost() async {
   return await firebaseFirestore
       .collection(findingPostCollection)
+      .where(alreadyBookedKey, isEqualTo: false)
       .get()
       .then((value) => value.docs);
+}
+
+Future updateBooked(String locationLatLng) async {
+  var _doc = await FirebaseFirestore.instance
+      .collection(findingPostCollection)
+      .where(locationLatLngKey, isEqualTo: locationLatLng)
+      .limit(1)
+      .get()
+      .then((value) => value.docs.first);
+  await FirebaseFirestore.instance
+      .collection(findingPostCollection)
+      .doc(_doc.id)
+      .update({
+    alreadyBookedKey: true,
+    bookerUIDKey: currentUser()!.uid,
+  });
+}
+
+Future deleteUserPost(String locationLatLng) async {
+  var _doc = await FirebaseFirestore.instance
+      .collection(findingPostCollection)
+      .where(locationLatLngKey, isEqualTo: locationLatLng)
+      .limit(1)
+      .get()
+      .then((value) => value.docs.first);
+  if (_doc.get(postTypeKey) == 'Booked') {
+    List list = _doc.get(imagesKey);
+    for (var url in list) {
+      await FirebaseStorage.instance.refFromURL(url).delete();
+    }
+  }
+
+  await FirebaseFirestore.instance
+      .collection(findingPostCollection)
+      .doc(_doc.id)
+      .delete();
 }
 
 /// USER MODEL ///

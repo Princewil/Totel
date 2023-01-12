@@ -28,7 +28,8 @@ class NotificationsScreenView
       BuildContext context, NotificationsViewModel viewModel, Widget? child) {
     return SafeArea(
       child: Scaffold(
-        appBar: SharedWidgets.buildHomeAppBar(title: 'Notifications'),
+        appBar: SharedWidgets.buildHomeAppBar(
+            title: 'Notifications', showBackBotton: true),
         body: BackgroundProgress<NotificationsViewModel>(
           child: ListView.separated(
             itemCount: viewModel.notifications.length,

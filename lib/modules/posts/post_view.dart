@@ -1,16 +1,12 @@
 import 'package:cheffy/modules/auth/auth/domain/entities/user_entity.dart';
 import 'package:cheffy/modules/main/main_view_model.dart';
-import 'package:cheffy/modules/posts/posts/domain/entities/create_finding_post_params.dart';
 import 'package:cheffy/modules/posts/posts/posts_provider.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
-import 'package:cheffy/widgets/app_drawer.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../main/discover/presentation/pages/result.dart';
 import 'detail/post_detail_view.dart';
 
 class PostsPageView extends StatefulWidget {
@@ -40,9 +36,10 @@ class _PostsPageViewState extends State<PostsPageView> {
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(
         title: mainViewModel.appBarTitle,
+        showBackBotton: false,
         onNotificationPressed: mainViewModel.onPressedNotifications,
       ),
-      drawer: AppDrawer(),
+      //drawer: AppDrawer(),
       body: BackgroundProgress<PostsProvider>(
         child: postsProvider.postEntity == null ||
                 postsProvider.postEntity!.isEmpty

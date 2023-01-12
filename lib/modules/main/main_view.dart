@@ -5,7 +5,6 @@ import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/register/register_form_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
-import 'package:cheffy/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +56,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       key: mainScreenScaffoldKey,
       extendBody: true,
-      drawer: AppDrawer(),
+      //drawer: AppDrawer(),
       body: SafeArea(
         bottom: false, // To make the body extend behind bottom bar
         child: ExtendedNavigator(
@@ -66,7 +65,7 @@ class _MainViewState extends State<MainView> {
               StackedService.nestedNavigationKey(StackedNavKeys.mainNavKey),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: ClipOval(
         child: FloatingActionButton(
           onPressed: () => mainViewModel.onAddPostHandler(context),
@@ -79,14 +78,14 @@ class _MainViewState extends State<MainView> {
       bottomNavigationBar: SizedBox(
         height: 65,
         child: BottomAppBar(
-          shape: CircularNotchedRectangle(),
+          // shape: CircularNotchedRectangle(),
           notchMargin: 5.0,
           clipBehavior: Clip.antiAlias,
           // color: Theme.of(context).primaryColor.withAlpha(0),
           // ↑ use .withAlpha(0) to debug/peek underneath ↑ BottomAppBar
           child: BottomNavigationBar(
             currentIndex: mainViewModel.index,
-            type: BottomNavigationBarType.fixed,
+            //type: BottomNavigationBarType.fixed,
             showSelectedLabels: true,
             showUnselectedLabels: true,
             selectedLabelStyle: AppStyle.of(context).b5M!.merge(headerTextFont),
@@ -109,19 +108,19 @@ class _MainViewState extends State<MainView> {
                 ),
                 label: 'Discover',
               ),
-              BottomNavigationBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.map,
-                  color: AppColors.rhythm,
-                  size: 20,
-                ),
-                activeIcon: FaIcon(
-                  FontAwesomeIcons.solidMap,
-                  color: AppColors.plumpPurplePrimary,
-                  size: 20,
-                ),
-                label: 'Map',
-              ),
+              // BottomNavigationBarItem(
+              //   icon: FaIcon(
+              //     FontAwesomeIcons.map,
+              //     color: AppColors.rhythm,
+              //     size: 20,
+              //   ),
+              //   activeIcon: FaIcon(
+              //     FontAwesomeIcons.solidMap,
+              //     color: AppColors.plumpPurplePrimary,
+              //     size: 20,
+              //   ),
+              //   label: 'Map',
+              // ),
               BottomNavigationBarItem(
                 icon: FaIcon(
                   FontAwesomeIcons.image,

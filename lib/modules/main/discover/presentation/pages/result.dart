@@ -2,19 +2,25 @@ import 'dart:math';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cheffy/Utils/Utils.dart';
 import 'package:cheffy/core/enums/male_female_enum.dart';
+import 'package:cheffy/core/enums/post_type.dart';
+import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/location_change_map/location_change_map_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_funct.dart';
 import 'package:cheffy/modules/main/map/map_view_model.dart';
 import 'package:cheffy/modules/posts/detail/post_detail_view.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
+import 'package:cheffy/pay.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:stacked/stacked.dart';
 import 'package:we_slide/we_slide.dart';
 
+import '../../../main_view.dart';
 import 'search_hotels_page.dart';
 
 class Result extends StatefulWidget {
@@ -25,23 +31,28 @@ class Result extends StatefulWidget {
   State<Result> createState() => _ResultState();
 }
 
+bool? isFind;
+double? lat;
+double? lng;
+
 class _ResultState extends State<Result> {
   late final controller = WeSlideController();
+  bool loadingPayment = false;
   String address = '';
   late final footerController = WeSlideController(initial: true);
   @override
   void initState() {
     super.initState();
-    placemarkFromCoordinates(
-            double.parse(
-                widget.postViewParams.locationLatLng!.split(split).first),
-            double.parse(
-                widget.postViewParams.locationLatLng!.split(split).last))
+    lat =
+        double.parse(widget.postViewParams.locationLatLng!.split(split).first);
+    lng = double.parse(widget.postViewParams.locationLatLng!.split(split).last);
+    placemarkFromCoordinates(lat!, lng!)
         .then((value) => setState(() => address = fullAddress(value.first)));
   }
 
   @override
   Widget build(BuildContext context) {
+    isFind = widget.postViewParams.postType!.toLowerCase() == 'find';
     return Scaffold(
       body: WeSlide(
         controller: controller,
@@ -49,23 +60,28 @@ class _ResultState extends State<Result> {
         hidePanelHeader: true,
         panelMinSize: 0,
         footerHeight: MediaQuery.of(context).size.height * 0.08,
-        panelMaxSize: MediaQuery.of(context).size.height * 0.6,
+        panelMaxSize: MediaQuery.of(context).size.height * 0.9,
         blur: true,
         overlay: true,
         overlayOpacity: 0.4,
         blurSigma: 30,
         appBar: SharedWidgets.buildHomeAppBar(
-            title: widget.postViewParams.nameOfHotel ?? ''),
+            title: isFind!
+                ? 'Finding travel partner'
+                : widget.postViewParams.nameOfHotel ?? '',
+            showBackBotton: true),
         backgroundColor: Theme.of(context).canvasColor,
         isUpSlide: false,
         panel: Card(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30))),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30), topRight: Radius.circular(30))),
           elevation: 10,
           child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), topRight: Radius.circular(30)),
             child: SizedBox(
-                child: Direction(), height: MediaQuery.of(context).size.width),
+                child: Direction(), height: MediaQuery.of(context).size.height),
           ),
         ),
         footer: Card(
@@ -78,14 +94,49 @@ class _ResultState extends State<Result> {
               Expanded(
                 flex: 3,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Book now',
-                      style: headerTextFont.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          letterSpacing: 2)),
+                  onPressed: () async {
+                    if (loadingPayment &&
+                            widget.postViewParams.userUID ==
+                                currentUser()!.uid ||
+                        widget.postViewParams.bookerUID == currentUser()!.uid) {
+                      return;
+                    }
+                    try {
+                      loadingPayment = true;
+                      setState(() {});
+                      await makePayment(
+                        widget.postViewParams.partnerAmount.toString(),
+                        widget.postViewParams.locationLatLng!,
+                      );
+                      await next(context);
+                    } catch (e) {
+                      loadingPayment = false;
+                      setState(() {});
+                    }
+                  },
+                  child: loadingPayment
+                      ? Center(
+                          child: const CupertinoActivityIndicator(
+                              color: Colors.white))
+                      : Text('Book now',
+                          style: headerTextFont.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: widget.postViewParams.userUID ==
+                                          currentUser()!.uid ||
+                                      widget.postViewParams.bookerUID ==
+                                          currentUser()!.uid
+                                  ? Colors.grey.shade200
+                                  : null,
+                              letterSpacing: 2)),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(100, 150),
+                    primary:
+                        widget.postViewParams.userUID == currentUser()!.uid ||
+                                widget.postViewParams.bookerUID ==
+                                    currentUser()!.uid
+                            ? Colors.grey
+                            : null,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                     ),
@@ -102,110 +153,191 @@ class _ResultState extends State<Result> {
                         borderRadius: BorderRadius.all(Radius.circular(30)),
                       ),
                     ),
-                    child: Text('Get direction',
-                        style: headerTextFont.copyWith(letterSpacing: 1.5))),
+                    child:
+                        Text('View on map', style: headerTextFont.copyWith())),
               )
             ],
           ),
         ),
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Swiper(
-                itemCount: widget.postViewParams.imagesURL!.length,
-                itemBuilder: (context, i) => imageView(
-                    widget.postViewParams.imagesURL![i],
-                    BorderRadius.all(Radius.circular(20))),
-                curve: Curves.easeIn,
-                autoplayDisableOnInteraction: false,
-                itemHeight: 400,
-                // autoplay: true,
-                itemWidth: double.infinity,
-                layout: SwiperLayout.TINDER,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50)
-                    .copyWith(top: 50),
-                child: Column(
+              if (isFind!) findPostTypeWidget(),
+              if (!isFind!)
+                Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //if (smallScreen)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 10),
-                      child: Text(
-                        widget.postViewParams.nameOfHotel!,
-                        style: headerTextFont.copyWith(
-                            fontWeight: FontWeight.bold, fontSize: 17),
-                      ),
+                    Swiper(
+                      itemCount: widget.postViewParams.imagesURL!.length,
+                      itemBuilder: (context, i) => imageView(
+                          widget.postViewParams.imagesURL![i],
+                          BorderRadius.all(Radius.circular(20))),
+                      curve: Curves.easeIn,
+                      autoplayDisableOnInteraction: false,
+                      itemHeight: 400,
+                      // autoplay: true,
+                      itemWidth: double.infinity,
+                      layout: SwiperLayout.TINDER,
                     ),
-                    Text(address, style: headerTextFont.copyWith(fontSize: 16)),
-                    //if (smallScreen)
                     Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 8),
-                      child: Row(
+                      padding: const EdgeInsets.symmetric(horizontal: 50)
+                          .copyWith(top: 50),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Card(
-                            color: iconColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 5),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    child: Text(
-                                      "\$${widget.postViewParams.partnerAmount}",
-                                      style: headerTextFont.copyWith(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          //if (smallScreen)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 15, bottom: 10),
+                            child: Text(
+                              widget.postViewParams.nameOfHotel!,
+                              style: headerTextFont.copyWith(
+                                  fontWeight: FontWeight.bold, fontSize: 17),
                             ),
                           ),
+                          Text(address,
+                              style: headerTextFont.copyWith(fontSize: 16)),
+                          //if (smallScreen)
                           Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateTo!)!)}',
-                              style: headerTextFont.copyWith(
-                                  fontWeight: FontWeight.bold),
+                            padding:
+                                const EdgeInsets.only(top: 20.0, bottom: 8),
+                            child: Row(
+                              children: [
+                                Card(
+                                  color: iconColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 5),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 5),
+                                          child: Text(
+                                            "\$${widget.postViewParams.partnerAmount}",
+                                            style: headerTextFont.copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateTo!)!)}',
+                                    style: headerTextFont.copyWith(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
+                          ),
+                          Text(
+                              '${widget.postViewParams.hourAvaliable!} each day',
+                              // widget.postViewParams.hourAvaliable != null &&
+                              //         widget.postViewParams.hourAvaliable != ''
+                              //     ? 'Avaliable Hours: ${widget.postViewParams.hourAvaliable}'
+                              //     : 'Avaliable Hours: $allDayAvaliable',
+                              style: headerTextFont),
+                          SizedBox(height: 30),
+                          // if (!smallScreen)
+                          //   cost(widget
+                          //       .postViewParams), //TODO: i will remove this code, i am owk with the ui for small screen
+                          Divider(),
+                          overview(widget.postViewParams.notes!),
+                          Divider(),
+                          SizedBox(height: 40),
+                          owner(context),
+                          SizedBox(height: 40)
+                          //amenities(),
                         ],
                       ),
                     ),
-                    Text(
-                        'Avaliable Hours: ${widget.postViewParams.hourAvaliable != null && widget.postViewParams.hourAvaliable != '' ? widget.postViewParams.hourAvaliable : allDayAvaliable}',
-                        style: headerTextFont),
-                    SizedBox(height: 30),
-                    // if (!smallScreen)
-                    //   cost(widget
-                    //       .postViewParams), //TODO: i will remove this code, i am owk with the ui for small screen
-                    Divider(),
-                    overview(widget.postViewParams.notes!),
-                    Divider(),
-                    SizedBox(height: 40),
-                    owner(context),
-                    SizedBox(height: 40)
-                    //amenities(),
                   ],
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget findPostTypeWidget() => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 50).copyWith(top: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            owner(context),
+            Divider(),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              horizontalTitleGap: 0,
+              minLeadingWidth: 0,
+              minVerticalPadding: 0,
+              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+              subtitle: Text('Traveling details:', style: headerTextFont),
+            ),
+            Text(address, style: headerTextFont.copyWith(fontSize: 16)),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 8),
+              child: Row(
+                children: [
+                  Card(
+                    color: iconColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: Text(
+                              "\$${widget.postViewParams.partnerAmount}",
+                              style: headerTextFont.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.postViewParams.dateTo!)!)}',
+                      style:
+                          headerTextFont.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Text('${widget.postViewParams.hourAvaliable!} each day',
+                // widget.postViewParams.hourAvaliable == null &&
+                //         widget.postViewParams.hourAvaliable != ''
+                //     ? '${widget.postViewParams.hourAvaliable!} each day'
+                // : allDayAvaliable,
+                style: headerTextFont),
+            Divider(),
+            overview(widget.postViewParams.notes!),
+          ],
+        ),
+      );
 }
 
 Widget cost(PostViewParams postViewParams) => Row(
@@ -325,7 +457,7 @@ Widget owner(BuildContext context) {
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Text(
-          'Roommate profile:',
+          isFind! ? 'Profile' : 'Roommate profile:',
           style: headerTextFont.copyWith(fontSize: 16),
         ),
       ),
@@ -372,9 +504,9 @@ Widget overview(String note) => Column(
 class Direction extends ViewModelBuilderWidget<MapViewModel> {
   const Direction({Key? key}) : super(key: key);
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+  static CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(lat!, lng!),
+    //zoom: 14.4746,
   );
 
   @override
@@ -382,7 +514,16 @@ class Direction extends ViewModelBuilderWidget<MapViewModel> {
     return Scaffold(
       body: GoogleMap(
         initialCameraPosition: _kGooglePlex,
+        zoomControlsEnabled: true,
+        zoomGesturesEnabled: true,
         onMapCreated: viewModel.onMapCreated,
+        markers: {
+          Marker(
+              markerId: MarkerId('value'),
+              position: LatLng(lat!, lng!),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueBlue))
+        },
       ),
     );
   }
@@ -390,3 +531,32 @@ class Direction extends ViewModelBuilderWidget<MapViewModel> {
   @override
   MapViewModel viewModelBuilder(BuildContext context) => MapViewModel();
 }
+
+Future next(BuildContext context) async => showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20))),
+          child: SizedBox(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.check_circle_outline_rounded,
+                    size: 100, color: Colors.green),
+                Text('You have succesfully booked!', style: headerTextFont),
+                RoundedLoadingButton(
+                    controller: RoundedLoadingButtonController(),
+                    animateOnTap: false,
+                    onPressed: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainView()),
+                        (route) => false),
+                    child: Text('Alright!', style: headerTextFont))
+              ],
+            ),
+          ),
+        ));

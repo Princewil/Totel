@@ -26,6 +26,7 @@ class MapPageView extends ViewModelBuilderWidget<MapViewModel> {
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(
         title: mainViewModel.appBarTitle,
+        showBackBotton: true,
         onNotificationPressed: mainViewModel.onPressedNotifications,
       ),
       drawer: AppDrawer(),

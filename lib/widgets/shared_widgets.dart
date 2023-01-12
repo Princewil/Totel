@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 class SharedWidgets {
   static AppBar buildHomeAppBar({
     required String title,
+    required bool showBackBotton,
     VoidCallback? onNotificationPressed,
     PreferredSizeWidget? bottom,
   }) {
@@ -14,17 +15,20 @@ class SharedWidgets {
       title: Text(title,
           style: normaltextFont.copyWith(fontWeight: FontWeight.bold)),
       bottom: bottom,
+      leading: showBackBotton ? null : SizedBox(),
+      centerTitle: true,
       actions: [
-        if (onNotificationPressed != null)
-          AppBarActionButton(
-            child: Center(
-              child: Icon(
-                Icons.notifications,
-                color: AppColors.plumpPurplePrimary,
-              ),
-            ),
-            onPressed: onNotificationPressed,
-          ),
+        //TODO:
+        // if (onNotificationPressed != null)
+        //   AppBarActionButton(
+        //     child: Center(
+        //       child: Icon(
+        //         Icons.notifications,
+        //         color: AppColors.plumpPurplePrimary,
+        //       ),
+        //     ),
+        //     onPressed: onNotificationPressed,
+        //   ),
       ],
     );
   }
