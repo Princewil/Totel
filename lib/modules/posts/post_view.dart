@@ -6,7 +6,10 @@ import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 
+import '../../Utils/Utils.dart';
+import '../main/discover/presentation/pages/search_hotels_page.dart';
 import 'detail/post_detail_view.dart';
 
 class PostsPageView extends StatefulWidget {
@@ -35,7 +38,8 @@ class _PostsPageViewState extends State<PostsPageView> {
     final postsProvider = context.watch<PostsProvider>();
     return Scaffold(
       appBar: SharedWidgets.buildHomeAppBar(
-        title: mainViewModel.appBarTitle,
+        //title: mainViewModel.appBarTitle,
+        title: "Home",
         showBackBotton: false,
         onNotificationPressed: mainViewModel.onPressedNotifications,
       ),
@@ -64,7 +68,7 @@ class _PostsPageViewState extends State<PostsPageView> {
                         postsProvider.onTapPost(postItem);
                       },
                       child: Card(
-                        elevation: 10,
+                        elevation: 0,
                         color: Theme.of(context).cardColor,
                         shape: RoundedRectangleBorder(
                             borderRadius:

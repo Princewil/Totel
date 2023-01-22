@@ -5,6 +5,9 @@ import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/auth/register/register_form_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
+import 'package:cheffy/modules/main/profile/profile_view.dart';
+import 'package:cheffy/modules/main/profile/tabs/posts_tab.dart';
+import 'package:cheffy/modules/posts/post_view.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +27,18 @@ class MainView extends StatefulWidget {
   State<MainView> createState() => _MainViewState();
 }
 
-class _MainViewState extends State<MainView> {
+class _MainViewState extends State<MainView>
+    with SingleTickerProviderStateMixin {
+  int currentPage = 0;
+  late var profileProvider;
+  late TabController _tabController =
+      TabController(length: 3, vsync: this, initialIndex: currentPage);
+  late List<Widget> _pages = [
+    PostsPageView(),
+    Name(),
+    //PostsTab(postEntity: profileProvider),
+    ProfileView(),
+  ];
   @override
   void initState() {
     super.initState();
@@ -53,104 +67,180 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     final mainViewModel = context.watch<MainViewModel>();
+    //profileProvider = context.watch<ProfileProvider>().postEntity;
     return Scaffold(
       key: mainScreenScaffoldKey,
       extendBody: true,
-      //drawer: AppDrawer(),
-      body: SafeArea(
-        bottom: false, // To make the body extend behind bottom bar
-        child: ExtendedNavigator(
-          router: MainViewRouter(),
-          navigatorKey:
-              StackedService.nestedNavigationKey(StackedNavKeys.mainNavKey),
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
+        children: _pages,
       ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: ClipOval(
-        child: FloatingActionButton(
-          onPressed: () => mainViewModel.onAddPostHandler(context),
-          elevation: 8,
-          child: Icon(
-            Icons.add,
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
+        //width: 20,
+        height: 55,
+        child: Material(
+          color: Colors.black.withOpacity(.7),
+          elevation: 10,
+          shadowColor: Colors.grey.shade300,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-        ),
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 65,
-        child: BottomAppBar(
-          // shape: CircularNotchedRectangle(),
-          notchMargin: 5.0,
-          clipBehavior: Clip.antiAlias,
-          // color: Theme.of(context).primaryColor.withAlpha(0),
-          // ↑ use .withAlpha(0) to debug/peek underneath ↑ BottomAppBar
-          child: BottomNavigationBar(
-            currentIndex: mainViewModel.index,
-            //type: BottomNavigationBarType.fixed,
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            selectedLabelStyle: AppStyle.of(context).b5M!.merge(headerTextFont),
-            unselectedLabelStyle:
-                AppStyle.of(context).b5M!.merge(headerTextFont),
-            selectedItemColor: AppColors.plumpPurplePrimary,
-            unselectedItemColor: AppColors.rhythm,
-            onTap: mainViewModel.onTapItem,
-            items: [
-              BottomNavigationBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.magnifyingGlass,
-                  color: AppColors.rhythm,
-                  size: 20,
+          child: TabBar(
+            onTap: (i) {
+              if (i == 1) {
+                mainViewModel.onAddPostHandler(context);
+              }
+              //setState(() {});
+            },
+            padding: const EdgeInsets.all(10),
+            controller: _tabController,
+            labelColor: Colors.blueGrey,
+            splashBorderRadius: BorderRadius.circular(15),
+            indicatorColor: Colors.transparent,
+            unselectedLabelColor:
+                Colors.white.withOpacity(0.6), //const Color(0xffB7B7B7)
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.white, // const Color.fromARGB(255, 21, 48, 88)
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xff000000).withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(2, 8),
                 ),
-                activeIcon: FaIcon(
-                  FontAwesomeIcons.magnifyingGlass,
-                  color: AppColors.plumpPurplePrimary,
-                  size: 20,
+              ],
+            ),
+            indicatorSize: TabBarIndicatorSize.label,
+            tabs: const [
+              Tab(
+                height: 40,
+                child: Center(
+                  child: Icon(Icons.travel_explore_sharp),
                 ),
-                label: 'Discover',
               ),
-              // BottomNavigationBarItem(
-              //   icon: FaIcon(
-              //     FontAwesomeIcons.map,
-              //     color: AppColors.rhythm,
-              //     size: 20,
-              //   ),
-              //   activeIcon: FaIcon(
-              //     FontAwesomeIcons.solidMap,
-              //     color: AppColors.plumpPurplePrimary,
-              //     size: 20,
-              //   ),
-              //   label: 'Map',
-              // ),
-              BottomNavigationBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.image,
-                  color: AppColors.rhythm,
-                  size: 20,
+              Tab(
+                height: 40,
+                child: Center(
+                  child: Icon(Icons.add),
                 ),
-                activeIcon: FaIcon(
-                  FontAwesomeIcons.solidImage,
-                  color: AppColors.plumpPurplePrimary,
-                  size: 20,
-                ),
-                label: 'Posts',
               ),
-              BottomNavigationBarItem(
-                icon: FaIcon(
-                  FontAwesomeIcons.user,
-                  color: AppColors.rhythm,
-                  size: 20,
+              Tab(
+                height: 40,
+                child: Center(
+                  child: Icon(Icons.person),
                 ),
-                activeIcon: FaIcon(
-                  FontAwesomeIcons.solidUser,
-                  color: AppColors.plumpPurplePrimary,
-                  size: 20,
-                ),
-                label: 'Profile',
               ),
             ],
           ),
         ),
       ),
+      //drawer: AppDrawer(),
+      // body: SafeArea(
+      //   bottom: false, // To make the body extend behind bottom bar
+      //   child: ExtendedNavigator(
+      //     router: MainViewRouter(),
+      //     navigatorKey:
+      //         StackedService.nestedNavigationKey(StackedNavKeys.mainNavKey),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: ClipOval(
+      //   child: FloatingActionButton(
+      //     onPressed: () => mainViewModel.onAddPostHandler(context),
+      //     elevation: 8,
+      //     child: Icon(
+      //       Icons.add,
+      //     ),
+      //   ),
+      // ),
+
+      // bottomNavigationBar: SizedBox(
+      //   height: 65,
+      //   child: BottomAppBar(
+      //     // shape: CircularNotchedRectangle(),
+      //     notchMargin: 5.0,
+      //     clipBehavior: Clip.antiAlias,
+      //     // color: Theme.of(context).primaryColor.withAlpha(0),
+      //     // ↑ use .withAlpha(0) to debug/peek underneath ↑ BottomAppBar
+      //     child: BottomNavigationBar(
+      //       currentIndex: mainViewModel.index,
+      //       //type: BottomNavigationBarType.fixed,
+      //       showSelectedLabels: true,
+      //       showUnselectedLabels: true,
+      //       selectedLabelStyle: AppStyle.of(context).b5M!.merge(headerTextFont),
+      //       unselectedLabelStyle:
+      //           AppStyle.of(context).b5M!.merge(headerTextFont),
+      //       selectedItemColor: AppColors.plumpPurplePrimary,
+      //       unselectedItemColor: AppColors.rhythm,
+      //       onTap: mainViewModel.onTapItem,
+      //       items: [
+      //         BottomNavigationBarItem(
+      //           icon: FaIcon(
+      //             FontAwesomeIcons.magnifyingGlass,
+      //             color: AppColors.rhythm,
+      //             size: 20,
+      //           ),
+      //           activeIcon: FaIcon(
+      //             FontAwesomeIcons.magnifyingGlass,
+      //             color: AppColors.plumpPurplePrimary,
+      //             size: 20,
+      //           ),
+      //           label: 'Discover',
+      //         ),
+      //         // BottomNavigationBarItem(
+      //         //   icon: FaIcon(
+      //         //     FontAwesomeIcons.map,
+      //         //     color: AppColors.rhythm,
+      //         //     size: 20,
+      //         //   ),
+      //         //   activeIcon: FaIcon(
+      //         //     FontAwesomeIcons.solidMap,
+      //         //     color: AppColors.plumpPurplePrimary,
+      //         //     size: 20,
+      //         //   ),
+      //         //   label: 'Map',
+      //         // ),
+      //         BottomNavigationBarItem(
+      //           icon: FaIcon(
+      //             FontAwesomeIcons.image,
+      //             color: AppColors.rhythm,
+      //             size: 20,
+      //           ),
+      //           activeIcon: FaIcon(
+      //             FontAwesomeIcons.solidImage,
+      //             color: AppColors.plumpPurplePrimary,
+      //             size: 20,
+      //           ),
+      //           label: 'Posts',
+      //         ),
+      //         BottomNavigationBarItem(
+      //           icon: FaIcon(
+      //             FontAwesomeIcons.user,
+      //             color: AppColors.rhythm,
+      //             size: 20,
+      //           ),
+      //           activeIcon: FaIcon(
+      //             FontAwesomeIcons.solidUser,
+      //             color: AppColors.plumpPurplePrimary,
+      //             size: 20,
+      //           ),
+      //           label: 'Profile',
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
     );
+  }
+}
+
+class Name extends StatelessWidget {
+  const Name({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Container());
   }
 }

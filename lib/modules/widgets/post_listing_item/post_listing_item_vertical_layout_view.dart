@@ -55,41 +55,44 @@ class _PostListingItemVerticalLayoutViewState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: widget.userEntity.avatar != null &&
-                              widget.userEntity.avatar != ''
-                          ? NetworkImage(widget.userEntity.avatar!)
-                          : null,
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      radius: 24,
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${widget.userEntity.firstName} ${widget.userEntity.lastName}',
-                          style: AppStyle.of(context)
-                              .b4M
-                              .wCChineseBlack!
-                              .merge(headerTextFont),
-                        ),
-                        Text(
-                          widget.userEntity.occupation ?? '',
-                          style: AppStyle.of(context)
-                              .b6
-                              .wCCrayola!
-                              .merge(headerTextFont),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: widget.post.postType != bookingPostType
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: widget.userEntity.avatar != null &&
+                                    widget.userEntity.avatar != ''
+                                ? NetworkImage(widget.userEntity.avatar!)
+                                : null,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            radius: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${widget.userEntity.firstName} ${widget.userEntity.lastName}',
+                                style: AppStyle.of(context)
+                                    .b4M
+                                    .wCChineseBlack!
+                                    .merge(headerTextFont),
+                              ),
+                              Text(
+                                widget.userEntity.occupation ?? '',
+                                style: AppStyle.of(context)
+                                    .b6
+                                    .wCCrayola!
+                                    .merge(headerTextFont),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    : SizedBox(),
               ),
               (widget.post.alreadyBoooked != null &&
                           widget.post.alreadyBoooked == true) ||
@@ -110,24 +113,26 @@ class _PostListingItemVerticalLayoutViewState
                         ),
                       ),
                     )
-                  : PopupMenuButton<String>(
-                      elevation: 16,
-                      color: AppColors.soap,
-                      itemBuilder: (context) {
-                        return [
-                          if (widget.onPress != null)
-                            PopupMenuItem(
-                              child: Text('View'),
-                              onTap: widget.onPress,
-                            ),
-                          if (widget.onDelete != null)
-                            PopupMenuItem(
-                              child: Text('Delete'),
-                              onTap: widget.onDelete,
-                            ),
-                        ];
-                      },
-                    ),
+                  : widget.onDelete != null
+                      ? PopupMenuButton<String>(
+                          elevation: 16,
+                          color: AppColors.soap,
+                          itemBuilder: (context) {
+                            return [
+                              if (widget.onPress != null)
+                                PopupMenuItem(
+                                  child: Text('View'),
+                                  onTap: widget.onPress,
+                                ),
+                              if (widget.onDelete != null)
+                                PopupMenuItem(
+                                  child: Text('Delete'),
+                                  onTap: widget.onDelete,
+                                ),
+                            ];
+                          },
+                        )
+                      : SizedBox(),
             ],
           ),
           SizedBox(height: 8),
@@ -153,11 +158,11 @@ class _PostListingItemVerticalLayoutViewState
                       )
                     : CarouselSlider.builder(
                         options: CarouselOptions(
-                          height: 240,
-                          autoPlay: true,
-                          enableInfiniteScroll: false,
-                          enlargeCenterPage: true,
-                        ),
+                            height: 240,
+                            autoPlay: true,
+                            enableInfiniteScroll: false,
+                            enlargeCenterPage: true,
+                            autoPlayInterval: Duration(minutes: 1)),
                         itemCount: widget.post.imagesURL!.length,
                         itemBuilder: (context, int i, int pageViewIndex) {
                           final attach = widget.post.imagesURL![i];
@@ -192,54 +197,70 @@ class _PostListingItemVerticalLayoutViewState
                 //           : AppColors.ratingLow,
                 //     ),
                 //   ),
-                Positioned(
-                  left: 12,
-                  bottom: 12,
-                  child: Chip(
-                    label: Text(
-                      widget.post.postType == bookingPostType
-                          ? 'In-search of a roommate'
-                          : 'In-search of a travel partner',
-                      style: AppStyle.of(context).b5M.wCWhite,
-                    ),
-                    backgroundColor: AppColors.plumpPurplePrimary,
-                  ),
-                ),
+                widget.post.postType != bookingPostType
+                    ? Positioned(
+                        left: 12,
+                        bottom: 12,
+                        child: Chip(
+                          label: Text(
+                            widget.post.postType == bookingPostType
+                                ? 'In-search of a roommate'
+                                : 'In-search of a travel partner',
+                            style: AppStyle.of(context).b5M.wCWhite,
+                          ),
+                          backgroundColor: AppColors.plumpPurplePrimary,
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
           ),
-          Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Chip(
-                //TODO: dont forget to include avaliable hours for the booked type
-                label: Text(
-                  '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateTo!)!)}',
-                  style: AppStyle.of(context)
-                      .b5M
-                      .wCChineseBlack!
-                      .merge(headerTextFont),
-                ),
-                side: BorderSide(color: AppColors.soap),
-                backgroundColor: Theme.of(context).colorScheme.background,
+          if (widget.post.postType == bookingPostType)
+            Padding(
+              padding: const EdgeInsets.only(left: 28),
+              child: Text(
+                '${widget.post.nameOfHotel}', //TODO add location
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppStyle.of(context).b3B.wCChineseBlack!.merge(
+                    headerTextFont.copyWith(fontWeight: FontWeight.w600)),
               ),
-              SizedBox(width: 10),
-              Chip(
-                label: Text(
-                  // widget.post.hourAvaliable == null &&
-                  //         widget.post.hourAvaliable != ''
-                  //     ? '${widget.post.hourAvaliable!} each day'
-                  //     : allDayAvaliable,
-                  '${widget.post.hourAvaliable!} each day',
-                  style: AppStyle.of(context)
-                      .b5M
-                      .wCChineseBlack!
-                      .merge(headerTextFont),
+            ),
+          Padding(
+            padding: const EdgeInsets.only(left: 28),
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Chip(
+                  //TODO: dont forget to include avaliable hours for the booked type
+                  label: Text(
+                    '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateTo!)!)}',
+                    style: AppStyle.of(context)
+                        .b5M
+                        .wCChineseBlack!
+                        .merge(headerTextFont),
+                  ),
+                  side: BorderSide(color: AppColors.soap),
+                  backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                side: BorderSide(color: AppColors.soap),
-                backgroundColor: Theme.of(context).colorScheme.background,
-              ),
-            ],
+                // SizedBox(width: 10),
+                // Chip(
+                //   label: Text(
+                //     // widget.post.hourAvaliable == null &&
+                //     //         widget.post.hourAvaliable != ''
+                //     //     ? '${widget.post.hourAvaliable!} each day'
+                //     //     : allDayAvaliable,
+                //     '${widget.post.hourAvaliable!} each day',
+                //     style: AppStyle.of(context)
+                //         .b5M
+                //         .wCChineseBlack!
+                //         .merge(headerTextFont),
+                //   ),
+                //   side: BorderSide(color: AppColors.soap),
+                //   backgroundColor: Theme.of(context).colorScheme.background,
+                // ),
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           // Text(
@@ -250,24 +271,18 @@ class _PostListingItemVerticalLayoutViewState
           //       AppStyle.of(context).b4.wCDarkGunmetal!.merge(headerTextFont),
           // ),
           //const SizedBox(height: 8),
-          if (widget.post.postType == bookingPostType)
-            Text(
-              '${widget.post.nameOfHotel}', //TODO add location
+
+          Padding(
+            padding: const EdgeInsets.only(left: 28),
+            child: Text(
+              '\$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
+              // '${widget.post.postType == bookingPostType ? "Cost:" : "Budget:"} \$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppStyle.of(context)
-                  .b3B
-                  .wCChineseBlack!
-                  .merge(headerTextFont.copyWith(fontWeight: FontWeight.w600)),
+              style: AppStyle.of(context).b4B.wCChineseBlack!.merge(
+                  headerTextFont.copyWith(
+                      fontWeight: FontWeight.bold, fontSize: 13)),
             ),
-          Text(
-            '${widget.post.postType == bookingPostType ? "Cost:" : "Budget:"} \$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppStyle.of(context)
-                .b4B
-                .wCChineseBlack!
-                .merge(headerTextFont.copyWith(fontWeight: FontWeight.w400)),
           ),
         ],
       ),

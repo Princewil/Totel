@@ -3,6 +3,8 @@ import 'package:cheffy/r.g.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+BuildContext? buildContext;
+
 class SplashView extends ViewModelBuilderWidget<SplashViewModel> {
   static const routeName = '/SplashView';
   const SplashView({super.key});
@@ -16,6 +18,7 @@ class SplashView extends ViewModelBuilderWidget<SplashViewModel> {
   @override
   Widget builder(
       BuildContext context, SplashViewModel viewModel, Widget? child) {
+    buildContext = context;
     return Scaffold(
       body: Center(
         child: Row(

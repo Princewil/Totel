@@ -1,4 +1,3 @@
-import 'package:cheffy/app/app.locator.dart';
 import 'package:cheffy/core/enums/male_female_enum.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/posts/create/create_post_functions.dart';
@@ -12,7 +11,6 @@ import 'package:stacked/stacked.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 import 'package:cheffy/modules/widgets/app_form_field.dart';
-import 'package:stacked_services/stacked_services.dart';
 
 import 'register_view_model.dart';
 
