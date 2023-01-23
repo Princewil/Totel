@@ -8,6 +8,7 @@ import 'package:cheffy/modules/main/profile/profile_provider.dart';
 import 'package:cheffy/modules/main/profile/profile_view.dart';
 import 'package:cheffy/modules/main/profile/tabs/posts_tab.dart';
 import 'package:cheffy/modules/posts/post_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ import 'package:cheffy/modules/theme/styles.dart';
 
 import '../../../app/app.router.dart';
 import '../auth/auth/domain/entities/user_entity.dart';
+import '../widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
 import 'main_view_model.dart';
 
 class MainView extends StatefulWidget {
@@ -30,13 +32,11 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView>
     with SingleTickerProviderStateMixin {
   int currentPage = 0;
-  late var profileProvider;
   late TabController _tabController =
       TabController(length: 3, vsync: this, initialIndex: currentPage);
   late List<Widget> _pages = [
     PostsPageView(),
-    Name(),
-    //PostsTab(postEntity: profileProvider),
+    PostsAddTab(),
     ProfileView(),
   ];
   @override
@@ -236,11 +236,50 @@ class _MainViewState extends State<MainView>
   }
 }
 
-class Name extends StatelessWidget {
-  const Name({Key? key}) : super(key: key);
+//Just a makeShift
+class PostsAddTab extends StatefulWidget {
+  const PostsAddTab({Key? key}) : super(key: key);
+
+  @override
+  State<PostsAddTab> createState() => _PostsAddTabState();
+}
+
+class _PostsAddTabState extends State<PostsAddTab> {
+  bool loading = true;
+  List<PostViewParams>? postEntity;
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  init() async {
+    try {
+      List<PostViewParams> list = [];
+      var resultData = await getThisUserPost();
+      for (var element in resultData!) {
+        final _ =
+            PostViewParams.fromMap(element.data() as Map<String, dynamic>);
+        list.add(_);
+      }
+      postEntity = list;
+      loading = false;
+      setState(() {});
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container());
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Add post", style: headerTextFont),
+        centerTitle: true,
+      ),
+      body: loading
+          ? Center(
+              child: CupertinoActivityIndicator(),
+            )
+          : PostsTab(postEntity: postEntity),
+    );
   }
 }

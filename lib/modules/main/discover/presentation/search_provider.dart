@@ -115,23 +115,25 @@ class SearchProvider extends BaseViewModel {
   }
 
   void onAdvancedSearchLocationSubmit() {
-    if (searchLocationForm.valid) {
-      // Continue the process of searching to filtering
-      _navigationService.navigateTo(Routes.searchFilterView);
-    } else {
-      print('Not valid (onLocationSubmit)');
-      searchLocationForm.markAllAsTouched();
-    }
+    _navigationService.navigateTo(Routes.searchFilterView);
+    // if (searchLocationForm.valid) {
+    //   // Continue the process of searching to filtering
+    //   _navigationService.navigateTo(Routes.searchFilterView);
+    // } else {
+    //   print('Not valid (onLocationSubmit)');
+    //   searchLocationForm.markAllAsTouched();
+    // }
   }
 
   void onNormalSearchLocationSubmit() {
-    if (searchLocationForm.valid) {
-      // Skip the process of searching and go to Hotels List
-      _navigationService.navigateTo(Routes.searchHotelsView);
-    } else {
-      print('Not valid (onLocationSubmit)');
-      searchLocationForm.markAllAsTouched();
-    }
+    _navigationService.navigateTo(Routes.searchHotelsView);
+    // if (searchLocationForm.valid) {
+    //   // Skip the process of searching and go to Hotels List
+    //   _navigationService.navigateTo(Routes.searchHotelsView);
+    // } else {
+    //   print('Not valid (onLocationSubmit)');
+    //   searchLocationForm.markAllAsTouched();
+    // }
   }
 
   void onSearchFilterResultSubmit() {

@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cheffy/Utils/Utils.dart';
+import 'package:cheffy/app/constants/common_constants.dart';
 import 'package:cheffy/core/enums/male_female_enum.dart';
 import 'package:cheffy/core/enums/post_type.dart';
+import 'package:cheffy/core/services/location_service.dart';
 import 'package:cheffy/firebase_method.dart';
 import 'package:cheffy/modules/location_change_map/location_change_map_view.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_funct.dart';
@@ -14,7 +17,9 @@ import 'package:cheffy/pay.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:stacked/stacked.dart';
@@ -46,6 +51,7 @@ class _ResultState extends State<Result> {
     lat =
         double.parse(widget.postViewParams.locationLatLng!.split(split).first);
     lng = double.parse(widget.postViewParams.locationLatLng!.split(split).last);
+    destination = LatLng(lat!, lng!);
     placemarkFromCoordinates(lat!, lng!)
         .then((value) => setState(() => address = fullAddress(value.first)));
   }
@@ -59,6 +65,7 @@ class _ResultState extends State<Result> {
         footerController: footerController,
         hidePanelHeader: true,
         panelMinSize: 0,
+        parallax: true,
         footerHeight: MediaQuery.of(context).size.height * 0.08,
         panelMaxSize: MediaQuery.of(context).size.height * 0.9,
         blur: true,
@@ -81,7 +88,8 @@ class _ResultState extends State<Result> {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(30), topRight: Radius.circular(30)),
             child: SizedBox(
-                child: Direction(), height: MediaQuery.of(context).size.height),
+                child: DirectionFullpage(),
+                height: MediaQuery.of(context).size.height),
           ),
         ),
         footer: Card(
@@ -146,7 +154,10 @@ class _ResultState extends State<Result> {
               Expanded(
                 flex: 2,
                 child: TextButton(
-                    onPressed: () => controller.show(),
+                    // onPressed: () => controller.show(),
+                    onPressed: () => Navigator.of(context).push(
+                        CupertinoPageRoute(
+                            builder: (context) => DirectionFullpage())),
                     style: TextButton.styleFrom(
                       fixedSize: Size(100, 150),
                       shape: RoundedRectangleBorder(
@@ -501,37 +512,6 @@ Widget overview(String note) => Column(
       ],
     );
 
-class Direction extends ViewModelBuilderWidget<MapViewModel> {
-  const Direction({Key? key}) : super(key: key);
-
-  static CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(lat!, lng!),
-    //zoom: 14.4746,
-  );
-
-  @override
-  Widget builder(BuildContext context, viewModel, Widget? child) {
-    return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition: _kGooglePlex,
-        zoomControlsEnabled: true,
-        zoomGesturesEnabled: true,
-        onMapCreated: viewModel.onMapCreated,
-        markers: {
-          Marker(
-              markerId: MarkerId('value'),
-              position: LatLng(lat!, lng!),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueBlue))
-        },
-      ),
-    );
-  }
-
-  @override
-  MapViewModel viewModelBuilder(BuildContext context) => MapViewModel();
-}
-
 Future next(BuildContext context) async => showDialog(
     context: context,
     barrierDismissible: false,
@@ -560,3 +540,213 @@ Future next(BuildContext context) async => showDialog(
             ),
           ),
         ));
+
+class Direction extends ViewModelBuilderWidget<MapViewModel> {
+  const Direction({Key? key}) : super(key: key);
+
+  static CameraPosition _kGooglePlex = CameraPosition(
+    //target: LatLng(lat!, lng!),
+    target: LatLng(destination!.latitude, destination!.longitude),
+    zoom: 14.5,
+  );
+
+  @override
+  Widget builder(BuildContext context, viewModel, Widget? child) {
+    return Scaffold(
+      body: GoogleMap(
+        initialCameraPosition: _kGooglePlex,
+        zoomControlsEnabled: true,
+        zoomGesturesEnabled: true,
+        scrollGesturesEnabled: true,
+        rotateGesturesEnabled: true,
+        circles: {
+          Circle(
+              circleId: CircleId('circleId'),
+              radius: 100,
+              strokeColor: Colors.blue.withOpacity(0.3),
+              fillColor: Colors.blue.withOpacity(0.3),
+              center: LatLng(destination!.latitude, destination!.longitude))
+        },
+        //onMapCreated: viewModel.onMapCreated,
+        polylines: {
+          // Polyline(polylineId: PolylineId('route'), points: polyLineCoordinates)
+        },
+        markers: {
+          // Marker(
+          //     markerId: MarkerId('Current_Location'),
+          //     //position: LatLng(lat!, lng!),
+          //     position: d,
+          //     icon: BitmapDescriptor.defaultMarkerWithHue(
+          //         BitmapDescriptor.hueBlue)),
+          Marker(
+              markerId: MarkerId('Destination'),
+              //position: LatLng(lat!, lng!),
+              position: LatLng(destination!.latitude, destination!.longitude),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueViolet)),
+        },
+      ),
+    );
+  }
+
+  @override
+  MapViewModel viewModelBuilder(BuildContext context) => MapViewModel();
+}
+
+class DirectionFullpage extends StatefulWidget {
+  DirectionFullpage({Key? key}) : super(key: key);
+
+  @override
+  State<DirectionFullpage> createState() => _DirectionFullpageState();
+}
+
+class _DirectionFullpageState extends State<DirectionFullpage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Stack(children: [
+      Direction(),
+      Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Column(
+          children: [
+            SizedBox(height: kToolbarHeight),
+            Card(
+                elevation: 5,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: Icon(Icons.arrow_back_rounded))),
+          ],
+        ),
+      )
+    ]));
+  }
+}
+
+// class NewGooglemap extends StatefulWidget {
+//   NewGooglemap({Key? key}) : super(key: key);
+
+//   @override
+//   State<NewGooglemap> createState() => _NewGooglemapState();
+// }
+
+// class _NewGooglemapState extends State<NewGooglemap> {
+//   List<LatLng> polyLineCoordinates = [];
+//   Position? currentPosition;
+//   final Completer<GoogleMapController> contr = Completer();
+//   getPolyPoints() async {
+//     PolylinePoints polylinePoints = PolylinePoints();
+//     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+//         googleApiKey,
+//         PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+//         PointLatLng(destination!.latitude, destination!.longitude));
+//     if (result.points.isNotEmpty) {
+//       for (var e in result.points) {
+//         polyLineCoordinates.add(LatLng(e.latitude, e.longitude));
+//       }
+//     }
+//     setState(() {});
+//   }
+
+//   getLoc() async {
+//     try {
+//       await LocationService().determinePosition();
+//       currentPosition = await Geolocator.getCurrentPosition();
+//       GoogleMapController mapController = await contr.future;
+//       getPolyPoints();
+//       Geolocator.getPositionStream().listen((e) {
+//         currentPosition = e;
+//         mapController.animateCamera(
+//           CameraUpdate.newCameraPosition(
+//             CameraPosition(
+//               zoom: 14.5,
+//               target: LatLng(e.latitude, e.longitude),
+//             ),
+//           ),
+//         );
+//         setState(() {});
+//       });
+//     } catch (e) {}
+//   }
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     getLoc();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           currentPosition == null
+//               ? Center(
+//                   child: Text(
+//                     'Loading...',
+//                     style: headerTextFont,
+//                   ),
+//                 )
+//               : GoogleMap(
+//                   onMapCreated: (c) {
+//                     contr.complete(c);
+//                   },
+//                   initialCameraPosition: CameraPosition(
+//                     //target: LatLng(lat!, lng!),
+//                     target: LatLng(
+//                         currentPosition!.latitude, currentPosition!.longitude),
+//                     zoom: 14.5,
+//                   ),
+//                   zoomControlsEnabled: true,
+//                   zoomGesturesEnabled: true,
+//                   scrollGesturesEnabled: true,
+//                   rotateGesturesEnabled: true,
+//                   polylines: {
+//                     Polyline(
+//                       polylineId: PolylineId('route'),
+//                       points: polyLineCoordinates,
+//                       color: Colors.red,
+//                     )
+//                   },
+//                   markers: {
+//                     Marker(
+//                         markerId: MarkerId('CurrentLocation'),
+//                         //position: LatLng(lat!, lng!),
+//                         position: LatLng(currentPosition!.latitude,
+//                             currentPosition!.longitude),
+//                         icon: BitmapDescriptor.defaultMarkerWithHue(
+//                             BitmapDescriptor.hueBlue)),
+//                     Marker(
+//                         markerId: MarkerId('Destination'),
+//                         //position: LatLng(lat!, lng!),
+//                         position: destination!,
+//                         icon: BitmapDescriptor.defaultMarkerWithHue(
+//                             BitmapDescriptor.hueBlue)),
+//                   },
+//                 ),
+//           Padding(
+//             padding: const EdgeInsets.only(left: 10),
+//             child: Column(
+//               children: [
+//                 SizedBox(height: kToolbarHeight),
+//                 Card(
+//                     elevation: 5,
+//                     color: Colors.white,
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.all(Radius.circular(20))),
+//                     child: IconButton(
+//                         onPressed: () => Navigator.of(context).pop(),
+//                         icon: Icon(Icons.arrow_back_rounded))),
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+LatLng? destination;

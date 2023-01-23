@@ -162,7 +162,8 @@ class _PostListingItemVerticalLayoutViewState
                             autoPlay: true,
                             enableInfiniteScroll: false,
                             enlargeCenterPage: true,
-                            autoPlayInterval: Duration(minutes: 1)),
+                            viewportFraction: 1,
+                            autoPlayInterval: Duration(minutes: 2)),
                         itemCount: widget.post.imagesURL!.length,
                         itemBuilder: (context, int i, int pageViewIndex) {
                           final attach = widget.post.imagesURL![i];
@@ -216,51 +217,47 @@ class _PostListingItemVerticalLayoutViewState
             ),
           ),
           if (widget.post.postType == bookingPostType)
-            Padding(
-              padding: const EdgeInsets.only(left: 28),
-              child: Text(
-                '${widget.post.nameOfHotel}', //TODO add location
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppStyle.of(context).b3B.wCChineseBlack!.merge(
-                    headerTextFont.copyWith(fontWeight: FontWeight.w600)),
-              ),
+            Text(
+              '${widget.post.nameOfHotel}', //TODO add location
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyle.of(context)
+                  .b3B
+                  .wCChineseBlack!
+                  .merge(headerTextFont.copyWith(fontWeight: FontWeight.w600)),
             ),
-          Padding(
-            padding: const EdgeInsets.only(left: 28),
-            child: Row(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Chip(
-                  //TODO: dont forget to include avaliable hours for the booked type
-                  label: Text(
-                    '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateTo!)!)}',
-                    style: AppStyle.of(context)
-                        .b5M
-                        .wCChineseBlack!
-                        .merge(headerTextFont),
-                  ),
-                  side: BorderSide(color: AppColors.soap),
-                  backgroundColor: Theme.of(context).colorScheme.background,
+          Row(
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Chip(
+                //TODO: dont forget to include avaliable hours for the booked type
+                label: Text(
+                  '${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateFrom!)!)} - ${UniversalVariables.dayMonthDateFormat.format(DateTime.tryParse(widget.post.dateTo!)!)}',
+                  style: AppStyle.of(context)
+                      .b5M
+                      .wCChineseBlack!
+                      .merge(headerTextFont),
                 ),
-                // SizedBox(width: 10),
-                // Chip(
-                //   label: Text(
-                //     // widget.post.hourAvaliable == null &&
-                //     //         widget.post.hourAvaliable != ''
-                //     //     ? '${widget.post.hourAvaliable!} each day'
-                //     //     : allDayAvaliable,
-                //     '${widget.post.hourAvaliable!} each day',
-                //     style: AppStyle.of(context)
-                //         .b5M
-                //         .wCChineseBlack!
-                //         .merge(headerTextFont),
-                //   ),
-                //   side: BorderSide(color: AppColors.soap),
-                //   backgroundColor: Theme.of(context).colorScheme.background,
-                // ),
-              ],
-            ),
+                side: BorderSide(color: AppColors.soap),
+                backgroundColor: Theme.of(context).colorScheme.background,
+              ),
+              // SizedBox(width: 10),
+              // Chip(
+              //   label: Text(
+              //     // widget.post.hourAvaliable == null &&
+              //     //         widget.post.hourAvaliable != ''
+              //     //     ? '${widget.post.hourAvaliable!} each day'
+              //     //     : allDayAvaliable,
+              //     '${widget.post.hourAvaliable!} each day',
+              //     style: AppStyle.of(context)
+              //         .b5M
+              //         .wCChineseBlack!
+              //         .merge(headerTextFont),
+              //   ),
+              //   side: BorderSide(color: AppColors.soap),
+              //   backgroundColor: Theme.of(context).colorScheme.background,
+              // ),
+            ],
           ),
           const SizedBox(height: 8),
           // Text(
@@ -272,17 +269,13 @@ class _PostListingItemVerticalLayoutViewState
           // ),
           //const SizedBox(height: 8),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 28),
-            child: Text(
-              '\$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
-              // '${widget.post.postType == bookingPostType ? "Cost:" : "Budget:"} \$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppStyle.of(context).b4B.wCChineseBlack!.merge(
-                  headerTextFont.copyWith(
-                      fontWeight: FontWeight.bold, fontSize: 13)),
-            ),
+          Text(
+            '\$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
+            // '${widget.post.postType == bookingPostType ? "Cost:" : "Budget:"} \$${widget.post.partnerAmount!.toStringAsFixed(2)} / Night',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyle.of(context).b4B.wCChineseBlack!.merge(headerTextFont
+                .copyWith(fontWeight: FontWeight.bold, fontSize: 13)),
           ),
         ],
       ),

@@ -52,6 +52,7 @@ dependencies:
   scroll_page_view: ^1.0.2
   intl:
   lottie:
+  flutter_polyline_points:
   #swipeable_card_stack:
   card_swiper:
   #photo_card_swiper:
