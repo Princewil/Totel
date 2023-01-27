@@ -11,7 +11,7 @@ import 'package:stacked/stacked.dart';
 import 'package:cheffy/modules/theme/color.dart';
 import 'package:cheffy/modules/theme/styles.dart';
 import 'package:cheffy/modules/widgets/app_form_field.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'register_view_model.dart';
 
 class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
@@ -355,21 +355,22 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
                   //   ),
                   // ),
                   const SizedBox(height: 52),
-                  ElevatedButton(
-                    onPressed: () {
-                      KeyboardUtil.hideKeyboard(context);
-                      viewModel.onRegisterSubmit();
-                    },
-                    style: ElevatedButton.styleFrom(textStyle: headerTextFont),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 17),
-                      child: Text(
-                        'Finish',
-                        style: headerTextFont.copyWith(
-                            fontSize: 16, letterSpacing: 1),
-                      ),
-                    ),
-                  ),
+                  FinishButton(viewModel: viewModel),
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     KeyboardUtil.hideKeyboard(context);
+                  //     viewModel.onRegisterSubmit();
+                  //   },
+                  //   style: ElevatedButton.styleFrom(textStyle: headerTextFont),
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.symmetric(vertical: 17),
+                  //     child: Text(
+                  //       'Finish',
+                  //       style: headerTextFont.copyWith(
+                  //           fontSize: 16, letterSpacing: 1),
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: getValueForScreenType(
                         context: context, mobile: 16, tablet: 36),
@@ -379,6 +380,46 @@ class RegisterFormView extends ViewModelWidget<RegisterViewModel> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FinishButton extends StatefulWidget {
+  final RegisterViewModel viewModel;
+  const FinishButton({super.key, required this.viewModel});
+
+  @override
+  State<FinishButton> createState() => _FinishButtonState();
+}
+
+class _FinishButtonState extends State<FinishButton> {
+  bool loading = false;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        KeyboardUtil.hideKeyboard(context);
+        if (loading) {
+          return;
+        }
+        loading = true;
+        setState(() {});
+        var b = await widget.viewModel.onRegisterSubmit();
+        if (b is bool && !b) {
+          loading = false;
+          setState(() {});
+        }
+      },
+      style: ElevatedButton.styleFrom(textStyle: headerTextFont),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 17),
+        child: loading
+            ? CupertinoActivityIndicator(color: Colors.black)
+            : Text(
+                'Finish',
+                style: headerTextFont.copyWith(fontSize: 16, letterSpacing: 1),
+              ),
       ),
     );
   }

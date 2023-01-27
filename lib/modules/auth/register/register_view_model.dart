@@ -107,9 +107,8 @@ class RegisterViewModel extends BaseViewModel {
   void onSubmitOtp() => _navigationService.navigateToNestedRegisterFormView(
       routerId: StackedNavKeys.registerNavKey);
 
-  void onRegisterSubmit() async {
+  Future onRegisterSubmit() async {
     try {
-      print(accountForm.valid);
       if (accountForm.valid) {
         if (maleFemaleRegEnum == null) {
           _snackbarService.showSnackbar(
@@ -121,13 +120,9 @@ class RegisterViewModel extends BaseViewModel {
         final phoneNumberWithCountryCode = '+' +
             accountForm.control(controls.phone).value.countryCode +
             accountForm.control(controls.phone).value.nsn;
-        print(phoneNumberWithCountryCode);
         await authRepo.sendOtp(
           phoneNumber: phoneNumberWithCountryCode,
           onVerificationCompleted: (PhoneAuthCredential credential) async {
-            print('verificationCompleted');
-            print(credential.asMap());
-
             //await auth.signInWithCredential(credential);
             await authRepo.createWithEmail(
                 // email: accountForm.control(controls.email).value,
@@ -139,18 +134,12 @@ class RegisterViewModel extends BaseViewModel {
             _navigationService.clearStackAndShow(Routes.mainView);
           },
           onVerificationFailed: (FirebaseAuthException e) {
-            print('verificationFailed');
-            print(e.message);
-            print(e.code);
             _snackbarService.showSnackbar(
               title: "Wrong Credentials - ${e.code}",
               message: "${e.message}",
             );
           },
           onCodeSent: (String verificationId, int? resendToken) async {
-            print(
-                'onCodeSent: verificationId: $verificationId, resendToken: $resendToken');
-
             _verificationId = verificationId;
             _resendToken = resendToken;
 
@@ -166,19 +155,23 @@ class RegisterViewModel extends BaseViewModel {
         );
       } else {
         accountForm.markAllAsTouched();
+        return false;
       }
     } on UserAlreadyRegisteredException catch (e) {
       _snackbarService.showSnackbar(message: 'User is already registered');
+      return false;
     } on FirebaseAuthException catch (e) {
       _snackbarService.showSnackbar(
         title: 'Wrong OTP',
         message: 'Wrong OTP, please try again',
       );
+      return false;
     } catch (e) {
       _snackbarService.showSnackbar(
         title: 'Error',
         message: 'Something went wrong, please try again',
       );
+      return false;
     } finally {
       setBusy(false);
     }
@@ -212,7 +205,7 @@ class RegisterViewModel extends BaseViewModel {
         // phoneNumber: phoneNumberWithCountryCode,
         userEntity: userEntity());
     _navigationService.clearStackAndShow(Routes.mainView);
-    _snackbarService.showSnackbar(message: registerMsg.toString());
+    //_snackbarService.showSnackbar(message: registerMsg.toString());
   }
 }
 

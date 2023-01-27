@@ -89,10 +89,6 @@ class _PostsPageViewState extends State<PostsPageView> {
                                           .onNormalSearchLocationSubmit();
                                       return;
                                     }
-                                    Get.showSnackbar(GetSnackBar(
-                                      title: 'First input your search detail',
-                                      duration: Duration(seconds: 2),
-                                    ));
                                   },
                                 ),
                               ),
@@ -113,7 +109,12 @@ class _PostsPageViewState extends State<PostsPageView> {
                                 searchVal = searchKey;
                                 KeyboardUtil.hideKeyboard(context);
                                 searchProvider.onAdvancedSearchLocationSubmit();
+                                return;
                               }
+                              Get.showSnackbar(GetSnackBar(
+                                message: 'First input your search details',
+                                duration: Duration(seconds: 2),
+                              ));
                             },
                             visualDensity: VisualDensity.compact,
                             icon: Icon(Icons.tune_rounded, size: 22),

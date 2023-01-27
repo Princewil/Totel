@@ -211,7 +211,7 @@ class AuthRepoImpl implements AuthRepo {
     // await _apiClient.fresh.clearToken();
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
-    _navigationService.clearStackAndShow(Routes.loginView);
+    //_navigationService.clearStackAndShow(Routes.loginView);
   }
 }
 //

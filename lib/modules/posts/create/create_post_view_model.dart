@@ -50,8 +50,7 @@ class CreatePostViewModel extends BaseViewModel {
               FormControl<DateTimeRange>(validators: [Validators.required]),
           controls.hotel:
               FormControl<String>(validators: [Validators.required]),
-          controls.rating:
-              FormControl<double>(validators: [Validators.required]),
+          controls.rating: FormControl<double>(),
           controls.price:
               FormControl<double>(validators: [Validators.required]),
           controls.message:
@@ -64,8 +63,7 @@ class CreatePostViewModel extends BaseViewModel {
           controls.date:
               FormControl<DateTimeRange>(validators: [Validators.required]),
           controls.price: FormControl<double>(),
-          controls.message:
-              FormControl<String>(validators: [Validators.required]),
+          controls.message: FormControl<String>(),
           controls.hourly: FormControl<bool>(),
         });
         break;
@@ -138,6 +136,7 @@ class CreatePostViewModel extends BaseViewModel {
   //void a(String val) => setAvaliableHour = val;
 
   void onSubmit() async {
+    print(form.valid);
     // form.markAsUntouched();
 
 /*
@@ -167,7 +166,8 @@ class CreatePostViewModel extends BaseViewModel {
                 .toList(growable: false);
             await _postsRepo.createBookedPost(
                 CreateBookedPostParams(
-                  hotelRating: form.control(controls.rating).value as double,
+                  hotelRating:
+                      0, //form.control(controls.rating).value as double,
                   hourAvaliable: avaliableHour,
                   nameOfHotel: form.control(controls.hotel).value,
                   imagesURL: [],
