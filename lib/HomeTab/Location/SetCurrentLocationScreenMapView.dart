@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cheffy/Utils/images,dart.dart';
 import 'package:cheffy/Utils/theme/color.dart';
 import 'package:cheffy/Utils/theme/styles.dart';
+import 'package:cheffy/modules/location_change_map/location_change_map_view_model.dart';
 import 'package:cheffy/widgets/dummy_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,26 @@ class _SetCurrentLocationScreenMapViewState
                         target: _center,
                         zoom: 11.0,
                       ),
+                      circles: location != null
+                          ? {
+                              Circle(
+                                  circleId: CircleId('C'),
+                                  radius: 200,
+                                  center: LatLng(
+                                      location!.latitude, location!.longitude))
+                            }
+                          : {},
                       onMapCreated: _onMapCreated,
+                      markers: location != null
+                          ? {
+                              Marker(
+                                markerId: MarkerId('value'),
+                                icon: BitmapDescriptor.defaultMarker,
+                                position: LatLng(
+                                    location!.latitude, location!.longitude),
+                              ),
+                            }
+                          : {},
                     ),
                   ),
                 ),

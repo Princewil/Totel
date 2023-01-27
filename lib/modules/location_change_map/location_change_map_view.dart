@@ -39,6 +39,27 @@ class LocationChangeMapView
                   myLocationButtonEnabled: true,
                   compassEnabled: true,
                   myLocationEnabled: true,
+                  circles: location != null
+                      ? {
+                          Circle(
+                              circleId: CircleId('C'),
+                              radius: 50,
+                              strokeColor: Colors.black.withOpacity(0.8),
+                              strokeWidth: 20,
+                              center: LatLng(
+                                  location!.latitude, location!.longitude))
+                        }
+                      : {},
+                  markers: location != null
+                      ? {
+                          Marker(
+                            markerId: MarkerId('value'),
+                            icon: BitmapDescriptor.defaultMarker,
+                            position:
+                                LatLng(location!.latitude, location!.longitude),
+                          ),
+                        }
+                      : {},
                 ),
               ),
               Padding(
@@ -160,8 +181,7 @@ class _LocationDetailsState extends State<LocationDetails> {
           location!.latitude, location!.longitude);
       _info = locationInfo.first;
       locationEntity = LocationEntity(
-          name:
-              '${_info!.street}, ${_info!.subLocality}, ${_info!.subAdministrativeArea}',
+          name: fullAddress(_info!),
           latitude: location!.latitude,
           longitude: location!.longitude);
     } else {

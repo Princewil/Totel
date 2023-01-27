@@ -14,3 +14,5 @@ Future<bool?> continueWithGoogleAccnt() async {
     return null;
   });
 }
+//  C:\Program Files\Android\Android Studio\jre\bin
+//  keytool -list -v -keystore "C:\Users\PC\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android

@@ -6,6 +6,7 @@ import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_verti
 import 'package:cheffy/modules/widgets/progress/background_progress.dart';
 import 'package:cheffy/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 
@@ -86,7 +87,12 @@ class _PostsPageViewState extends State<PostsPageView> {
                                       KeyboardUtil.hideKeyboard(context);
                                       searchProvider
                                           .onNormalSearchLocationSubmit();
+                                      return;
                                     }
+                                    Get.showSnackbar(GetSnackBar(
+                                      title: 'First input your search detail',
+                                      duration: Duration(seconds: 2),
+                                    ));
                                   },
                                 ),
                               ),

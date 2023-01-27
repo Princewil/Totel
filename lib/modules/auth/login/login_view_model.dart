@@ -105,13 +105,14 @@ class LoginViewModel extends BaseViewModel {
     }
   }
 
-  void onGoogle() async {
+  Future onGoogle() async {
     try {
-      setBusy(true);
+      // setBusy(true);
       bool? notNew = await authRepo.continueWithGoogleAccnt();
-      setBusy(false);
+      //setBusy(false);
       if (notNew == null) {
-        _snackbarService.showSnackbar(message: 'An error occured. Try again');
+        //_snackbarService.showSnackbar(message: 'An error occured. Try again');
+        return false;
       } else if (notNew) {
         // _navigationService.navigateToMainView();
         _navigationService.clearStackAndShow(Routes.mainView);
@@ -119,8 +120,9 @@ class LoginViewModel extends BaseViewModel {
         _navigationService.clearStackAndShow(Routes.registerView);
       }
     } catch (e) {
-      setBusy(false);
-      _snackbarService.showSnackbar(message: e.toString());
+      //setBusy(false);
+      //_snackbarService.showSnackbar(message: e.toString());
+      return false;
     }
   }
 

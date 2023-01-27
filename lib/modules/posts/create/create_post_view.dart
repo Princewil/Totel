@@ -175,40 +175,40 @@ class CreatePostView extends ViewModelBuilderWidget<CreatePostViewModel> {
                     //endregion
                     //region rate
                     if (viewModel.type == PostType.booked) ...[
-                      AppFormField(
-                        label: 'Rate Hotel',
-                        field: ReactiveRatingBar<double>(
-                          formControlName: viewModel.controls.rating,
-                          allowHalfRating: true,
-                          decoration: const InputDecoration(
-                            filled: false,
-                            isDense: true,
-                            isCollapsed: true,
-                            border: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          ),
-                          ratingWidget: RatingWidget(
-                            full: Icon(
-                              Icons.star_rounded,
-                              color: AppColors.plumpPurplePrimary,
-                            ),
-                            half: Icon(
-                              Icons.star_half_rounded,
-                              color: AppColors.plumpPurplePrimary,
-                            ),
-                            empty: Icon(
-                              Icons.star_border_rounded,
-                              color: AppColors.plumpPurplePrimary,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
+                      // AppFormField(
+                      //   label: 'Rate Hotel',
+                      //   field: ReactiveRatingBar<double>(
+                      //     formControlName: viewModel.controls.rating,
+                      //     allowHalfRating: true,
+                      //     decoration: const InputDecoration(
+                      //       filled: false,
+                      //       isDense: true,
+                      //       isCollapsed: true,
+                      //       border: InputBorder.none,
+                      //       errorBorder: InputBorder.none,
+                      //       focusedBorder: InputBorder.none,
+                      //       focusedErrorBorder: InputBorder.none,
+                      //       disabledBorder: InputBorder.none,
+                      //       enabledBorder: InputBorder.none,
+                      //       contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      //     ),
+                      //     ratingWidget: RatingWidget(
+                      //       full: Icon(
+                      //         Icons.star_rounded,
+                      //         color: AppColors.plumpPurplePrimary,
+                      //       ),
+                      //       half: Icon(
+                      //         Icons.star_half_rounded,
+                      //         color: AppColors.plumpPurplePrimary,
+                      //       ),
+                      //       empty: Icon(
+                      //         Icons.star_border_rounded,
+                      //         color: AppColors.plumpPurplePrimary,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 24),
                     ],
                     //endregion
                     //region price

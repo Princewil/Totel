@@ -1,0 +1,116 @@
+{
+  "project_info": {
+    "project_number": "795851651432",
+    "project_id": "irish-53c69",
+    "storage_bucket": "irish-53c69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795851651432:android:7a4f38844a4dc3ce7efedd",
+        "android_client_info": {
+          "package_name": "com.irish.irish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795851651432-c2dcg9us8jrejva3bc288ugme8l7u35c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.irish.irish",
+            "certificate_hash": "0616e30932767fc051e915f4ded3da33163299f3"
+          }
+        },
+        {
+          "client_id": "795851651432-kpmhq9n971n9jvggnemh4p8b8a8cnj3t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.irish.irish",
+            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
+          }
+        },
+        {
+          "client_id": "795851651432-pb53cvfcb1tt76atft7rdh5pp9semi5q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.irish.irish",
+            "certificate_hash": "b296c1d2b641b211b7b4c644b589f266d42a30ae"
+          }
+        },
+        {
+          "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlbtjR6CjXcbJwozGwmpSKOotsrHbzp4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795851651432:android:c6a16fef4757f2ae7efedd",
+        "android_client_info": {
+          "package_name": "com.ktotel.ktotel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795851651432-7dt7hke9f8r4i0cu0pb152mvvqfdc01k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
+          }
+        },
+        {
+          "client_id": "795851651432-erpm6kutve4he2688drcldj4g79p1rrj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "0616e30932767fc051e915f4ded3da33163299f3"
+          }
+        },
+        {
+          "client_id": "795851651432-qe576n5talrhkm17c9glfl6ul0p6thj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "b296c1d2b641b211b7b4c644b589f266d42a30ae"
+          }
+        },
+        {
+          "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlbtjR6CjXcbJwozGwmpSKOotsrHbzp4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795851651432-16hgkda0i3cqrr5aa1eiorvr4uvskl81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/main/profile/profile_provider.dart';
 import 'package:cheffy/modules/posts/detail/post_detail_view.dart';
 import 'package:cheffy/modules/widgets/post_listing_item/post_listing_item_vertical_layout_view.dart';
@@ -22,7 +23,7 @@ class PostsTab extends StatelessWidget {
       isLoading: profileProvider.busy(profileProvider.postEntity),
       child: postEntity == null || postEntity!.isEmpty
           ? Center(
-              child: Text('None available'),
+              child: Text('You don\'t have a post yet.', style: headerTextFont),
             )
           : ListView.builder(
               itemCount: postEntity!.length,

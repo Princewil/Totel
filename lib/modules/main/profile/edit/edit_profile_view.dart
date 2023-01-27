@@ -12,6 +12,7 @@ import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
 import 'package:cheffy/modules/widgets/app_form_field.dart';
 
+import '../../../../new_UI/splash_screen.dart';
 import '../../../auth/register/register_form_view.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -61,7 +62,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginView()),
+                                          builder: (context) =>
+                                              NewOnBoarding()),
                                       (route) => false);
                                 },
                                 child: Text('Yes', style: headerTextFont)),
