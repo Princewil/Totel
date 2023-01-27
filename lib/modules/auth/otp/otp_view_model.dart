@@ -8,6 +8,8 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:cheffy/app/app.locator.dart';
 
+import '../register/register_form_view.dart';
+
 class OTPViewModel extends BaseViewModel {
   // ignore: constant_identifier_names
   static const String TAG = 'OTPViewModel';
@@ -56,7 +58,10 @@ class OTPViewModel extends BaseViewModel {
     }
   }
 
-  void onWrongNumber() => _navigationService.back();
+  void onWrongNumber() {
+    isWrngNumb = true;
+    _navigationService.back();
+  }
 
   void _onTimerTick(Timer timer) {
     if (seconds > 0) {

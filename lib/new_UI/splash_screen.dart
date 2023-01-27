@@ -256,8 +256,8 @@ class _ContinueWithGoogleLoadingState extends State<ContinueWithGoogleLoading> {
           }
           loading = true;
           setState(() {});
-          bool x = await widget.viewModel.onGoogle();
-          if (!x) {
+          var x = await widget.viewModel.onGoogle();
+          if (x is bool && !x) {
             loading = false;
             setState(() {});
             Get.closeAllSnackbars();

@@ -103,28 +103,40 @@ class ProfileHeaderView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${profileProvider.profileEntity?.firstName ?? ''} ${profileProvider.profileEntity?.lastName ?? ''}",
-                        style: AppStyle.of(context)
-                            .b3M
-                            .wCChineseBlack!
-                            .merge(headerTextFont),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(
+                          "${profileProvider.profileEntity?.firstName ?? ''} ${profileProvider.profileEntity?.lastName ?? ''}",
+                          softWrap: true,
+                          style: AppStyle.of(context)
+                              .b3M
+                              .wCChineseBlack!
+                              .merge(headerTextFont),
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        currentUser()!.email!,
-                        style: AppStyle.of(context)
-                            .b4
-                            .wCRhythm!
-                            .merge(headerTextFont),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(
+                          currentUser()!.email!,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyle.of(context)
+                              .b4
+                              .wCRhythm!
+                              .merge(headerTextFont),
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        "${profileProvider.profileEntity?.occupation ?? ''}",
-                        style: AppStyle.of(context)
-                            .b4
-                            .wCRhythm!
-                            .merge(headerTextFont),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.6,
+                        child: Text(
+                          "${profileProvider.profileEntity?.occupation ?? ''}",
+                          softWrap: true,
+                          style: AppStyle.of(context)
+                              .b4
+                              .wCRhythm!
+                              .merge(headerTextFont),
+                        ),
                       ),
                     ],
                   ),

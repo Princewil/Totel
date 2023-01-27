@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cheffy/core/enums/male_female_enum.dart';
 import 'package:cheffy/modules/main/discover/presentation/pages/search_hotels_page.dart';
 import 'package:cheffy/modules/posts/create/create_post_functions.dart';
@@ -394,6 +396,20 @@ class FinishButton extends StatefulWidget {
 }
 
 class _FinishButtonState extends State<FinishButton> {
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 2), (t) {
+      if (isWrngNumb && mounted) {
+        isWrngNumb = false;
+        loading = false;
+        setState(() {});
+      }
+      timer = t;
+    });
+  }
+
+  Timer? timer;
   bool loading = false;
   @override
   Widget build(BuildContext context) {
@@ -424,6 +440,8 @@ class _FinishButtonState extends State<FinishButton> {
     );
   }
 }
+
+bool isWrngNumb = false;
 
 class Gender extends StatefulWidget {
   Gender({Key? key}) : super(key: key);

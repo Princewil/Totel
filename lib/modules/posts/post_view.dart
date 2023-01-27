@@ -123,6 +123,7 @@ class _PostsPageViewState extends State<PostsPageView> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 3),
                   Expanded(
                     child: ListView.builder(
                       itemCount: postsProvider.postEntity!.length,
