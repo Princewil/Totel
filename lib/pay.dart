@@ -14,33 +14,31 @@ Future makePayment(String cost, String locationLatLng) async {
           paymentIntentClientSecret: paymentIntent!['client_secret'],
           style: ThemeMode.dark,
           merchantDisplayName: 'Admin'));
-  return displayPaymentSheet(locationLatLng);
+  return await displayPaymentSheet(locationLatLng);
 }
 
-createPaymentIntent(String amount, String currency) async {
-  try {
-    Map<String, dynamic> body = {
-      'amount': calculateAmount(amount),
-      "currency": currency,
-      "payment_method_types[]": 'card'
-    };
-    var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/payment_intents'),
-        body: body,
-        headers: {
-          "Authorization": "Bearer $SECRET_KEY",
-          'Content-Type': 'application/x-www-form-urlencoded'
-        });
-    return jsonDecode(response.body);
-  } catch (e) {}
+Future createPaymentIntent(String amount, String currency) async {
+  Map<String, dynamic> body = {
+    'amount': calculateAmount(amount),
+    "currency": currency,
+    "payment_method_types[]": 'card'
+  };
+  var response = await http.post(
+      Uri.parse('https://api.stripe.com/v1/payment_intents'),
+      body: body,
+      headers: {
+        "Authorization": "Bearer $SECRET_KEY",
+        'Content-Type': 'application/x-www-form-urlencoded'
+      });
+  return jsonDecode(response.body);
 }
 
 String calculateAmount(String amount) {
-  final calculateAmount = (int.parse(amount)) * 100;
+  final calculateAmount = (double.parse(amount).truncate()) * 100;
   return calculateAmount.toString();
 }
 
-displayPaymentSheet(String locationLatLng) async {
+Future displayPaymentSheet(String locationLatLng) async {
   return await Stripe.instance.presentPaymentSheet().then((value) async {
     paymentIntent = null;
     return await updateBooked(locationLatLng);

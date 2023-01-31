@@ -67,19 +67,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "795851651432-3vlec2rvjqasifdo8miu2usoj1b5o4c2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "b7a817b47c74f5e5676212eeff682487bce86ff1"
+          }
+        },
+        {
           "client_id": "795851651432-7dt7hke9f8r4i0cu0pb152mvvqfdc01k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ktotel.ktotel",
             "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
-          }
-        },
-        {
-          "client_id": "795851651432-erpm6kutve4he2688drcldj4g79p1rrj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ktotel.ktotel",
-            "certificate_hash": "0616e30932767fc051e915f4ded3da33163299f3"
           }
         },
         {

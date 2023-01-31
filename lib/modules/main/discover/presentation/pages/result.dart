@@ -104,9 +104,9 @@ class _ResultState extends State<Result> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (loadingPayment &&
-                            widget.postViewParams.userUID ==
-                                currentUser()!.uid ||
-                        widget.postViewParams.bookerUID == currentUser()!.uid) {
+                        (widget.postViewParams.userUID == currentUser()!.uid ||
+                            widget.postViewParams.bookerUID ==
+                                currentUser()!.uid)) {
                       return;
                     }
                     try {
