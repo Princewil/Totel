@@ -14,27 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "795851651432-c2dcg9us8jrejva3bc288ugme8l7u35c.apps.googleusercontent.com",
+          "client_id": "795851651432-hhopjn01mnrvidgndfifjhdkdvjt0ps3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.irish.irish",
-            "certificate_hash": "0616e30932767fc051e915f4ded3da33163299f3"
+            "certificate_hash": "c31eed831649a8938fadb8df7c824207d1aa1b46"
           }
         },
         {
-          "client_id": "795851651432-kpmhq9n971n9jvggnemh4p8b8a8cnj3t.apps.googleusercontent.com",
+          "client_id": "795851651432-nhko7r5kbp4k2mks98roq20iaruo5gsj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.irish.irish",
-            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
-          }
-        },
-        {
-          "client_id": "795851651432-pb53cvfcb1tt76atft7rdh5pp9semi5q.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.irish.irish",
-            "certificate_hash": "b296c1d2b641b211b7b4c644b589f266d42a30ae"
+            "certificate_hash": "b7a817b47c74f5e5676212eeff682487bce86ff1"
           }
         },
         {
@@ -67,27 +59,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "795851651432-3vlec2rvjqasifdo8miu2usoj1b5o4c2.apps.googleusercontent.com",
+          "client_id": "795851651432-14mgog47s6kbf5fit15fssoimsamabtp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "686f18d9d4a2f6756118810d9e5f5f33d3dae2f3"
+          }
+        },
+        {
+          "client_id": "795851651432-g29u3ph860f540k5p7eniqmp5cjpmjnb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ktotel.ktotel",
+            "certificate_hash": "c31eed831649a8938fadb8df7c824207d1aa1b46"
+          }
+        },
+        {
+          "client_id": "795851651432-lh5apc0huiqqdb5ni8aonsgk7uqs79ni.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ktotel.ktotel",
             "certificate_hash": "b7a817b47c74f5e5676212eeff682487bce86ff1"
-          }
-        },
-        {
-          "client_id": "795851651432-7dt7hke9f8r4i0cu0pb152mvvqfdc01k.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ktotel.ktotel",
-            "certificate_hash": "ed14cdb0aa228dcab3b6671301c55ec62789e877"
-          }
-        },
-        {
-          "client_id": "795851651432-qe576n5talrhkm17c9glfl6ul0p6thj6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ktotel.ktotel",
-            "certificate_hash": "b296c1d2b641b211b7b4c644b589f266d42a30ae"
           }
         },
         {
