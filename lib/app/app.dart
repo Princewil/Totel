@@ -70,8 +70,8 @@ class Application {
 
     // References the firebase_options in the root not in the (firebase) folder
     await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+        //options: DefaultFirebaseOptions.currentPlatform,
+        );
 
     // Only send crashlytics outside dev env
     if (flavor != Flavor.dev) {

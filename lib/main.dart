@@ -1,4 +1,5 @@
 import 'package:cheffy/Utils/app_providers.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -10,8 +11,9 @@ import 'app/app.router.dart';
 import 'modules/theme/theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = 'pk_test_Ey2p2N4zmrg5nqZrLTpcPg4h00MJSdtjP2';
+  //await Firebase.initializeApp();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.dark,
